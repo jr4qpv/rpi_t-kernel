@@ -1,0 +1,1394 @@
+/*
+ *----------------------------------------------------------------------
+ *    T2EX Software Package
+ *
+ *    Copyright 2012 by Ken Sakamura.
+ *    This software is distributed under the T-License 2.0.
+ *----------------------------------------------------------------------
+ *
+ *    Released by T-Engine Forum(http://www.t-engine.org/) at 2012/12/12.
+ *    Modified by T-Engine Forum at 2015/2/27.
+ *
+ *----------------------------------------------------------------------
+ */
+
+==============================================================================
+      T2EX for T-Engine Reference Board Implementation Specifications
+==============================================================================
+
+------------------------------------------------------------------------------
+1. Overview
+------------------------------------------------------------------------------
+
+This specifications describe settings, resource details, and limitations
+related to the implementation of T-Kernel 2.0 Extension (T2EX) which operates
+on the T-Engine reference board.
+
+
+------------------------------------------------------------------------------
+2. Differences from T-Kernel 2.0 Reference Implementation
+------------------------------------------------------------------------------
+
+      T2EX implementation is basically created by adding functions to the
+      T-Kernel 2.0 reference implementation, but some modifications are made
+      as well.
+
+      Following is the list of modifitications made to the original T-Kernel
+      2.0 reference implementation.
+
+        - Dispatcher (${BD}/kernel/sysdepend_t2ex/cpu/em1d/cpu_support.S)
+                In order to utilize register exclusive load and store 
+                primitives (ldrex and strex) of the processor, clear
+                exclusive (clrex) operation is added to be called at
+                the time of dispatch.
+
+        - Memory management (${BD}/kernel/extension/memory/t2ex)
+                Details are described later in section 3.
+
+
+------------------------------------------------------------------------------
+3. Memory Protection Function
+------------------------------------------------------------------------------
+
+3.1 Basic Setting Items
+
+      Basic settings of the memory management function in T2EX can be made by
+      rewriting settings in the following source program file.
+
+              kernel/sysmain/build_t2ex/tef_em1d/Makefile
+
+      Following parameters can be set:
+
+         - T2EX_MM
+              Suffix of the name of the memory management function to be used
+              _t2ex   : Uses the T2EX standard memory protection function
+              (empty) : Uses the T-Kernel 2.0 standard memory management
+                        function (without memory protection)
+
+         - T2EX_MM_USE_TASKEXCEPTION
+              How to handle memory protection violations
+              1 : Uses the standard configuration which uses TaskMemFaultHdr()
+              0 : Uses the simple configuration which does not use
+                  TaskMemFaultHdr()
+
+         - T2EX_MM_USE_DEFAULT_FAULT_HANDLER
+              Where to define memory protection violation handlers
+              1 : Uses handlers defined internally in T2EX system code
+              0 : Uses handlers defined in user application
+
+      Sections 3.2 to 3.6 describe the configuration where T2EX_MM is set to
+      t2ex. The configuration where T2EX_MM is empty, which does not use the
+      T2EX memory protection function, is described in section 3.7.
+
+3.2 MMU Setting
+
+      It is the same as the T-Kernel 2.0 reference implementation, as shown
+      below. These settings should be set by T-Monitor at system startup and
+      left unchanged (must not be changed) thereafter.
+
+   (a) SCTLR.AFE [29] = 1
+
+      Enables the access flag of the page table.
+
+   (b) SCTLR.TRE [28] = 1
+
+      Enables the remap of the TEX memory attribute.
+
+   (c) PRRR = 0x000a8aa4
+
+   (d) NMRR = 0x44e048e0
+
+      Allocates the remap of the memory attributes as shown below.
+
+      TEX[0] C B      Memory type     Internal cache  External cache
+           0 0 0      Strongly-order  None            None
+           0 0 1      Device          None            None
+           0 1 0      Normal          WT-NA           WT-NA
+           0 1 1      Normal          WB-NA           WB-NA
+           1 0 0      Normal          None            None
+           1 0 1      Normal          WT-NA           WB-A
+           1 1 0      (Not used)
+           1 1 1      Normal          WB-A            WB-A
+
+              WT-NA   Write-through, no allocate on write
+              WB-NA   Write-back, no allocate on write
+              WB-A    Write-back, allocate on write
+
+3.3 Memory Map
+
+      It is almost the same as the T-Kernel 2.0 reference implementation, as
+      shown below.
+
+          Local address                         Mode
+           0x00000000 +=======================+       ---
+                      |Task space             |        |  Virtual memory (Reserved)
+           0x10000000 +=======================+       ---
+                      |Peripheral device      | S D RW-
+                      |(including unused area)|
+           0x30000000 +-----------------------+       ---
+                      |RAM             (64MB) |        |  Protected memory space
+                      |(including unused area)|        |
+           0x40000000 +-----------------------+       ---
+                      |Peripheral device      | S D RW-
+                      |(including unused area)|         Physical address
+           0x70000000 +-----------------------+       --- 0x00000000
+                      |ROM             (32MB) | S C R-X |  Mapping NOR Flash (*1)
+           0x72000000 +-----------------------+       --- 0x02000000
+                      |(Reserved)             |
+           0x80000000 +=======================+       ---
+                      |Used for program map   |        |
+           0x90000000 +-----------------------+        |  Virtual memory (Reserved)
+                      |Used for memory map    |        |
+           0xa0000000 +=======================+       ---
+                      |Built-in SRAM  (128KB) | S N RWX
+                      |(including unused area)|
+           0xb0000000 +-----------------------+
+                      |Peripheral device      | S D RW-
+                      |(including unused area)|
+           0xd0000000 +=======================+       ---
+                      |Shared memory space    |        |  Virtual memory (Reserved)
+           0xf0000000 +=======================+       ---
+                      |Built-in Boot ROM      | S N R--
+                      |(including unused area)|
+           0xffffffff +-----------------------+
+
+      Mode
+        Protection level attributes
+          S   System level (inaccessible from user level)
+          U   User level (accessible from system level and user level)
+
+        Memory type/Cache attribute
+          C   Cache ON     Normal memory/Write-back cache, Write allocate
+          N   Cache OFF    Normal memory/Non-cacheable
+          D   Device       Device memory / Non-cacheable
+
+        Access attribute ("-" means the attribute is turned off)
+          R   Read enabled
+          W   Write enabled
+          X   Execution enabled
+
+      * Domain of each area is 0.
+
+      * The area specified as protected memory space is managed by the T2EX
+        memory protection function, and the mode is specified per page (4 KB).
+        In areas other than protected memory space, the mapping and mode are
+        specified per section (1 MB).
+
+      * The areas specified as virtual memory are unused in this
+        implementation and reserved. They are configured as unallocated areas
+        and inaccessible.
+
+      * The areas other than protected memory and virtual memory space are
+        mapped as logical address = physical address, and the mapping and mode
+        do not change dynamically.
+
+           (*1) Note that the area for NOR Flash, which is hidden behind the
+                task space, is not mapped as logical address = physical
+                address but is mapped by moving it as the memory map shown
+                above. This mapping does not change dynamically.
+
+        Addresses in this specifications means logical addresses unless
+        otherwise stated.
+
+      * The built-in SRAM and built-in Boot ROM are used at system startup
+        (boot). After system startup, they are not used and managed by OS.
+        After system startup, the built-in SRAM can be used for any
+        application.
+
+      * In the protected memory space, the areas used by dynamic memory
+        allocation API calls like tk_get_smb() and malloc() and internal
+        dynamic memory allocation by the system are called dynamic allocation
+        areas. In the initial state, these areas are specified as
+        inaccessible. Once allocated, they become accessible, and then revert
+        to inaccessible mode when released.
+
+      * The memory areas other than the dynamic allocation areas are called
+        static allocation areas, for which the mode is statically specified.
+        Unlike the dynamic memory spaces, fixed modes are assigned to these
+        areas when T2EX is initialized. Appropriate mode can be assigned
+        to each application by properly changing the T2EX initialization 
+        process.
+
+3.4 Static Allocation Area
+
+        This section describes the implementation overview of the static
+        allocation area in this implementation and how to change it depending
+        on an application.
+
+3.4.1 Initialization
+
+        The implementation uses sections in ELF object (linker sections) to
+        allocate static allocation areas. This means that a linker section is
+        mapped to a memory space containing symbols with the same mode, and
+        thus the memory space is specified via the linker section.
+
+        The following files are used to set static allocation areas.
+
+        - kernel/sysmain/build_t2ex/tef_em1d/kernel_t2ex-rom.lnk
+        - kernel/sysmain/build_t2ex/tef_em1d/kernel_t2ex-ram.lnk
+                Specifies the linker section that symbols belong to.
+                That is, this specifies the mode of the memory space that
+                symbols belong to.
+
+        - kernel/extension/memory/t2ex/sysdepend/em1d/space.c
+                Specifies the mode for each static area.
+                (InitLogicalSpace Function)
+	
+        - kernel/sysdepend_t2ex/device/tef_em1d/icrt0_t2ex.S or icrt0_t2ex_ram.S
+                Initializes the content of the memory space including static
+                areas.
+
+        As a specific example, kernel_t2ex-rom.lnk defines .data_usr and .bss_usr,
+        which are linker sections for user level data areas as follows.
+        This rule defines that both the .data_usr and .bss_usr. sections
+        include the data areas in object files whose filename is "*.uo".
+        These two sections are allocated contiguously, and __data_usr_start
+        and _end_usr symbols are defined at the top and end of them
+        respectively.
+
+        	__data_usr_org = LOADADDR(.bss) + SIZEOF(.bss);
+        	.data_usr ALIGN(0x1000) : AT(__data_usr_org) {
+        		__data_usr_start = . ;
+        		*.uo(.data)
+        		*.uo(.data.*)
+        		*.uo(.data1)
+        		KEEP (*.uo(.eh_frame))
+        		*.uo(.gcc_except_table)
+        		*.uo(.sdata)
+        		*.uo(.sdata.*)
+        		. = ALIGN(4);
+        		_edata_usr = .;
+        		PROVIDE (edata_usr = .);
+        	}
+        	.bss_usr ALIGN(4) : {
+        		__bss_usr_start = .;
+        		PROVIDE (__sbss_usr_start = .);
+        		PROVIDE (___sbss_usr_start = .);
+        		*.uo(.sbss)
+        		*.uo(.sbss.*)
+        		*.uo(.scommon)
+        		PROVIDE (__sbss_usr_end = .);
+        		PROVIDE (___sbss_usr_end = .);
+        		*.uo(.bss)
+        		*.uo(.bss.*)
+        		*.uo(COMMON)
+        		. = ALIGN(4);
+        		_end_usr = .;
+        		PROVIDE (end_usr = .);
+        	}
+
+        The InitLogicalSpace function in space.c uses this information for
+        initialization. Specifically, the following code initializes the area
+        from __data_usr_start to _end to the mode PTE_USR_RW
+        (user-accessible and readable/writable).
+        (la = __data_usr_start when this code is executed.)
+
+        	for ( ; (UW)la < (UW)&_end_usr; la = NextPage(la) ) {
+        		/* User data area (__data_usr_start ... _end_usr) */
+        		pte.w = PTE_USR_RW;
+        		pte.a.pfa = LADRtoPFA(la);
+        		SetPTE(la, pte, FALSE);
+        	}
+
+        icrt0_t2ex.S corresponds to icrt0.S in the T-Kernel 2.0 standard
+        implementation. However, since the BSS area are divided into two
+        areas, .bss, and .bss_usr, it has been changed to initialize each of
+        them separately. Modification of this file is required if an 
+        initialization different from the previous one is to be performed 
+        due to the change to the memory space.
+
+3.4.2 Static Setting in Reference Implementation
+
+        Based on the implementation described in section 3.4.1, the reference
+        implementation configures the static allocation area as described
+        below. A name in [] is a linker section name that each symbol is
+        assigned to.
+
+        ---------------------------------------------------------------------
+                     Area                    Privileged level   User level
+        =====================================================================
+          User-level program area [.text]         R,EX           R,EX
+          Read-only data area [.rodata]           R,EX           R,EX
+          Privileged-level read/write data area   R,W            -
+               [.data, .bss]
+          User-level read/write data area         R,W            R,W
+               [.data_usr, .bss_usr]
+        ---------------------------------------------------------------------
+
+        The mode setting in the reference implementation is generally basic
+        and conservative except that the write privilege to the system area
+        from the user level is disallowed entirely. Specifically, the
+        following operation is allowed and does no cause a protection
+        violation because the protection level is not distinguished between
+        the program area and the read-only data area.
+
+          - Access to a static system program code from the user level
+
+        This configuration intends to use codes from both the system and a
+        user program and share read-only data. For example, this configuration
+        allows codes in the SVC interface library (libsvc.a) to be shared, 
+        which allows saving ROM or RAM occupied by a program code.
+
+3.4.3 Data Area Allocation
+
+        In Makefile of the T2EX reference implementation, the previous SRC is
+        divided into two parts: SRC_SYS for the system area and SRC_USR for
+        the user area.
+
+        Data areas (.data and .bss) that can be read/written by objects linked
+        to the kernel are allocated to different spaces, depending on which is
+        specified for a source file, SRC_SYS or SRC_USR, as follows.
+
+          - SRC_SYS: Allocated to a privileged-level read/write data area
+                     (.data, .bss)
+          - SRC_USR: Allocated to a user-level read/write data area
+                     (.data_usr, .bss_usr)
+
+        Specification of SRC_SYS or SRC_USR can be performed using one of the 
+	following files.
+
+              kernel/sysmain/build_t2ex/tef_em1d/Makefile
+              kernel/sysmain/build_t2ex/Makefile.common
+
+3.5 Protection Violation (Exception)
+
+        An access to an unallocated dynamic area or a memory access against 
+        the mode specification causes a memory protection violation, 
+        and the protection violation exception is handled.
+
+        When T2EX_MM_USE_DEFAULT_FAULT_HANDLER is set to 1, protection violation 
+        exception handlers are defined in the following file. TaskMemFaultHdr()
+        and RawMemFaultHdr() in this file can be adequately modified to handle 
+        exceptions properly.
+
+              kernel/extension/memory/t2ex/sysdepend/em1d/exchdr.c
+
+        This implementation defines these handlers for reference as
+        described below.
+
+        - RawMemFaultHdr()
+                Intended to support debugging. It outputs a
+                "*** OS SYSTEM DOWN ***" message and transitions to T-Monitor.
+
+        - TaskMemFaultHdr()
+                Sends a task exception with exception code 0 to the task
+                causing the exception.
+                A task can define the task exception handler for exception
+                handling to handle protection violation exceptions per task.
+                If it fails to send a task exception (or the target task does 
+                not have the task exception handler implemented), it outputs a 
+                "*** OS SYSTEM DOWN ***" message and transitions to T-Monitor 
+                just like RawMemFaultHdr().
+
+        On the other hand, when T2EX_MM_USE_DEFAULT_FAULT_HANDLER is set to 0, 
+        the above sample handler implementations are not linked, and thus 
+        needed to be defined in user applications.
+
+3.6 Implementation Restrictions
+
+      There is the following restriction:
+
+        - The mode cannot be changed for a static area managed per section
+          (1 MB).
+
+3.7 Not Using T2EX Memory Protection Function
+
+      If T2EX memory protection function is not to be used, perform following 
+      settings:
+
+         - kernel/sysmain/build_t2ex/tef_em1d/Makefile
+              Set T2EX_MM to empty (for details, see section 3.1)
+
+         - kernel/sysdepend_t2ex/cpu/em1d/cpu_conf.h
+              Set USE_MMU to 0.(It is set to 1 by default)
+
+      For operations with these settings, see T-Kernel 2.0 implementation
+      specifications.
+
+
+------------------------------------------------------------------------------
+4. File Management Function
+------------------------------------------------------------------------------
+
+4.1 Special File System
+
+      The file management function uses the two special file systems described
+      below as well as the "basic FAT file system".
+
+  (1) Root file system
+
+      A virtual file system that corresponds to the root directory "/" to
+      connect the file system to.
+
+            File system implementation part name   "rootfs"
+            Connection name                        "/" (special name)
+            Subdirectory           <Connection name of a connected file system>
+
+      It is not possible to disconnect the root file system or unregist the
+      implementation part.
+
+  (2) Console file system
+
+      A file system that supports the console device to treat standard console
+      input and output as files.
+
+            File system implementation part name   "consolefs"
+            Connection name                        "console"
+            Files                                  "stdin", "stdout", "stderr"
+
+      It is not possible to disconnect the console file system or unregist the
+      implementation part. The above three files are fixed. It is not possible
+      to delete or add files.
+
+      The console file system uses the following APIs in the console driver to
+      operate the console.
+
+            ConsoleIO()       Initialization
+            console_conf()    Configuration
+            console_in()      Input
+            console_out()     Output
+
+
+4.2 File Management Common Part
+
+  4.2.1 System Configuration Information
+
+    FsMaxFile     Number of files that can be opened at the same time
+                  (system-wide)
+
+      This specifies the number of files that can be opened at the same time
+      from application tasks in the whole system. It does not include the
+      standard input/output files (stdin, stdout, and stderr) which are opened
+      automatically.
+      It must be two or more.
+
+    FsMaxFIMP     Number of file system implementation parts that can be
+                  registered at the same time
+
+      This specifies the number of file system implementation parts that can
+      be registered at the same time in the whole system. It does not include
+      the root file system implementation part and the console file system
+      implementation part which are registered automatically, but includes the
+      basic FAT file system implementation part.
+      It must be one or more.
+
+    FsMaxCON	Number of file system connections that can be connected at the
+                same time
+
+      This specifies the number of file system connections that can be
+      connected at the same time in the whole system. It does not include the
+      root file system and the console file system which are connected
+      automatically.
+      It must be one or more.
+
+    * These settings directly affect the dynamic memory consumption. They
+      should be set to the required minimal values.
+
+  4.2.2 Kernel Object
+
+      File Managemet Common Part consumes the following kernel objects.
+
+            ----------------------
+             Kind         Number
+            ======================
+            Subsystem       1
+            Event Flag      1
+            ----------------------
+
+  4.2.3 Dynamic Memory Allocation
+
+      File Managemet Common Part allocates/releases the following sizes of
+      memory by Kmalloc() / Kfree() dynamically.
+
+            ---------------------------------------------------
+            Memory size to be allocated dynamically (in bytes)
+            ===================================================
+            At initialization: (not released until exited)
+                          8 * ( TMaxTskId )
+                          4 * ( TMaxTskId )
+                          4 * ( FsMaxFile + 3 ) + 16
+                         24 * ( FsMaxFile + 3 )
+                         76 * ( FsMaxFIMP + 2 )
+                         60 * ( FsMaxCON  + 2 )
+                         PATH_MAX( =1024 ) * 2
+            ---------------------------------------------------
+                Temporary:
+                         PATH_MAX( =1024 )
+            ---------------------------------------------------
+
+  4.2.4 Implementation of APIs
+
+      The file management function basically implements APIs as extended SVC,
+      except for the following ones implemented as libraries.
+
+  (1) To handle variable arguments
+      int   fs_open(const char *path, int oflag, ... /* mode_t mode */ );
+      int   fs_ioctl(int fd, int request, ... /* arg */ );
+      int   fs_fcntl(int fd, int cmd, ... /* arg */ );
+
+  (2) To replace an equivalent API
+      int   fs_creat(const char *pathname, mode_t mode);
+            --> fs_open(pathname, O_WRONLY | O_CREAT | O_TRUNC, mode);
+
+  (3) To handle return codes
+      off_t    fs_lseek(int fd, off_t offset, int whence);
+      off64_t  fs_lseek64(int fd, off64_t offset64, int whence);
+
+  4.2.5 Case-sensitivity in Current Directory
+
+      The current directory is managed by the file management function
+      (common part). A path name string set by fs_chdir() will be returned by
+      fs_getcwd() as it is.
+      Therefore, uppercase and lowercase in the path name may not match with
+      the real filename in a file system that is case-insensitive like the
+      FAT file system.
+
+      Example: For the directory /FAT/local/bin/, fs_getcwd() returns
+               "/FAT/Local/BIN" after fs_chdir("/FAT/Local/BIN") is executed,
+               but it returns "/FAT/LOCAL/bin" after fs_chdir("/FAT/LOCAL/bin")
+               is executed.
+
+      When fs_fchdir() is used, the result depends on the behavior of the file
+      system implementation part.
+
+
+4.3 Basic FAT File System Implementation Part (Basic FAT FIMP)
+
+  4.3.1 System Configuration Information
+
+    FsAccessTime        Whether or not to allow updating the time of last data
+                        access
+
+      This specifies whether or not to update the time of last data access. If
+      this is 0, the time of last data access is not updated. If this is not 0,
+      writing to the file system may occur to update the time of last data
+      access, even if there is no file that is created or written to. 
+      (In the FAT file system, access time is managed per day, and the writing
+      does not occur unless the day changes from the date of last data access.)
+
+    FiFAT_TskPri        Task priority
+
+      This specifies the priority of tasks that actually perform operations to
+      the file system. Although there is no dependency on other tasks,
+      generally, a higher priority than application tasks should be specified.
+
+    FiFAT_StkSz         Task stack size
+
+      Stack size of tasks that actually perform operations to the file system.
+      No need to change it from 2048, which is the default.
+
+    FiFAT_FCacheSz      FAT cache size (in bytes)
+    FiFAT_FCacheNs      Number of FAT cache unit sectors
+
+      This specifies the cache size to access to the FAT area. 
+      The number of unit sectors specifies the number of sectors per page which
+      is a unit of disc I/O. Specify 1 or a multiple of 2.
+
+      Page size = Number of unit sectors * Disc sector size (usually 512 bytes)
+      Real cache size = ( Cache size / Page size ) * Page size
+
+    FiFAT_RCacheSz      Root directory cache size (bytes)
+    FiFAT_RCacheNs      Number of root directory cache unit sectors
+
+      This specifies the cache size to access to the FAT12/16 root directory
+      area. Not used in FAT32.
+      The number of unit sectors specifies the number of sectors per page
+      which is a unit of disc I/O. Specify 1 or a multiple of 2.
+
+      Page size = Number of unit sectors * Disc sector size (usually 512 bytes)
+      Real cache size = ( Cache size / Page size ) * Page size
+
+    FiFAT_DCacheSz      Data cache size (in bytes)
+    FiFAT_DCacheNs      Number of data cache unit sectors
+
+      This specifies the cache size used to access to data area (cluster area)
+      of files/directories.
+      The number of unit sectors specifies the number of sectors per page
+      which is a unit of disc I/O. Specify 0, 1, or a multiple of 2. When 0 is
+      specified, the cluster size is used.
+
+      Page size = Number of unit sectors * Disc sector size (usually 512 bytes)
+                  or Cluster size (when the number of unit sectors is 0)
+      Real cache size = ( Cache size / Page size ) * Page size
+
+  4.3.2 Kernel Object
+
+      Basic FAT FIMP consumes the following kernel objects for each connected
+      file system.
+
+            ----------------------
+             Kind         Number
+            ======================
+            Task             1
+            Rendezvous       1
+            ----------------------
+
+      Operations to one connected file system are actually performed by one
+      task sequentially. The rendezvous is used to send process requests to the
+      task and receive process results from the task. The message size of a
+      rendezvous is 4 bytes.
+
+  4.3.3 Dynamic Memory Allocation
+
+      Basic FAT FIMP allocates/releases the following sizes of memory by
+      Kmalloc() / Kfree() dynamically.
+
+            ---------------------------------------------------------------
+            Memory size to be allocated dynamically (in bytes)
+            ===============================================================
+            At file system connection: (not released until disconnected)
+                  2,596
+                  44 *  ( FiFAT_FCacheSz / ( FiFAT_FCacheNs * 512 ) )
+                  44 *  ( FiFAT_RCacheSz / ( FiFAT_RCacheNs * 512 ) )  (*1)
+                  44 *  ( FiFAT_FCacheSz / ( FiFAT_FCacheNs * 512 ) )
+                  (512 + 44) * 2
+                  4 * ( FsMaxFile )
+            ---------------------------------------------------------------
+            At file open: (not released until closed)
+                  60 + 24
+                  80 * N           (*2)
+                  PATH_MAX(=1024)  (*3)
+            ---------------------------------------------------------------
+
+      (*1)  Only used in FAT12/16. not in FAT32.
+      (*2)  N = Number of contiguous clusters comprising the file / 10.
+            If every comprising cluster is located discontiguously, the number
+            of contiguous clusters is File size / Cluster size.
+      (*3)  Only used when opening directory.
+
+  4.3.4 Considerations/Restrictions
+
+  (1) Supports the FAT12, FAT16, and FAT32 file system.
+
+  (2) Supports the short filename (SFN) and the long filename (LFN).
+
+      MS-KANJI (CP932) is used for the character code of the short filename.
+
+      If only ASCII characters are used in filenames, "FAT_ASCII_FN_ONLY" can 
+      be defined at build to make the code translation table unnecessary 
+      and to significantly reduce the code size.
+
+  (3) Does not support reallocation of a directory.
+
+      Contiguous directory entries are needed for the long filename (LFN).
+      When there is not enough space for contiguous directory entries in
+      creating a file, it is addressed by adding new clusters to enlarge the
+      directory instead of reallocating directory entries to make a contiguous
+      space.
+
+      Note that creating file may cause an error in FAT12 and FAT16 even if
+      there is enough space for directory entries because it is not possible
+      to enlarge the root directory.
+
+  (4) No guarantee of unique file serial numbers.
+
+      The FAT file system does not have the file serial number. The position
+      from the beginning of the disk for the directory entry corresponding to
+      a file is used as the file serial numbers.
+
+      Therefore, the file serial number has a 64-bit size, not 32-bit.
+      Because the file management function provides 32-bit APIs, they return
+      the lower 32 bits of 64 bits as the file serial number. This means that
+      different files can have the same file serial number. However,
+      it is guaranteed that all files in the same directory have unique file
+      serial numbers.
+
+  (5) Path name of the current directory
+
+      A path name of the current directory retuned by fs_fchdir() reflects
+      upper/lower cases of the filenames correctly, which requires a path
+      traversal.
+
+      If it does not need to be case sensitive, "FAT_CURDIR_CASE_NOCARE" can be
+      defined at build to accelerate the fs_fchdir() operation and to reduce 
+      the code size a bit.
+
+
+------------------------------------------------------------------------------
+5. Network Communication Function
+------------------------------------------------------------------------------
+
+5.1 LAN driver
+
+      The network communication function of the T2EX reference implementation
+      uses the LAN driver for the network interface card (NIC) of the T-Engine
+      reference board (tef_em1d), which conforms to the "T-Engine Standard
+      Device Driver Specifications". The LAN driver is provided in the T2EX
+      source code package and can be used both on an actual machine (tef_em1d)
+      and on an emulator for tef_em1d (QEMU-tef_em1d).
+
+      The LAN driver is the only hardware-dependent part in the network
+      communication function. When the network communication function in the
+      T2EX reference implementation is ported to other hardware, only the LAN
+      driver requires modifications or rewrites to adapt to other target
+      systems.
+
+5.2 Maximum Number of Sockets that can be Opened at the Same Time
+
+      The maximum number of sockets that can be opened at the same time can be
+      specified by the system configuration information SoMaxSocket. It is the
+      total of sockets generated by so_socket() and so_accept().
+
+      For the number of consumed kernel objects required to generate one
+      socket, see "5.7 Kernel Object".
+
+5.3 Maximum Number of Device Drivers that can be Connected
+
+      The number of device drivers that can be connected to the network
+      connection manager by so_ifattach() is limited. It is defined by
+      TKN_NIFDEV_MAX in the following header file.
+
+        ${BD}/t2ex/network/net/src/netmain/tkn_init.h
+
+        #define TKN_NIFDEV_MAX   3
+
+5.4 Buffer Registered with LAN Driver
+
+  (1) Number of buffers to be registered
+
+      When so_ifattach() connects a device driver, buffers required for
+      reception are registered with the device driver. The number of receive
+      buffers registered with the device driver is set by the system
+      configuration information SoDrvRxBufNum.
+
+  (2) Buffer size
+
+      The size of a buffer registered with a device driver is 1520, which is
+      the maximum frame size of Ethernet. This value is defined by
+      TKN_RXBUF_SIZE in the following header file.
+
+        ${BD}/t2ex/network/net/src/netmain/if_tkn.h
+
+        #define TKN_RXBUF_SIZE   1520
+
+5.5 Buffer Size of Socket Send/Receive Queue
+
+      Here are the default values of the system configuration information
+      related to the buffer size for socket send/receive queue.
+
+      ----------------------------------------------------
+        System configuration information  Size (in bytes)
+      ====================================================
+        SoTcpTxBufSz          32,768
+        SoTcpRxBufSz          32,768
+        SoUdpTxBufSz           9,216
+        SoUdpRxBufSz          41,600
+        SoRawIPTxBufSz         8,192
+        SoRawIPRxBufSz         8,192
+        SoRawTxBufSz           8,192
+        SoRawRxBufSz           8,192
+      ----------------------------------------------------
+
+      The maximum window size for the TCP flow control depends on the buffer
+      size of the send or receive queue. When the system configuration
+      information SoTcpDoAutoTx and SoTcpDoAutoRx are set to 1, the buffer
+      size of the send or receive queue are changed dynamically according to
+      the window size of the peer (automatic resizing). Their default values
+      are 0.
+
+      Here are the default values of the system configuration information
+      related to the automatic resizing.
+
+      ---------------------------------------------------
+        System configuration information  Size (in bytes)
+      ===================================================
+        SoTcpIncAutoTx        16,384
+        SoTcpMaxAutoTx       262,144
+        SoTcpIncAutoRx        16,384
+        SoTcpMaxAutoRx       262,144
+      ---------------------------------------------------
+
+5.6 Changes in Dynamic Memory Allocation
+
+      The old source code, from which the current code is derived, allocates a
+      few KB buffer on the stack.  The previous implementation is not
+      satisfactory for build-in devices.  They are improved to dynamically
+      allocate buffers by malloc() and so on.
+
+      ---------------------------------------------------------------
+        Function name        File path
+      ===============================================================
+        res_queryN()         net/src_bsdlib/libc/net/getaddrinfo.c
+        getanswer()          net/src_bsdlib/libc/net/getaddrinfo.c
+        _gethtent()          net/src_bsdlib/libc/net/getaddrinfo.c
+        res_querydomainN()   net/src_bsdlib/libc/net/getaddrinfo.c
+        getanswer()          net/src_bsdlib/libc/net/gethnamaddr.c
+        res_nquery()         net/src_bsdlib/libc/resolv/res_query.c
+        res_nquerydomain()   net/src_bsdlib/libc/resolv/res_query.c
+        res_nameinquery()    net/src_bsdlib/libc/resolv/res_send.c
+        res_queriesmatch()   net/src_bsdlib/libc/resolv/res_send.c
+      ---------------------------------------------------------------
+          (*) "${BD}/t2ex/network/" is omitted from the file paths.
+
+      The dynamically allocated buffer sizes are defined in the following
+      header file.
+
+        ${BD}/t2ex/network/net/src_bsdlib/libc/include/port_before.h
+
+        #define T2EX_NS_MAXPACKET   (64*1024)
+        #define T2EX_NS_HOSTBUFSZ   (8*1024)
+        #define T2EX_NS_MAXDNAME    (1025)
+        #define T2EX_NS_THRESHOLD   (1024)
+
+      T2EX_NS_MAXPACKET
+        Buffer size to send/receive DNS packets
+        - res_queryN() [getaddrinfo.c]
+
+      T2EX_NS_HOSTBUFSZ
+        Buffer size to receive and analyze DNS packets
+        - getanswer() [getaddrinfo.c]
+        - _gethtent() [getaddrinfo.c]
+
+      T2EX_NS_MAXDNAME
+        Buffer size to expand or compress DNS host names
+        - getanswer() [getaddrinfo.c]
+        - res_querydomainN() [getaddrinfo.c]
+        - getanswer() [gethnamaddr.c]
+        - res_nquerydomain() [res_query.c]
+        - res_nameinquery() [res_send.c]
+        - res_queriesmatch() [res_send.c]
+
+      T2EX_NS_THRESHOLD
+        Buffer size for DNS query packets
+        - res_nquery() [res_query.c]
+
+5.7 Kernel Object
+
+  (1) Kernel objects consumed when initializing the network communication
+      function
+
+      When so_main() initializes the network communication function, the
+      following kernel objects are consumed.
+
+        -----------------------
+            Kind         Number
+        =======================
+          Task               6
+          Semaphore          5
+          Event Flag         5
+          Mutex              1
+          Rendezvous         1
+          Cyclic Handler     1
+          Subsystem          1
+        -----------------------
+
+  (2) Kernel objects consumed when connecting a device driver
+
+      When so_ifattach() connects a device driver, the following kernel
+      objects are consumed.
+
+        --------------------------
+            Kind         Number
+        ==========================
+          Task               1
+          Message Buffer     1
+        --------------------------
+
+  (3) Kernel objects consumed by generating a socket
+
+      When so_socket() or so_accept() generates one socket, the following
+      number of kernel objects are consumed.
+
+        -------------------------------------------
+            Kind                   Number
+        ===========================================
+          Event Flag      ceil(2/32) + ceil(4/32)
+        -------------------------------------------
+
+      "2/32" and "4/32" in this table mean 2 bits and 4 bits of the event flag
+      respectively. ceil() is the ceiling function. ceil(x) represents the
+      minimum integer that is equal to or larger than a real number x.
+
+      When the total number of sockets generated by so_socket() and
+      so_accept() is N, the following number of event flags are needed.
+
+        ceil((2*N)/32) + ceil((4*N)/32)
+
+      (Calculation example) when N=9
+          ceil((2*9)/32) + ceil((4*9)/32)
+        = ceil(18/32) + ceil(36/32)
+        = 1 + 2
+        = 3
+
+  (4) Kernel objects required for the network communication function
+
+      Supposing that the maximum number of connected device drivers is D and
+      the maximum number of generated sockets is S (which is equal to the
+      system configuration information SoMaxSocket), they are summarized as
+      follows.
+
+        --------------------------------------------------------------------
+            Kind               Number
+        ====================================================================
+          Task               6 + D
+          Semaphore          5
+          Event Flag         1 + ceil((57 + 2*S)/32) + ceil((37 + 4*S)/32)
+          Mutex              1
+          Message Buffer     D
+          Rendezvous         1
+          Cyclic Handler     1
+          Subsystem          1
+        --------------------------------------------------------------------
+
+      The constants (57 and 37) in the ceiling functions of the event flag are
+      numbers of bits consumed by initialization with so_main().
+
+5.8 Runtime Environment Setting
+
+      No item is required to be set to verify the operation on the T-Engine
+      reference board (tef_em1d). Check that the LAN cable is connected to the
+      body before running a program.
+
+      This section describes how to set up the runtime environment to use the
+      T2EX network communication function on an emulator (QEMU-tef_em1d) for
+      the T-Engine reference board (tef_em1d).
+
+      Parameters can be set at startup to allow QEMU-tef_em1d to use a virtual 
+      network device (TAP) on the host OS, as described in QEMU-tef_em1d guide.
+
+      The network needs to be properly configured in order to allow
+      communication between QEMU-tef_em1d and the host OS. In this document,
+      we configure the network communication between QEMU-tef_em1d and the
+      host OS through bridge connection and allow direct access from
+      QEMU-tef_em1d to the physical network.
+
+  (1) Prerequisite
+
+   (a) Host OS
+
+      Windows 7, Windows Vista, Windows XP
+      (depending on the host OS where QEMU-tef_em1d operates)
+
+      Windows administer privilege is required to perform the following tasks.
+
+  (2) TAP device
+
+   (a) Install OpenVPN
+
+      Download the OpenVPN installer from the following URL.
+
+	http://openvpn.net/index.php/download/community-downloads.html
+        (Download from the link "Windows Installer")
+
+      Execute the downloaded "openvpn-2.2.2-install.msi" and follow
+      instructions on screens to install OpenVPN.
+
+      When the following message appears during installation, select
+      "Install".
+
+        Would you like to install this device software?
+          Name: TAP-Win32 Provider V9 Network Adapter
+          Publisher: OpenVPN Technologies, Inc.
+
+    (b) Changing TAP device name
+
+      The name of the TAP device installed by OpenVPN may include Japanese
+      characters. Because QEMU-tef_em1d cannot use such a name, it must be
+      renamed to an acceptable one as shown in the following steps.
+
+      Display "Network Connections" in following steps.
+
+      - For Windows 7
+
+        1) From the Start menu, open "Control Panel".
+        2) Click "View network status and tasks".
+        3) Click "Change adapter settings".
+
+      - For Windows Vista
+
+        1) From the Start menu, open "Control Panel".
+        2) Click "Network and Internet".
+        3) Click "Network Center".
+        4) Click "Manage network connections".
+
+      - For Windows XP
+
+        1) From the Start menu, open "Control Panel".
+        2) Click "Network and Internet Connections".
+        3) Click "Network Connections".
+
+      An adapter labeled with "TAP-Win32 Adapter V9" is the TAP device
+      installed by OpenVPN. Right-click it and select "Rename".
+
+      It can be changed to any name that includes only ASCII characters
+      without spaces. "MY-TAP" is used in the following descriptions.
+
+  (3) Bridge connection
+
+      Display "Network Connections". (See (2)(b))
+
+      Determine the network adapter that is used by the host PC. Ctrl-click
+      the network adapter and the TAP device just created. Right-click one of
+      the selected adapters and click "Bridge Connection".
+
+  (4) Parameters for QEMU-tef_em1d
+
+      qemu-net.bat can be found in ${BD}/kernel/sysmain/src/network_sample/.
+      Copy this file to the QEMU-tef_em1d install directory "C:\qemu\bin\".
+      To run a program that uses the network connection function, use 
+      qemu-net.bat instead of qemu.bat.
+
+      qemu-net.bat adds the following options to qemu.bat. Modify them as
+      needed for your environment.
+
+      -net nic,macaddr=52:54:00:12:34:56
+
+        This sets the MAC address of NIC in QEMU-tef_em1d. To run more than
+        one QEMU-tef_em1d, set unique MAC addresses for them. A sample using
+        the following MAC addresses is described in the man page of the
+        original QEMU.
+
+          52:54:00:12:34:56, 52:54:00:12:34:57, 52:54:00:12:34:58
+
+      -net tap,ifname=MY-TAP
+
+        This sets the TAP device name.
+
+5.9 Network Operation Check
+
+      This section describes how to check network operations by using a sample
+      program.
+
+  (1) Modifying source code
+
+      Modify appl_main() in ${BD}/kernel/sysmain/src/appl_main.c as follows.
+      Include the header file net_test.h required for the following function
+      call.
+
+        #include "network_sample/net_test.h"
+
+      Add the following function call to appl_main().
+
+        net_test();
+
+      The net_test() function assumes the address is set by DHCP.  To use a
+      static address, configure the macros related to IP address settings,
+      then modify the parameters passed to net_conf() in net_test() in the
+      following file. For details, see "(1) Setting network interface" in
+      "5.11 Network Utility".
+
+        ${BD}/kernel/sysmain/src/network_sample/net_test.c
+
+  (2) Building network sample program
+
+      Add the following line to the bottom of
+      ${BD}/kernel/sysmain/build_t2ex/tef_em1d/Makefile to include Makefile.sample
+      for building the sample program.
+
+        include ../../src/network_sample/Makefile.sample
+
+      Execute make in the following directory as usual.
+
+        ${BD}/kernel/sysmain/build_t2ex/tef_em1d
+
+  (3) Verifying network sample program
+
+      On an actual machine, transfer and execute the program as usual. On the
+      emulator, execute the built binary from qemu-net.bat, which is
+      configured in 5.8(4).
+
+      Results about the network interface setting and sample program
+      operations are printed.
+
+5.10 Program Development using Network Communication Function
+
+      In order to communicate using the socket provided by the network
+      communication function, initialization of the network communication
+      function and proper setup of network interface is required.
+
+  (1) Initializing network communication function
+
+      so_main(0, NULL);
+
+  (2) Setting network interface
+
+      Call net_conf(), which is called from net_test() in the sample program, 
+      to configure the required address setting for the network interface Neta.
+
+      For net_conf() and other utilities, see "5.11 Network Utility".
+
+      The socket for communication can be used once the network interface 
+      setting is complete.
+
+5.11 Network Utility
+
+      Sample programs for network utilities are provided.
+
+      To build network utilities, add the following line to the bottom of
+      ${BD}/kernel/sysmain/build_t2ex/tef_em1d/Makefile.
+
+        include ../../src/network_sample/Makefile.sample
+
+      Execute make in the following directory as usual.
+
+        ${BD}/kernel/sysmain/build_t2ex/tef_em1d
+
+  (1) Setting network interface
+
+      #include "network_sample/util.h"
+      int net_conf(int emu, int dhcp);
+
+      Parameter
+
+        int     emu     whether it is the emulator or not
+        int     dhcp    how to set address
+
+      Description
+
+        This sets the network interface Neta. Before calling it, use so_main()
+        to initialize the network communication function.
+
+        - loop-back device setting
+        - network interface Neta setting
+        - default gateway setting
+        - DNS related setting
+        - host name table setting
+
+        net_conf() internally uses functions described in 5.11(3) or later in
+        addition to T2EX API calls.
+
+        When executing on an actual machine, specify 0 in emu. When executing
+        on the emulator, specify 1 in emu. The following constant is defined
+        for emu.
+
+          #define NET_CONF_MACHINE  (0)
+          #define NET_CONF_EMULATOR (1)
+
+        Specify 1 in dhcp to set DHCP address. Specify 0 in dhcp to set
+        static address. The following constants are defined for dhcp.
+
+          #define NET_CONF_STATIC (0)
+          #define NET_CONF_DHCP   (1)
+
+        In addition, when using the static address, directly edit macros
+        defined at the top of the following file.
+
+          ${BD}/kernel/sysmain/src/network_sample/net_conf.c
+
+          - IPADDR:     IP address
+          - NETMASK:    Net mask
+          - GATEWAY:    Gateway
+          - DNSSERVER1: First DNS server (Comment it out if not required)
+          - DNSSERVER2: Second DNS server (Comment it out if not required)
+          - DNSSERVER3: Third DNS server (Comment it out if not required)
+          - DNSDOMAIN:  DNS search domain (Comment it out if not required)
+
+      Example (using DHCP on the actual machine)
+
+        net_conf(NET_CONF_MACHINE, NET_CONF_DHCP);
+
+      Example (using the static address on the emulator)
+
+        net_conf(NET_CONF_EMULATOR, NET_CONF_STATIC);
+
+        (*) Make sure that the above macros in net_conf.c are set correctly
+
+  (2) Displaying network interface information
+
+      #include "network_sample/util.h"
+      void net_show(void);
+
+      Description
+
+        This displays the following information related to the network
+        interface.
+
+         - address information set for the network interface
+         - DNS related setting
+         - host name table
+         - routing information
+
+  (3) Setting network interface address
+
+      #include "network_sample/util.h"
+      void set_ifaddr(const char* ifname, in_addr_t addr, in_addr_t mask)
+
+      Parameter
+
+        const char*     ifname          interface name
+        in_addr_t       addr            address
+        in_addr_t       mask            network mask
+
+      Description
+
+        This sets the address addr and the network mask mask for the
+        interface specified by ifname.
+
+  (4) Starting/stopping network interface
+
+      #include "network_sample/util.h"
+      int if_updown(const char* ifname, int is_up)
+
+      Parameter
+
+        const char*     ifname          interface name
+        int             is_up           starts/stops the interface
+
+      Description
+
+        This starts or stops the interface specified by ifname.
+
+        To start the interface, specify a non-zero value in is_up. To stop the
+        interface, specify 0 in is_up.
+
+  (5) Adding a route
+
+      #include "network_sample/route.h"
+      void route_add(in_addr_t dest, in_addr_t gate, in_addr_t mask,
+                     int index, int direct);
+
+      Parameter
+
+        in_addr_t       dest    destination address
+        in_addr_t       gate    gateway address
+        in_addr_t       mask    network mask
+        int             index   interface index
+        int             direct  value indicating whether directly accessible
+                                to the destination address or not
+
+      Description
+
+        This adds the routing information specified by the destination address
+        dest, the gateway address gate, and the network mask mask to the
+        routing table.
+
+        Specify the interface index in index. This value can be retrieved by
+        so_ifnametoindex() and so on.
+
+        Specify a value other than 0 in direct when connecting to the
+        destination address directly, or 0 otherwise. The routing information
+        flag is set to RTF_GATEWAY when 0 is specified in direct, or
+        RTF_HOST instead of RTF_GATEWAY when a value other than 0 is
+        specified.
+
+        To specify the default gateway, specify INADDR_ANY in dest and mask.
+        
+
+  (6) Deleting a route
+
+      #include "network_sample/route.h"
+      void route_delete(in_addr_t dest, in_addr_t mask, int index,
+                        int direct);
+
+      Parameter
+
+        in_addr_t       dest    destination address
+        in_addr_t       gate    gateway address
+        in_addr_t       mask    network mask
+
+      Description
+
+        This deletes the routing information specified by the destination
+        address dest, the gateway address gate, and the network mask
+        mask from the routing table.
+
+        To specify the default gateway, specify INADDR_ANY in dest and mask.
+
+  (7) Listing routes
+
+      #include "network_sample/route.h"
+      void dump_rtlist(void);
+
+      Description
+
+        This displays the entries in the routing table in the standard output.
+
+  (8) Adding an entry to host table
+
+      #include "network_sample/util.h"
+      void add_hosttable(const char* hostname, in_addr_t addr);
+
+      Parameter
+
+        const char*     hostname        name of host
+        in_addr_t       addr            address
+
+      Description
+
+        This adds an entry that assigns the address addr to the host name
+        hostname to the host table.
+
+  (9) Setting address using DHCP
+
+      #include "network_sample/dhclient.h"
+      int dhclient(const char* ifname);
+
+      Parameter
+
+        const char*     ifname          interface name
+
+      Description
+
+        This tries to obtain the following setting for the interface specified
+        by ifname using DHCP.
+
+        - network interface address setting
+        - default gateway setting
+        - DNS related setting
+
+5.12 Implementation Restrictions
+
+      There is the following restriction:
+
+      - Although the old source code, from which the current code is derived,
+        provides the function of assigning a random value to the
+        identification field of the IP header, this implementation does not
+        support this function to reduce memory usage.
+
+
+------------------------------------------------------------------------------
+6. Calendar Function
+------------------------------------------------------------------------------
+
+      There are the following restrictions:
+
+      - In API calls that have arguments or the return code of time_t type, an
+        error occurs when a time value that is out of the range expressed by
+        SYSTIM or SYSTIM_U is specified.
+        Specifically, an error occurs when a time earlier than 1985/1/1 00:00:00
+        is specified.
+
+      - When %U or %W is specified in dt_strptime(), the value is ignored in
+        the string and not stored in tm.
+
+
+------------------------------------------------------------------------------
+7. Program Load Function
+------------------------------------------------------------------------------
+
+7.1 Program Module Creation
+
+      This implementation supports the ELF object as a program module format.
+
+      A program module can be created by using build rules included in
+      ${BD}/module/etc/makerules. See samples of the system and regular
+      program modules, which are found in the following directories.
+
+        ${BD}/module/test-sys
+           System program module sample
+
+        ${BD}/module/test-usr
+           Regular program module sample
+
+7.2 Restrictions
+
+      There is the following restriction:
+
+      - The initialization and termination processes of a regular program
+        module are always performed at the system level regardless of the
+        destination space specification when pm_load() is executed.
+
+
+------------------------------------------------------------------------------
+8. Standard C Compatible Library
+------------------------------------------------------------------------------
+
+      Standard C compatible library is implemented in portions of 
+      ${BD}/lib/libtk, and in ${BD}/lib/libc.
+
+      In this implementation, static data is placed in user level 
+      memory space (.data_usr and .bss_usr).
+
+
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------

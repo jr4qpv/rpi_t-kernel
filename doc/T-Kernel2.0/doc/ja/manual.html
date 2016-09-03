@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h1 id="t-kernel-2.0-tef_em1d-ソフトウェアパッケージ説明書">T-Kernel 2.0 (tef_em1d) ソフトウェアパッケージ説明書</h1>
+<hr />
+<h3 id="更新履歴">&lt; 更新履歴 &gt;</h3>
+<ul>
+<li><a href="Ver2.02.00.txt">Ver 2.02.00</a></li>
+<li><a href="Ver2.01.03.txt">Ver 2.01.03</a></li>
+<li><a href="Ver2.01.02.txt">Ver 2.01.02</a></li>
+<li><a href="Ver2.01.01.txt">Ver 2.01.01</a></li>
+<li><a href="Ver2.01.00.txt">Ver 2.01.00</a></li>
+<li><a href="Ver2.00.01.txt">Ver 2.00.01</a></li>
+</ul>
+<h2 id="はじめに">1. はじめに</h2>
+<p>本ドキュメントは、T-Kernel 2.0 (tef_em1d) ソフトウェアパッケージに関する説明書です。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li>1-1. <a href="package.html">パッケージ内容</a></li>
+<li>1-2. <a href="ref_board.html">T-Engine リファレンスボード (tef_em1d)</a></li>
+</ol>
+<h2 id="t-kernel-2.0-ソースコードパッケージの説明">2. T-Kernel 2.0 ソースコードパッケージの説明</h2>
+<p>T-Kernel 2.0 ソースコードパッケージの内容/構成に関して説明します。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li>2-1. <a href="tkernel-source.html">T-Kernel 2.0 ソース構成</a></li>
+<li>2-2. <a href="tmonitor-source.html">T-Monitor (tef_em1d 用) ソース構成</a></li>
+<li>2-3. <a href="driver-source.html">デバイスドライバ (tef_em1d 用) ソース構成</a></li>
+<li>2-4. <a href="tkernel-startup.html">T-Kernel 2.0 の起動処理</a></li>
+</ol>
+<h2 id="t-kernel-2.0-実装仕様書">3. T-Kernel 2.0 実装仕様書</h2>
+<p>T-Kernel2.0 (tef_em1d) の実装依存部分に関して説明します。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li>3-1. <a href="impl-tef_em1d.txt">T-Kernel 2.0 (tef_em1d) 実装仕様書</a></li>
+</ol>
+<h2 id="開発方法">4. 開発方法</h2>
+<p>T-Kernel 2.0 システムの開発方法に関して説明します。本パッケージでは以下の 3 種類の開発方法に対応しています。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p><strong>4-1. Eclipse を使用した開発方法 (Windows ホスト)</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>Windows で動作する Eclipse 開発環境を使用して開発する方法を説明します。Eclipse 開発環境では、Cygwin 上の GNU 開発環境を使用します。</p></li>
+<li><p>Eclipse 開発環境の基本的な使用方法に関してましては、Eclipse (CDT プラグイン) 関連のドキュメントを参照してください。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li>(1) <a href="install-cygwin.html">Cygwin のインストール</a></li>
+<li>(2) <a href="install-java.html">Javaのインストール</a></li>
+<li>(3) <a href="install-eclipse.html">Eclipse のインストール</a></li>
+<li>(4) <a href="setup-gnu-eclipse.html">GNU 開発環境の設定(Eclipse 用)</a></li>
+<li>(5) <a href="setup-eclipse.html">Eclipse 作業環境の構築</a></li>
+<li>(6) <a href="build-eclipse.html">T-Kernel システムの構築(Eclipse 用)</a></li>
+<li>(7) <a href="debug-eclipse.html">実行とデバッグ(Eclipse 用)</a></li>
+<li>(8) <a href="addendum-eclipse.html">補足事項(Eclipse 用)</a></li>
+</ol></li>
+</ol></li>
+<li><p><strong>4-2. Cygwin を使用した開発方法 (Windows ホスト)</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>Windows で動作する Cygwin 上の GNU 開発環境を直接使用して開発する方法を説明します。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li>(1) <a href="install-cygwin.html">Cygwin のインストール</a></li>
+<li>(2) <a href="setup-gnu-cygwin.html">GNU 開発環境の設定(Cygwin 用)</a></li>
+<li>(3) <a href="build-cyglinux.html">T-Kernel システムの構築(Cygwin/Linux 共用)</a></li>
+<li>(4) <a href="debug-cyglinux.html">実行とデバッグ(Cygwin/Linux 共用)</a></li>
+</ol></li>
+</ol></li>
+<li><p><strong>4-3. Linux を使用した開発方法 (Linux ホスト)</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>Linux 上で動作する GNU 開発環境を直接使用して開発する方法を説明します。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li>(1) <a href="setup-gnu-linux.html">GNU 開発環境の設定(Linux 用)</a></li>
+<li>(2) <a href="build-cyglinux.html">T-Kernel システムの構築(Cygwin/Linux 共用)</a></li>
+<li>(3) <a href="debug-cyglinux.html">実行とデバッグ(Cygwin/Linux 共用)</a></li>
+</ol></li>
+</ol></li>
+</ol>
+<h2 id="エミュレータqemu-tef_em1d">5. エミュレータ(QEMU-tef_em1d)</h2>
+<p>T-Kernel 2.0 システムの開発で利用できる T-Engine リファレンスボード (tef_em1d) 用エミュレータ (QEMU-tef_em1d) に関して説明します。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li>5-1. <a href="qemu-tef_em1d.html">エミュレータ (QEMU-tef_em1d) 説明書</a></li>
+</ol>
+</body>
+</html>

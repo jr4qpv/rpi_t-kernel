@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="Eclipse-Installation">Eclipse Installation</h2>
+<hr />
+<ul>
+<li><a href="#Eclipse-System-Installation">1. Eclipse System Installation</a></li>
+<li><a href="#T-Kernel-Development-Plugin-Installation">2. T-Kernel Development Plugin Installation</a></li>
+<li><a href="#Other-Settings">3. Other Settings</a></li>
+</ul>
+<hr />
+<h3 id="Eclipse-System-Installation">1. Eclipse System Installation</h3>
+<p>This section installs the Eclipse + CDT (C/C++ Development Tooling) environment.</p>
+<p>Please log in to Windows with the account which will actually use Eclipse and perform the following tasks.</p>
+<p>Copy the following files located in the &quot;develop&quot; folder of this package to an appropriate folder on the drive where it is to be installed (e.g. &quot;C:\temp&quot;).</p>
+<pre><code>    - Eclipse + CDT             &quot;eclipse-cpp-indigo-SR2-incubation-win32.zip&quot;
+    - Eclipse Japanese plugin   &quot;pleiades_1.3.4.zip&quot;</code></pre>
+<ul>
+<li>There are newer versions of Eclipse on the Eclipse home page, but compatibility testing was performed with the version above. Please use this version of Eclipse (Indigo SR2).</li>
+</ul>
+<p>Next, extract each of the zip files above in the order in which they are listed. Select and right-click the files above in the Explorer and select &quot;Extract All&quot;. Specify the extraction location as follows.</p>
+<pre><code>    - Eclipse + CDT              &quot;C:\&quot;
+    - Eclipse Japanese plugin    &quot;C:\eclipse&quot;</code></pre>
+<p>Eclipse is extracted into the &quot;C:\eclipse&quot; folder.</p>
+<ul>
+<li>Do not install with a path name that includes spaces or Japanese characters. The software will not operate properly if there is a space in the path name (e.g. &quot;C:\Program Files&quot;).</li>
+<li>The Eclipse Japanese plugin does not need to be extracted if you are using a non-Japanese environment.</li>
+<li>The system will ask if you wish to combine the folders when extracting the &quot;Eclipse Japanese plugin&quot;. Press &quot;Yes&quot;.</li>
+</ul>
+<p>To use Eclipse in a Japanese environment, add the following statement to the last line of &quot;C:\eclipse\eclipse.ini&quot;. Delete this line to change the environment back to English.</p>
+<pre><code>    -javaagent:plugins/jp.sourceforge.mergedoc.pleiades/pleiades.jar</code></pre>
+<p>Use Explorer to open the &quot;C:\eclipse&quot; folder where Eclipse is installed. The &quot;eclipse.exe&quot; file is the Eclipse program. Create a shortcut to this file on the Desktop.</p>
+<p>Please delete the zip files copied to &quot;C:\temp&quot; after installation as they are no longer needed.</p>
+<h3 id="T-Kernel-Development-Plugin-Installation">2. T-Kernel Development Plugin Installation</h3>
+<p>To continue, install the T-Kernel development plugin.</p>
+<p>Copy the following files located in the &quot;develop&quot; folder of this package to an appropriate folder on the drive where it is to be installed (e.g. &quot;C:\temp&quot;).</p>
+<pre><code>  - Common platform elements     &quot;org.t_engine.te.1.1.2.zip&quot;
+  - tef_em1d support elements    &quot;org.t_engine.tl.tef_em1d.1.1.2.zip&quot;</code></pre>
+<ul>
+<li>If you are using plugins from a previous version, move them to another folder or delete them.</li>
+</ul>
+<p>Next, extract each of the zip files above in the order in which they are listed. Select and right-click the files above in the Explorer and select &quot;Extract All&quot;. Specify the extraction location as &quot;C:\eclipse&quot;.</p>
+<p>Please delete the zip files copied to &quot;C:\temp&quot; after installation as they are no longer needed.</p>
+<h3 id="Other-Settings">3. Other Settings</h3>
+<p>If the Windows HOME environment variable is set, it will conflict with the Cygwin environment variable, and Eclipse will not run properly. Change the Windows HOME environment variable to another name (Ex. HOME_ORG) or delete it.</p>
+<ul>
+<li>Access and edit the Windows environment variables under &quot;Control Panel&quot; -&gt; (&quot;System and Security&quot; -&gt;) &quot;System&quot; -&gt; &quot;Advanced system settings&quot; -&gt; &quot;Environment variables&quot;.</li>
+</ul>
+</body>
+</html>

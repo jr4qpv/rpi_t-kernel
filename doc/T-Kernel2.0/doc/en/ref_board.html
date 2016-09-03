@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="T-Engine-Reference-Board-tef_em1d">T-Engine Reference Board (tef_em1d)</h2>
+<hr />
+<ul>
+<li><a href="#Implementation-and-Operation-Method">1. Implementation and Operation Method</a></li>
+<li><a href="#Writing-to-Flash-ROM">2. Writing to Flash ROM</a></li>
+</ul>
+<hr />
+<h3 id="Implementation-and-Operation-Method">1. Implementation and Operation Method</h3>
+<p>This section explains how to operate the &quot;T-Engine Reference Board (tef_em1d)&quot;.</p>
+<p>For hardware details, please refer to the <a href="../../hardware/tef_em1d/doc/en/TE_ReferenceBoard_HardwareManual.pdf">Hardware Manual</a>.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p><strong>(1) DIP switch settings</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>The DIP switches (U11) on the board are set as follows.</p>
+<pre><code>    SW1     Always OFF
+    SW2     Always OFF
+    SW3     Always OFF
+    SW4     ON: start T-Monitor, OFF: start T-Kernel</code></pre></li>
+<li><p>Set the switch to start T-Monitor when debugging. T-Monitor will wait for command input when it starts up. Use the T-Monitor commands to load the T-Kernel execution program.</p></li>
+<li><p>Starting up with T-Kernel will immediately start the T-Kernel execution program without waiting for T-Monitor command input. In this case, the T-Kernel execution program must be written to Flash ROM.</p></li>
+</ol></li>
+<li><p><strong>(2) Connection with the serial communications terminal</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>Connect the UART0 (CN3) on the board to the serial communications (COM) port on the development host PC using a serial communications (RS232C) cross cable.</p></li>
+<li><p>Start the communications software (terminal emulator) on the development host PC using the following settings to use it as a debugging console.</p>
+<pre><code>    Transmission speed          115200 bps
+    Data                        8 bits
+    Stop bit                    1 bit
+    Parity                      None
+    Flow control                None
+</code></pre></li>
+<li><p>&quot;gterm&quot; is included as the communications software (terminal emulator) in the development environment of this package, but it is acceptable to use other general-purpose communications software.</p></li>
+</ol></li>
+<li><p><strong>(3) System start up</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>Connect a DC 5V power supply to the power connector on the board and turn the power switch (SW10) ON to start the system.</p></li>
+<li><p>Press the reset button (SW5) with the power turned on to reset and reboot the system.</p></li>
+<li><p>The reset button does not reboot when the system is shutdown and &quot;&lt;&lt; SYSTEM SHUTDOWN &gt;&gt;&quot; is output to the debug console. Turn the power switch OFF once and then ON again to reboot.</p></li>
+<li><p>Please note that if the reset button is pressed or the power is switched OFF without a proper shutdown sequence when using a micro SD card, the contents of the micro SD card may become corrupted.</p></li>
+</ol></li>
+<li><p><strong>(4) Confirming operation on the device</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>When the system starts, T-Monitor launches, the following startup message is displayed on the debug console, and the &quot;TM&gt;&quot; prompt waiting for command input is shown.</p>
+<pre><code>    T-Monitor/tef_em1d Version 2.01.00
+
+    TM></code></pre></li>
+<li><p>Use the T-Monitor &quot;bd&quot; command to run T-Kernel if the T-Kernel execution image is written to the device's Flash ROM.</p>
+<pre><code>    TM> bd
+
+    T-Kernel Version 2.02.00
+
+    ConsoleIO - OK
+        ::::
+    Push any key to shutdown the T-Kernel.
+
+    << SYSTEM SHUTDOWN >></code></pre></li>
+</ol></li>
+</ol>
+<h3 id="Writing-to-Flash-ROM">2. Writing to Flash ROM</h3>
+<p>To run the T-Kernel program on the device, the ROM information (rominfo-rom.mot) and the T-Kernel ROM image (kernel-rom.mot) must be written to the Flash ROM using one of the following methods.</p>
+<p>However, if for some reason the pre-written T-Monitor does not start, use the ICE to write the T-Monitor ROM image (tmonitor.mot) again.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p><strong>(1) Method for Writing with T-Monitor</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>You can write to the Flash ROM using the &quot;<code>.flload</code>&quot; command when using the &quot;gterm&quot; communications software.</p>
+<pre><code>    TM> .flload rominfo-rom.mot
+    .. FLLO  [rominfo-rom.mot: 1762 bytes]
+
+    Copy Flash ROM Image to RAM Area</code></pre>
+<ul>
+<li><p>Please wait a few moments until the following message is displayed.</p>
+<pre><code>> Load S-Format Data of Flash ROM
+ (125.8 bytes/sec)
+
+Loaded: 70020000 -> 700202A3
+Writing Flash ROM at 70020000 [1 blks] ... wait
+TM> </code></pre></li>
+</ul></li>
+<li><p>You can write to the Flash ROM using the T-Monitor &quot;FLLO&quot; command if you are not using the &quot;gterm&quot; communications software.</p>
+<pre><code>    TM> FLLO
+    Copy Flash ROM Image to RAM Area</code></pre>
+<ul>
+<li><p>Please wait a few moments until the following message is displayed.</p>
+<pre><code>> Load S-Format Data of Flash ROM</code></pre></li>
+<li><p>When the message above is displayed, use the communications software functions to send the ROM image file (.mot file) to be written with no control sequence.</p>
+<pre><code>Loaded: 70020000 -> 700202A3
+Writing Flash ROM at 70020000 [1 blks] ... wait
+TM></code></pre></li>
+</ul></li>
+</ol></li>
+<li><p><strong>(2) Method for Writing with ICE (PARTNER-Jet)</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>Use the settings file (JETARM.CFG) attached to this package to start PARTNER-Jet. Use the following command after start up to write the T-Monitor ROM image.</p>
+<pre><code>    > rd tmonitor.mot,0x90000000</code></pre>
+<ul>
+<li>An offset of 0x90000000 must be added to change to the Flash ROM address (0x00000000 - ), because the address of the ROM image file (.mot file) is the address (0x70000000 - ) at the time of T-Monitor/T-Kernel execution.</li>
+</ul></li>
+</ol></li>
+</ol>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="Running-and-Debugging-Cygwin-Linux-shared-use">Running and Debugging (Cygwin/Linux shared use)</h2>
+<hr />
+<ul>
+<li><a href="#Console-Preparation">1. Console Preparation</a></li>
+<li><a href="#Running-in-the-Emulator-RAM-version-T-Kernel">2. Running in the Emulator (RAM version T-Kernel)</a></li>
+<li><a href="#Debugging-in-the-Emulator-RAM-version-T-Kernel">3. Debugging in the Emulator (RAM version T-Kernel)</a></li>
+<li><a href="#Running-in-the-Emulator-ROM-version-T-Kernel">4. Running in the Emulator (ROM version T-Kernel)</a></li>
+<li><a href="#Running-on-the-Device">5. Running on the Device</a></li>
+</ul>
+<hr />
+<h3 id="Console-Preparation">1. Console Preparation</h3>
+<p>First, prepare the terminal emulator to communicate with the target.</p>
+<p>Any terminal emulator program (&quot;Tera Term&quot;, &quot;Hyper Terminal&quot;, &quot;minicom&quot;, etc.) which supports the development environment platform can be used, but this example uses the &quot;gterm&quot; program used by the Eclipse development environment included in this package.</p>
+<p>Run &quot;gterm&quot; from the console using the following command.</p>
+<pre><code>    $ $GNU_BD/etc/gterm</code></pre>
+<ul>
+<li>$GNU_BD is the value of the GNU_BD environmental variable, which is the directory where the development environment was installed.</li>
+<li>Enter &quot;gterm -h&quot; to display the command line help message.</li>
+</ul>
+<h3 id="Running-in-the-Emulator-RAM-version-T-Kernel">2. Running in the Emulator (RAM version T-Kernel)</h3>
+<p>Run the RAM version T-Kernel which was built in the emulator using the following procedure.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Start the emulator. Please refer to the <a href="qemu-tef_em1d.html">Emulator (QEMU-tef_em1d) Instructions</a> for more information about how to start the emulator.</p>
+<p>Specify &quot;-dipsw dbgsw=on&quot; to start T-Monitor and specify the following Debug ROM image which was created in the system build.</p>
+<pre><code>    $BD/kernel/sysmain/build/tef_em1d/rom-dbg.bin</code></pre>
+<ul>
+<li>$BD is the value of the BD environmental variable, which is the &quot;tkernel_source&quot; sub-directory (&quot;/usr/local/tef_em1d/tkernel_source&quot;) in the directory where the T-Kernel source code package was installed.</li>
+</ul></li>
+<li><p>(2) Use the following command to run &quot;gterm&quot; from the console.</p>
+<pre><code>    $ cd $BD/kernel/sysmain/build/tef_em1d
+    $ $GNU_BD/etc/gterm -l localhost:10000</code></pre>
+<ul>
+<li><p>&quot;-l localhost:10000&quot; is the serial port specification for connecting with the emulator. By default, it is the localhost (127.0.0.1) TCP port number 10000. Please adjust to match any changes in the emulator settings.</p></li>
+<li><p>Defining an alias that includes the parameters is convenient when running &quot;gterm&quot;.</p>
+<pre><code>  Example:  alias gterm=&#39;$GNU_BD/etc/gterm -l localhost:10000&#39;</code></pre></li>
+<li><p>Make the following settings when using &quot;Tera Term&quot; or other general-purpose terminal emulators.</p>
+<pre><code>    Connection method   TCP/IP
+    Destination (host)  localhost (or 127.0.0.1)
+    TCP port number     10000 
+    Service             Other 
+    Protocol            none/raw</code></pre></li>
+</ul></li>
+<li><p>(3) The console displays the &quot;gterm&quot; startup message, T-Monitor starts on the emulator, and the startup message and prompt are displayed.</p>
+<pre><code>    &lt;&lt; Gterm ver 2.51 : 130221 &gt;&gt;
+
+    T-Monitor/tef_em1d Version 2.01.00
+
+    TM&gt;</code></pre></li>
+<li><p>(4) Load the execution image file from the console with the &quot;<code>.load</code>&quot; command.</p>
+<pre><code>    TM&gt; .load kernel-ram.bin 30006000
+    .. LO XM,30006000 [kernel-ram.bin: 177392 bytes]
+    ....*....*....*....*....*....*....*....*....*....*....*....*....*....*....*....*....*. (29565.3 bytes/sec)
+
+    Loaded: 30006000 -&gt; 300317FF
+    TM&gt;</code></pre>
+<ul>
+<li><p>&quot;30006000&quot; is the starting address of the binary image. It is possible to specify and load &quot;kernel-ram.mot&quot; (S-Format), which does not require an address specification, but the transfer time will be long due to the large file size.</p></li>
+<li><p>&quot;<code>.load</code>&quot; is a &quot;gterm&quot; specific command. Send the &quot;kernel-ram.bin&quot; file by X-Modem after entering the following T-Monitor command when using &quot;Tera Term&quot; or other general-purpose terminal emulators.</p>
+<pre><code>    TM&gt; LO XM,30006000</code></pre>
+<p>Alternatively, send the &quot;kernel-ram.mot&quot; file by non-procedure after entering the following command.</p>
+<pre><code>    TM&gt; LO S</code></pre></li>
+</ul></li>
+<li><p>(5) Enter the &quot;BD&quot; command to start the execution.</p>
+<pre><code>    TM&gt; BD
+
+    T-Kernel Version 2.02.00
+
+    ConsoleIO - OK
+    ClockDrv - OK
+    SysDiskDrv - OK
+    ScreenDrv - OK
+    KbPdDrv - OK
+    LowKbPdDrv - OK
+    1 - Debug sample started.
+    2 - Start sample task (tid=8) and wait.
+    3 - Sample task started (tid=8).
+    4 - Delay 1000 msec.
+    5 - Delay 1000 msec.
+    6 - Delay 1000 msec.
+    7 - Wakeup main task.
+    8 - Wakeup from sample task.
+    9 - Sample task finished.
+    10 - Debug sample finished.
+    Push any key to shutdown the T-Kernel.</code></pre></li>
+<li><p>(6) Shutdown &quot;gterm&quot; with the &quot;<code>.q</code>&quot; command.</p>
+<ul>
+<li>To not shutdown &quot;gterm&quot;, enter &quot;Ctrl-C&quot; and then &quot;<code>.q</code>&quot; when &quot;^C&gt; &quot; is displayed.</li>
+</ul></li>
+</ol>
+<h3 id="Debugging-in-the-Emulator-RAM-version-T-Kernel">3. Debugging in the Emulator (RAM version T-Kernel)</h3>
+<p>Run the debugging for the RAM version T-Kernel which was built for debugging on the emulator using the following procedure.</p>
+<p>Use &quot;gdb&quot; (GNU debugger) as the debugger.</p>
+<ul>
+<li>The emulator includes &quot;gdb&quot; target debugger functions.</li>
+<li>Please refer to the <a href="ftp://ftp.gnu.org/pub/old-gnu/Manuals/gdb/html_chapter/gdb_1.html">gdb Manual</a> for more information about operations and commands of &quot;gdb&quot;.</li>
+</ul>
+<p>The typical build directory for running builds is &quot;<span class="math">$BD/kernel/sysmain/build/tef_em1d&quot;, but the build directory for debugging is &quot;$</span>BD/kernel/sysmain/build/tef_em1d.debug&quot;.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Start the emulator in the same way as for a typical RAM version T-Kernel execution.</p>
+<p>Add &quot;-S -gdb tcp:127.0.0.1:1234&quot; to the emulator startup parameters to support &quot;gdb&quot;. Either of the following can be specified as the Debug ROM image. (same content)</p>
+<pre><code>    $BD/kernel/sysmain/build/tef_em1d/rom-dbg.bin
+    $BD/kernel/sysmain/build/tef_em1d.debug/rom-dbg.bin</code></pre></li>
+<li><p>(2) Use the following command to run &quot;gterm&quot; from the console. The &quot;gterm&quot; startup message is displayed, but the T-Monitor startup message is not because the debugger is stopped.</p>
+<pre><code>    $ cd $BD/kernel/sysmain/build/tef_em1d.debug
+    $ $GNU_BD/etc/gterm -l localhost:10000
+
+    &lt;&lt; Gterm ver 2.51 : 130221 &gt;&gt;</code></pre></li>
+<li><p>(3) Use the following command to run &quot;gdb&quot; from another console.</p>
+<pre><code>    $ cd $BD/kernel/sysmain/build/tef_em1d.debug
+    $ $GNU_BD/bin/arm_2-unknown-tmonitor-gdb kernel-ram.sys
+    ::::
+    (gdb)</code></pre></li>
+<li><p>(4) Use the &quot;gdb&quot; &quot;target&quot; command to connect to the emulator, then enter &quot;c (continue)&quot; to restart the execution.</p>
+<pre><code>    (gdb) target remote localhost:1234
+    Remote debugging using localhost:1234
+    0x00000000 in ?? ()
+    (gdb) c
+    Continuing.</code></pre>
+<ul>
+<li><p>If the &quot;<code>.gdbinit</code>&quot; file is present in the home or current directory when &quot;gdb&quot; starts, it will run using the commands in that file. Create the &quot;<code>.gdbinit</code>&quot; file as described below to save the trouble of entering the commands.</p>
+<pre><code>    target remote localhost:1234
+    c</code></pre></li>
+</ul></li>
+<li><p>(5) The T-Monitor startup message and prompt are displayed on the &quot;gterm&quot; console. Load the execution image file from the console with the &quot;<code>.load</code>&quot; command.</p>
+<pre><code>    T-Monitor/tef_em1d Version 2.01.00
+    TM&gt;
+
+    TM&gt; .load kernel-ram.bin 30006000
+    ::::
+    Loaded: 30006000 -&gt; 300317FF
+    TM&gt;</code></pre></li>
+<li><p>(6) Enter &quot;Ctrl-C&quot; on the &quot;gdb&quot; console when the loading finishes and suspend the execution. When the control switches to &quot;gdb&quot;, set the first break point (for example &quot;usermain&quot;) and restart the execution.</p>
+<pre><code>    ( CtrlｰC Key-in ) 
+    Program received signal SIGINT, Interrupt.
+    0x70000dd4 in ?? ()
+    (gdb) b usermain
+    (gdb) c
+    Continuing.</code></pre></li>
+<li><p>(7) Next, enter the command &quot;BD&quot; on the &quot;gterm&quot; console to start running the &quot;kernel-ram.bin&quot; which was loaded, suspend the break point &quot;usermain&quot; that was set, and switch control to &quot;gdb&quot;.</p>
+<pre><code>    TM&gt; BD
+
+    T-Kernel Version 2.02.00</code></pre></li>
+<li><p>(8) Finally, use the various &quot;gdb&quot; commands on the &quot;gdb&quot; console to execute the debugging. In addition, the &quot;gterm&quot; console also handles the input and output from the program.</p>
+<ul>
+<li>Shutdown &quot;gdb&quot; with the &quot;q&quot; command, but if the target is shutdown it may not be possible to do so. In that case, enter &quot;Ctrl-C&quot; twice to suspend operation and then use the &quot;q&quot; command to shut it down.</li>
+</ul></li>
+</ol>
+<h3 id="Running-in-the-Emulator-ROM-version-T-Kernel">4. Running in the Emulator (ROM version T-Kernel)</h3>
+<p>Run the ROM version T-Kernel which was built in the emulator using the following procedure.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Start the emulator and run &quot;gterm&quot; in the same way as for a typical RAM version T-Kernel execution.</p>
+<p>Specify the following ROM image in the emulator.</p>
+<pre><code>    $BD/kernel/sysmain/build/tef_em1d/rom.bin</code></pre></li>
+<li><p>(2) The console displays the &quot;gterm&quot; startup message, T-Monitor starts up on the emulator, and the startup message and prompt are displayed.</p>
+<pre><code>    &lt;&lt; Gterm ver 2.51 : 130221 &gt;&gt;
+
+    T-Monitor/tef_em1d Version 2.01.00
+
+    TM&gt; </code></pre></li>
+<li><p>(3) In this case, enter the T-Monitor &quot;BD&quot; command to start the execution.</p>
+<pre><code>    TM&gt; BD
+
+    T-Kernel Version 2.02.00
+
+    ConsoleIO - OK
+      ::::::</code></pre></li>
+</ol>
+<h3 id="Running-on-the-Device">5. Running on the Device</h3>
+<p>The procedure to run the program on the device (T-Engine reference board - tef_em1d) is almost the same as the emulator.</p>
+<p>Please refer above to <a href="#Running-in-the-Emulator-RAM-version-T-Kernel">Running in the Emulator (RAM version T-Kernel)</a>, <a href="#Debugging-in-the-Emulator-RAM-version-T-Kernel">Debugging in the Emulator (RAM version T-Kernel)</a>, <a href="#Running-in-the-Emulator-ROM-version-T-Kernel">Running in the Emulator (ROM version T-Kernel)</a>. However, only the following point differs for the device.</p>
+<ul>
+<li><p>Specify the serial port to connect with the device in the &quot;gterm&quot; startup parameters.</p>
+<pre><code>    $ cd $BD
+    $ $GNU_BD/etc/gterm -l /dev/ttyS0 -115200 -x</code></pre>
+<ul>
+<li><p>&quot;-l /dev/ttyS0&quot; supports the following specification for the serial port connection with the device. &quot;-115200&quot; is the transmission speed (bps) setting. &quot;-x&quot; specifies no flow control. Please match the settings to the actual environment and device being used.</p>
+<pre><code>    COM1   /dev/ttyS0
+    COM2   /dev/ttyS1
+    COM3   /dev/ttyS2
+     .....</code></pre></li>
+<li><p>Make the following settings when using &quot;Tera Term&quot; or other general-purpose terminal emulators.</p>
+<pre><code>    Connection method       Serial
+    Port                    COM1
+    Baud rate               115200
+    Data                    8 bit
+    Stop                    1 bit
+    Parity                  none
+    Flow control            none</code></pre></li>
+</ul></li>
+<li><p>T-Monitor must be written to the Flash ROM of the device. The device's DIP switch must also be set for T-Monitor startup.</p></li>
+<li><p>After connecting the device and the serial cable, start &quot;gterm&quot;, and turn on the device's power switch or press the reset button. The T-Monitor startup message and prompt are displayed on the console.</p></li>
+<li><p>Write the following ROM information (for RAM execution) to the Flash ROM when running the RAM version T-Kernel.</p>
+<pre><code>    $BD/bin/tef_em1d/rominfo-ram.mot</code></pre>
+<p>To write the information to Flash ROM, start &quot;gterm&quot;, and enter the following commands with the T-Monitor prompt displayed.</p>
+<pre><code>    TM&gt; .flload bin/tef_em1d/rominfo-ram.mot</code></pre>
+<ul>
+<li><p>&quot;.flload&quot; is a &quot;gterm&quot; specific command. Send the &quot;rominfo-ram.mot&quot; file by non-procedure after entering the following T-Monitor command when using &quot;Tera Term&quot; or other general-purpose terminal emulators.</p>
+<pre><code>TM&gt; FLLO</code></pre></li>
+</ul></li>
+<li><p>Write both the following ROM information (for ROM execution) and the Kernel ROM image to the Flash ROM when running the ROM version T-Kernel.</p>
+<pre><code>    $BD/bin/tef_em1d/rominfo-rom.mot
+    $BD/bin/tef_em1d/kernel-rom.mot</code></pre>
+<p>Enter each of the following commands to write to Flash ROM.</p>
+<pre><code>    TM&gt; .flload bin/tef_em1d/rominfo-rom.mot
+    TM&gt; .flload bin/tef_em1d/kernel-rom.mot</code></pre></li>
+<li><p>Debug execution using &quot;gdb&quot; is as follows.</p>
+<ul>
+<li><p>Use T-Monitor as the target debugger needed for &quot;gdb&quot; operation.</p></li>
+<li>&quot;gdb&quot; and &quot;gterm&quot; use the same serial port, so they cannot be used simultaneously. Shutdown &quot;gterm&quot; when using &quot;gdb&quot;.
+<ul>
+<li>Because &quot;gterm&quot; cannot be used, the output from the program to the debug console is displayed, but input does not work.</li>
+</ul></li>
+<li><p>Use the following command to specify the serial port for the &quot;gdb&quot; connection with the device. &quot;tmon&quot; specifies the target debugger.</p>
+<pre><code>    set remotebaud 115200
+    target tmon /dev/ttyS0</code></pre></li>
+<li><p>Load the program using the &quot;gdb&quot; &quot;load&quot; command. A command execution example is shown below.</p>
+<ul>
+<li>The line &quot;from target&gt;&quot; is the output from the program to the debug console. Input does not work.</li>
+<li><p>&quot;s&quot; is the step execution command.</p>
+<pre><code>$ $GNU_BD/bin/arm_2-unknown-tmonitor-gdb kernel-ram.sys
+::::
+(gdb) set remotebaud 115200
+(gdb) target tmon /dev/ttyS0
+Remote target tmon connected to /dev/ttyS0
+0x34000000 in ?? ()
+(gdb) load
+.text   : 0x30006000 .. 0x30031000
+.data   : 0x30031000 .. 0x300314f0
+Transfer rate: 2 KB/sec.
+(gdb) b usermain
+Breakpoint 1 at 0x300062d8: file ../../src/usermain.c, line 133.
+(gdb) c
+Continuing.
+from target&gt; 
+from target&gt; T-Kernel Version 2.02.00
+from target&gt; 
+
+Breakpoint 1, usermain () at ../../src/usermain.c:133
+133     ercd = ConsoleIO(0, NULL);  ercd = ConsoleIO(0, NULL);
+(gdb) s
+134     tm_putstring(ercd &gt;= E_OK ? &quot;ConsoleIO - OK\n&quot; : &quot;ConsoleIO - ERR\n&quot;);
+(gdb) s
+from target&gt; ConsoleIO - OK
+137     ercd = ClockDrv(0, NULL);
+(gdb) s</code></pre></li>
+</ul></li>
+</ul></li>
+</ul>
+</body>
+</html>

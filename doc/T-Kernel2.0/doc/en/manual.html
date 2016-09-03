@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h1 id="T-Kernel-2.0-tef_em1d-Software-Package-Manual">T-Kernel 2.0 (tef_em1d) Software Package Manual</h1>
+<hr />
+<h3 id="Update-history">&lt; Update history &gt;</h3>
+<ul>
+<li><a href="Ver2.02.00.txt">Ver 2.02.00</a></li>
+<li><a href="Ver2.01.03.txt">Ver 2.01.03</a></li>
+<li><a href="Ver2.01.02.txt">Ver 2.01.02</a></li>
+<li><a href="Ver2.01.01.txt">Ver 2.01.01</a></li>
+<li><a href="Ver2.01.00.txt">Ver 2.01.00</a></li>
+<li><a href="Ver2.00.01.txt">Ver 2.00.01</a></li>
+</ul>
+<h2 id="introduction">1. Introduction</h2>
+<p>This document is the T-Kernel 2.0 (tef_em1d) Software Package Manual.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li>1-1. <a href="package.html">Package contents</a></li>
+<li>1-2. <a href="ref_board.html">T-Engine reference board (tef_em1d)</a></li>
+</ol>
+<h2 id="t-kernel-2.0-source-code-package-manual">2. T-Kernel 2.0 Source Code Package Manual</h2>
+<p>This document explains the T-Kernel 2.0 Source Code Package contents and configuration.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li>2-1. <a href="tkernel-source.html">T-Kernel 2.0 source configuration</a></li>
+<li>2-2. <a href="tmonitor-source.html">T-Monitor (tef_em1d use) source configuration</a></li>
+<li>2-3. <a href="driver-source.html">Device driver (tef_em1d use) source configuration</a></li>
+<li>2-4. <a href="tkernel-startup.html">T-Kernel 2.0 startup processing</a></li>
+</ol>
+<h2 id="t-kernel-2.0-implementation-specifications">3. T-Kernel 2.0 Implementation Specifications</h2>
+<p>This section explains the T-Kernel 2.0 (tef_em1d) implementation dependencies.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li>3-1. <a href="impl-tef_em1d.txt">T-Kernel 2.0 (tef_em1d) Implementation Specifications</a></li>
+</ol>
+<h2 id="development-method">4. Development Method</h2>
+<p>This section explains the development method of the T-Kernel 2.0 system. This package supports the following three types of development methods.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p><strong>4-1. Development method using Eclipse (Windows host)</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>This section explains how to develop using the Eclipse development environment running on Windows. The Eclipse development environment uses the GNU development environment on Cygwin.</p></li>
+<li><p>Please refer to the Eclipse (CDT plugin) related documents for more information about the basic usage of the Eclipse development environment.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li>(1) <a href="install-cygwin.html">Cygwin Installation</a></li>
+<li>(2) <a href="install-java.html">Java Installation</a></li>
+<li>(3) <a href="install-eclipse.html">Eclipse Installation</a></li>
+<li>(4) <a href="setup-gnu-eclipse.html">GNU Development Environment Settings (Eclipse use)</a></li>
+<li>(5) <a href="setup-eclipse.html">Setting Up the Eclipse Work Environment</a></li>
+<li>(6) <a href="build-eclipse.html">T-Kernel System Construction (Eclipse use)</a></li>
+<li>(7) <a href="debug-eclipse.html">Running and Debugging (Eclipse use)</a></li>
+<li>(8) <a href="addendum-eclipse.html">Supplementary Note (for Eclipse)</a></li>
+</ol></li>
+</ol></li>
+<li><p><strong>4-2. Development method using Cygwin (Windows host)</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>This section explains how to develop by directly using the GNU development environment in Cygwin running on Windows.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li>(1) <a href="install-cygwin.html">Cygwin Installation</a></li>
+<li>(2) <a href="setup-gnu-cygwin.html">GNU Development Environment Settings (Cygwin use)</a></li>
+<li>(3) <a href="build-cyglinux.html">T-Kernel System Construction (Cygwin/Linux shared use)</a></li>
+<li>(4) <a href="debug-cyglinux.html">Running and Debugging (Cygwin/Linux shared use)</a></li>
+</ol></li>
+</ol></li>
+<li><p><strong>4-3. Development method using Linux (Linux host)</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>This section explains how to develop by directly using the GNU development environment running on Linux.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li>(1) <a href="setup-gnu-linux.html">GNU Development Environment Settings (Linux use)</a></li>
+<li>(2) <a href="build-cyglinux.html">T-Kernel System Construction (Cygwin/Linux shared use)</a></li>
+<li>(3) <a href="debug-cyglinux.html">Running and Debugging (Cygwin/Linux shared use)</a></li>
+</ol></li>
+</ol></li>
+</ol>
+<h2 id="emulator-qemu-tef_em1d">5. Emulator (QEMU-tef_em1d)</h2>
+<p>This section explains the emulator (QEMU-tef_em1d) for the T-Engine reference board (tef_em1d) which can be used for T-Kernel 2.0 system development.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li>5-1. <a href="qemu-tef_em1d.html">Emulator (QEMU-tef_em1d) Manual</a></li>
+</ol>
+</body>
+</html>

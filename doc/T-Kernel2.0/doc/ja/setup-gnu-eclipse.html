@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="gnu-開発環境の設定-eclipse-用">GNU 開発環境の設定 (Eclipse 用)</h2>
+<hr />
+<ul>
+<li><a href="#作業ディレクトリの作成">1. 作業ディレクトリの作成</a></li>
+<li><a href="#開発環境パッケージの展開">2. 開発環境パッケージの展開</a></li>
+<li><a href="#t-kernel-ソースコードパッケージの展開">3. T-Kernel ソースコードパッケージの展開</a></li>
+</ul>
+<hr />
+<h3 id="作業ディレクトリの作成">1. 作業ディレクトリの作成</h3>
+<p>まず、GNU 開発環境をインストールするディレクトリを作成します。ここでは、&quot;/usr/local/tef_em1d&quot; にインストールするものとします。</p>
+<p>Cygwin コンソール上で次のコマンドを実行して、ディレクトリを作成します。</p>
+<pre><code>    $ mkdir /usr/local/tef_em1d</code></pre>
+<ul>
+<li><p>他の T-Kernel 用 GNU 開発環境が既にインストールされている場合は、それとは異なるディレクトリにインストールしてください。同じディレクトリにインストールした場合は、問題を生じる可能性があります。</p></li>
+<li><p>通常、&quot;/usr/local&quot; の所有者は Cygwin をインストールした管理者となっているため、&quot;/usr/local/tef_em1d&quot; を作成するためには管理者権限が必要になります。&quot;/usr/local/tef_em1d&quot; の作成後、その所有者およびパーミッションは、T-Kernel の開発作業を行うユーザが アクセスできるよう適切に設定してください。</p></li>
+</ul>
+<h3 id="開発環境パッケージの展開">2. 開発環境パッケージの展開</h3>
+<p>次に、&quot;/usr/local/tef_em1d&quot; 内に、GNU 開発環境パッケージを展開します。</p>
+<p>まず、Windows のエクスプローラ等を使って、本パッケージの &quot;develop&quot; フォルダにある以下のファイルを、&quot;C:\cygwin\usr\local\tef_em1d&quot; フォルダにコピーしてください。</p>
+<pre><code>    - te.Cygwin-i686.arm_2.1.0.3.tar.gz
+    - te.Cygwin-i686.common.15.tar.gz</code></pre>
+<p>次に、Cygwin コンソール上で次のコマンドを順に実行し、各パッケージを展開してください。&quot;/usr/local/tef_em1d/tool&quot; に GNU 開発環境が設定されます。</p>
+<pre><code>    $ cd /usr/local/tef_em1d
+    $ tar zxpf te.Cygwin-i686.arm_2.1.0.3.tar.gz
+    $ tar zxpf te.Cygwin-i686.common.15.tar.gz</code></pre>
+<p>Cygwin コンソールからは、Windows 上のドライブ &quot;C:\&quot; を &quot;/cygdrive/C/&quot; としてアクセスできますので、ファイルをコピーせずに、Windows 上のファイルのパスを直接指定して展開することもできます。</p>
+<pre><code>    例: $ tar zxpf /cygdrive/C/tmp/te.Cygwin-i686.arm_2.1.0.3.tar.gz</code></pre>
+<p>パッケージの展開後は、コピーした各 tar.gz のファイルは不要ですので削除してください。</p>
+<h3 id="t-kernel-ソースコードパッケージの展開">3. T-Kernel ソースコードパッケージの展開</h3>
+<p>本パッケージの &quot;srcpkg&quot; フォルダにある以下のファイルを、Windows のエクスプローラ等を使って、&quot;C:\cygwin\usr\local\tef_em1d&quot; フォルダにコピーしてください。</p>
+<pre><code>    - tkernel_source.tar.gz</code></pre>
+<p>その後、Cygwin コンソール上で次のコマンドを実行し、パッケージを展開してください。&quot;/usr/local/tef_em1d/tkernel_source&quot; に T-Kernel ソースコードパッケージが展開されます。</p>
+<pre><code>    $ cd /usr/local/tef_em1d
+    $ tar zxpf tkernel_source.tar.gz</code></pre>
+<p>パッケージの展開後は、コピーした tkernel_source.tar.gz のファイルは不要ですので削除してください。</p>
+</body>
+</html>

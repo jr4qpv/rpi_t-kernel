@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="Package-Contents">Package Contents</h2>
+<hr />
+<ul>
+<li><a href="#Package-Overview">1. Package Overview</a></li>
+<li><a href="#Package-Contents-Details">2. Package Contents Details</a></li>
+</ul>
+<hr />
+<h3 id="Package-Overview">1. Package Overview</h3>
+<p>This software package includes all of the software required to build, run and debug the T-Kernel 2.0 system targeting the &quot;T-Engine Reference Board (tef_em1d)&quot;.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p><strong>(1) T-Kernel 2.0 Source Code</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>This includes the target-dependent software source code and build environment, starting with the T-Kernel 2.0 kernel, required to actually run the T-Kernel 2.0 system.</p>
+<ul>
+<li><p><strong>T-Kernel 2.0 Kernel</strong></p>
+<p>This is the T-Kernel 2.0 kernel. This includes the T-Kernel/OS, T-Kernel/SM, and T-Kernel/DS. The source code is separated by directory into target-independent common code and target-dependent model-specific code to simplify porting to other targets.</p></li>
+<li><p><strong>T-Monitor</strong></p>
+<p>This performs system startup and initialization and processes interrupts and exceptions. It also includes debug support functions. Basically, it is completely target-dependent.</p></li>
+<li><p><strong>Device Drivers</strong></p>
+<p>These device drivers comply with the T-Kernel standard specifications for the following primary devices equipped on the target. Basically, it is completely target-dependent.</p>
+<ul>
+<li>Clock (RTC)</li>
+<li>Serial console</li>
+<li>Touch panel and press button switch</li>
+<li>LCD</li>
+<li>System disk (micro SD use)</li>
+</ul></li>
+</ul></li>
+</ol></li>
+<li><p><strong>(2) Development Environment</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>This is the development environment required to build the T-Kernel 2.0 system. Please select one of the following three types to use.</p>
+<ul>
+<li>GNU development environment for Eclipse (runs on Windows)</li>
+<li>GNU development environment for Cygwin (runs on Windows)</li>
+<li>GNU development environment for Linux (runs on Linux)</li>
+</ul></li>
+</ol></li>
+<li><p><strong>(3) Emulator</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>This is the emulator for the &quot;T-Engine reference board (tef_em1d)&quot; target and includes versions for both the Windows and Linux environments.</p></li>
+<li><p>Using the emulator enables development and debugging on a development PC even without the target hardware.</p></li>
+</ol></li>
+<li><p><strong>(4) Other</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>Includes the operation manual for the &quot;T-Engine reference board (tef_em1d)&quot; target, the hardware manual, and the ICE settings file.</p></li>
+<li></li>
+</ol></li>
+</ol>
+<h3 id="Package-Contents-Details">2. Package Contents Details</h3>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p><strong>(1) Distribution ucode</strong></p>
+<pre><code>    tk2-dist-ucode.png          Distribution ucode</code></pre>
+<ol style="list-style-type: none" class="nonum_list">
+<li>Includes the identification number (distribution number) assigned to this package and the ucodeQR image which represents that number.</li>
+</ol></li>
+<li><p><strong>(2) Manual</strong></p>
+<pre><code>    TEF000-218-150401.pdf       T-License 2.1 Manual (Japanese, English)
+
+    index.html                  Software Package Manual (this document)
+
+    doc/ja/                     Manuals, Figures on Individual Topics (Japanese edition)
+        *.html                    HTML-format Manual
+        *.txt                     Text-format Manual
+        fig/*.png                 Figure data</code></pre></li>
+<li><p><strong>(3) T-Kernel 2.0 Source Code</strong></p>
+<pre><code>    srcpkg/
+        tkernel_source.tar.gz   Source code archive
+                                (T-Kernel 2.0, T-Monitor, Device drivers)</code></pre>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>[License]</p>
+<ul>
+<li>The <a href="../../TEF000-218-150401.pdf">T-License 2.1</a> applies to the T-Kernel 2.0 Source Code (tkernel_source.tar.gz) and all manuals (index.html, doc/*) listed above.</li>
+</ul></li>
+</ol></li>
+<li><p><strong>(4) Development Environment</strong></p>
+<pre><code>    develop/
+        te.Linux-i686.common.15.tar.gz      GNU Development Environment Common Elements (for Linux)
+        te.Linux-i686.arm_2.1.0.3.tar.gz    GNU Development Environment CPU Dependent Elements (for Linux)
+
+        te.Cygwin-i686.common.15.tar.gz     GNU Development Environment Common Elements (for Cygwin)
+        te.Cygwin-i686.arm_2.1.0.3.tar.gz   GNU Development Environment CPU Dependent Elements (for Cygwin)
+        cygwin_d-1.7.17-1.zip               Cygwin Install Package
+
+        eclipse-cpp-indigo-SR2-incubation-win32.zip
+                                            Eclipse + CDT Package
+        pleiades_1.3.4.zip                  Eclipse Japanese Plugin
+        org.t_engine.te.1.1.2.zip           Eclipse T-Kernel Common Plugin
+        org.t_engine.tl.tef_em1d.1.1.2.zip  Eclipse tef_em1d Plugin</code></pre>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>[GNU Tools]</p>
+<ul>
+<li>The original versions of gcc, gdb and other GNU tools can be downloaded from <a href="http://www.gnu.org/software/">http://www.gnu.org/software/</a>. A patch is applied to some GNU tools used in this development environment.</li>
+<li>GNU tools are licensed under the GPL license. For details, please refer to <a href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a>.</li>
+</ul></li>
+<li><p>[Cygwin]</p>
+<ul>
+<li>Download Cygwin from <a href="http://www.cygwin.com/">http://www.cygwin.com/</a>. The version of Cygwin included in this package was downloaded from that location and tested for compatibility.</li>
+<li>Cygwin is licensed under the GPL license. For details, please refer to <a href="http://cygwin.com/license.html">http://cygwin.com/license.html</a>.</li>
+</ul></li>
+<li><p>[Eclipse]</p>
+<ul>
+<li>Download Eclipse from <a href="http://www.eclipse.org/">http://www.eclipse.org/</a>. The version of Eclipse included in this package was downloaded from that location and tested for compatibility.</li>
+<li>Eclipse is licensed under the Eclipse Public License (EPL). For details, please refer to <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a>.</li>
+<li>The Eclipse Japanese plugin is licensed under the Eclipse Public License (EPL), Mozilla Public License (MPL), Lesser General Public License (LGPL), and the Apache License. For details, please refer to <a href="http://mergedoc.sourceforge.jp/index.html#/pleiades.html">http://mergedoc.sourceforge.jp/index.html#/pleiades.html</a>.</li>
+</ul></li>
+</ol></li>
+<li><p><strong>(5) Emulator</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>This is a version of the QEMU (qemu-0.12.4) open source, general-purpose emulator which supports the EMMA Mobile1-D (ARM11 Core) CPU of the &quot;T-Engine Reference Board (tef_em1d)&quot; and the basic devices equipped on the board.</p>
+<pre><code>emulator/
+    tef_em1d/*           Emulator related files</code></pre></li>
+<li><p>[QEMU]</p>
+<ul>
+<li>Download QEMU from <a href="http://wiki.qemu.org/">http://wiki.qemu.org/</a>. Support for the &quot;T-Engine Reference Board (tef_em1d)&quot; was added to the downloaded version of QEMU that is included in this package.</li>
+<li>QEMU is licensed under the GPL license. For details, please refer to <a href="http://wiki.qemu.org/License">http://wiki.qemu.org/License</a>.</li>
+</ul></li>
+</ol></li>
+<li><p><strong>(6) Other</strong></p>
+<pre><code>    hardware/tef_em1d/
+        doc/ja/TE_ReferenceBoard_HardwareManual.pdf
+                                Hardware manual
+        doc/ja/License_for_Redistribution_of_T-EngineReferenceBoardHardwareManual.pdf
+                                Regarding redistribution of the Hardware manual
+        ice/JETARM.CFG          ICE settings file (for PARTNER-Jet) </code></pre></li>
+</ol>
+</body>
+</html>

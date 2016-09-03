@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="eclipseのインストール">Eclipseのインストール</h2>
+<hr />
+<ul>
+<li><a href="#eclipse-システムのインストール">1. Eclipse システムのインストール</a></li>
+<li><a href="#t-kernel-開発用プラグインのインストール">2. T-Kernel 開発用プラグインのインストール</a></li>
+<li><a href="#その他の設定">3. その他の設定</a></li>
+</ul>
+<hr />
+<h3 id="eclipse-システムのインストール">1. Eclipse システムのインストール</h3>
+<p>Eclipse + CDT (C/C++ Development Tooling) の環境をインストールします。</p>
+<p>これ以下の作業は、実際に利用するユーザのアカウントで Windows にログインした状態にて行ってください。</p>
+<p>まず、本パッケージの &quot;develop&quot; フォルダにある以下のファイルを、インストールするドライブの適当なフォルダ (&quot;C:\temp&quot; など) にコピーしてください。</p>
+<pre><code>    - Eclipse + CDT             &quot;eclipse-cpp-indigo-SR2-incubation-win32.zip&quot;
+    - Eclipse日本語化プラグイン &quot;pleiades_1.3.4.zip&quot;</code></pre>
+<ul>
+<li>Eclipse のホームページには、より新しいバージョンの Eclipse がありますが、動作確認は上記のバージョンの Eclipse で行っております。このバージョンの Eclipse (Indigo SR2) をご利用ください。</li>
+</ul>
+<p>次に、上記の各 zip ファイルを、上記に記載された順に展開します。エクスプローラ上で上記のファイルを選択して右クリックし、「すべて展開」を選択してください。展開先の指定は以下のようにしてください。</p>
+<pre><code>    - Eclipse + CDT              &quot;C:\&quot;
+    - Eclipse日本語化プラグイン  &quot;C:\eclipse&quot;</code></pre>
+<p>&quot;C:\eclipse&quot; フォルダに Eclipse が展開されます。</p>
+<ul>
+<li>パス名に空白や日本語が入る場所にはインストールしないでください。パス名に空白が存在すると (&quot;C:\Program Files&quot; など)、正常に動作しません。</li>
+<li>日本語環境で使用しない場合は、「Eclipse日本語化プラグイン」の展開は不要です。</li>
+<li>「Eclipse日本語化プラグイン」を展開する際、フォルダを統合するか尋ねられますが、「はい」を押してください。</li>
+</ul>
+<p>Eclipse を日本語環境で使用する場合、&quot;C:\eclipse\eclipse.ini&quot; の最終行に以下の記述を追加してください。この記述を削除すると英語環境に戻ります。</p>
+<pre><code>    -javaagent:plugins/jp.sourceforge.mergedoc.pleiades/pleiades.jar</code></pre>
+<p>エクスプローラを使って、Eclipse をインストールした &quot;C:\eclipse&quot; フォルダを開きます。この中の &quot;eclipse.exe&quot; が Eclipse 本体ですので、このファイルのショートカットをデスクトップに作成してください。</p>
+<p>&quot;C:\temp&quot; などにコピーした各 zip ファイルは、インストールの終了後は不要ですので削除してください。</p>
+<h3 id="t-kernel-開発用プラグインのインストール">2. T-Kernel 開発用プラグインのインストール</h3>
+<p>続いて、T-Kernel 開発用プラグインをインストールします。</p>
+<p>本パッケージの &quot;develop&quot; フォルダにある以下のファイルを、インストールするドライブの適当なフォルダ (&quot;C:\temp&quot; など) にコピーしてください。</p>
+<pre><code>  - プラットホーム共通部分  &quot;org.t_engine.te.1.1.2.zip&quot;
+  - tef_em1d 対応部分       &quot;org.t_engine.tl.tef_em1d.1.1.2.zip&quot;</code></pre>
+<ul>
+<li>旧バージョンのプラグインを使用している場合は、そのプラグインを別のフォルダに移動するか、削除してください。</li>
+</ul>
+<p>次に、上記の各 zip ファイルを、上記に記載された順に展開します。エクスプローラ上で上記のファイルを選択して右クリックし「すべて展開」を選択してください。展開先の指定は &quot;C:\eclipse&quot; としてください。</p>
+<p>&quot;C:\temp&quot; などにコピーした各 zip ファイルは、インストールの終了後は不要ですので削除してください。</p>
+<h3 id="その他の設定">3. その他の設定</h3>
+<p>Windows の環境変数の HOME が設定されていると、Cygwin の環境変数の HOME との競合により、Eclipse が正常に動作しない場合がありますので、Windows の環境変数 HOME を別の変数名 (HOME_ORG など) に変更するか、または削除してください。</p>
+<ul>
+<li>Windows の環境変数は、「コントロールパネル」→ (「システムとセキュリティ」→ )「システム」→「詳細設定」→「環境変数」で参照/編集できます。</li>
+</ul>
+</body>
+</html>

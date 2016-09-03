@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="Supplementary-Note-for-Eclipse">Supplementary Note (for Eclipse)</h2>
+<hr />
+<ul>
+<li><a href="#How-to-use-the-eclipse-development-environment-for-other-models">1. How to use the Eclipse development environment for other models</a></li>
+</ul>
+<hr />
+<h3 id="How-to-use-the-eclipse-development-environment-for-other-models">1. How to use the Eclipse development environment for other models</h3>
+<p>The Eclipse development environment plugin included with this package is intended for use with the &quot;tef_em1d&quot; model. To use Eclipse with other models, a plugin which supports that model must be created, but Eclipse can also be easily set up to support other models using the following method.</p>
+<p>In this example, we will set up Eclipse to use a model named &quot;bbb_cccc&quot;. As a requirement, the source directory configuration is the same as &quot;tef_em1d&quot; (except where the directory name is different due to the difference in model name), and the name of the Makefile, etc. have been edited to match the model name &quot;bbb_cccc&quot;.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p><strong>(1) How to use the build environment name &quot;tef_em1d&quot; as is</strong></p>
+<p>The simplest method is to use the following operation. However, you must use the build environment name &quot;tef_em1d&quot; which differs from the actual model name.</p>
+<ul>
+<li><p>Start Eclipse and specify the following folder as the work space for the &quot;bbb_cccc&quot; model.</p>
+<ul>
+<li>C:\cygwin\usr\local\bbb_cccc\tkernel_source</li>
+</ul></li>
+<li><p>Enter the following settings from the &quot;Window&quot; -&gt; &quot;Preferences&quot; menu for the &quot;bbb_cccc&quot; model.</p>
+<ul>
+<li>Change &quot;tef_em1d&quot; to &quot;bbb_cccc&quot; in the path names for the &quot;Environment Variables&quot; &quot;BD&quot;, &quot;GNU_BD&quot;, and &quot;GNUARM_2&quot;.</li>
+</ul></li>
+</ul></li>
+<li><p><strong>(2) How to add the &quot;bbb_cccc&quot; build environment name that corresponds with the model</strong></p>
+<p>The &quot;bbb_cccc&quot; model name can be used as the build environment name by easily modifying part of the plugin.</p>
+<ul>
+<li><p>Go to the folder &quot;C\:eclipse\plugins&quot;, copy everything in &quot;org.t_engine.tl.tef_em1d.1.1.2_1.1.2&quot; and change the name to &quot;org.t_engine.tl.bbb_cccc.1.1.2_1.1.2&quot;.</p></li>
+<li><p>Modify the following files in the &quot;org.t_engine.tl.bbb_cccc.1.1.2_1.1.2&quot; folder which was copied.</p>
+<ul>
+<li><p>File - plugin.xml</p>
+<p>name=&quot;tef_em1d.1.1.2&quot; change to the following name=&quot;bbb_cccc.1.1.2&quot;</p></li>
+<li><p>File - META-INF\MANIFEST.MF</p>
+<pre><code>Bundle-Name: tef_em1d Plug-in
+  change to the following
+Bundle-Name: bbb_cccc Plug-in
+
+Bundle-SymbolicName: org.t_engine.tl.tef_em1d.1.1.2;singleton:=true
+  change to the following
+Bundle-SymbolicName: org.t_engine.tl.bbb_cccc.1.1.2;singleton:=true
+
+Do not change any other instances of &quot;tef_em1d&quot;.</code></pre></li>
+</ul></li>
+<li><p>Double-click &quot;eclipse.exe -clean.cmd&quot; in the &quot;C:\eclipse&quot; folder, initialize and start Eclipse, and specify the following folder as the work space for the &quot;bbb_cccc&quot; model.</p>
+<ul>
+<li>C:\cygwin\usr\local\bbb_cccc\tkernel_source</li>
+</ul></li>
+<li><p>Go to the &quot;Window&quot; -&gt; &quot;Preferences&quot; menu and confirm that both &quot;tef_em1d.1.1.2&quot; and &quot;bbb_cccc.1.1.2&quot; are displayed under &quot;T-Engine Development Environment&quot;. Select &quot;bbb_cccc.1.1.2&quot; and enter the following settings for the &quot;bbb_cccc&quot; model.</p>
+<ul>
+<li><p>Change &quot;tef_em1d&quot; to &quot;bbb_cccc&quot; in the path names for the &quot;Environment Variables&quot; &quot;BD&quot;, &quot;GNU_BD&quot;, and &quot;GNUARM_2&quot;.</p></li>
+<li><p>The &quot;Output Directory&quot; does not need to be changed to &quot;bbb_cccc&quot;.</p></li>
+</ul></li>
+<li><p>Set the &quot;Target&quot; when generating a new project to &quot;bbb_cccc.1.1.2&quot;.</p></li>
+<li><p>Set the &quot;Build Environment&quot; under the build directory &quot;Properties&quot; to &quot;bbb_cccc.1.1.2&quot;.</p></li>
+</ul></li>
+</ol>
+</body>
+</html>

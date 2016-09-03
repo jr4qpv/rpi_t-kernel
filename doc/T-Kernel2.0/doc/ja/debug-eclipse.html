@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="実行とデバッグ-eclipse-用">実行とデバッグ (Eclipse 用)</h2>
+<hr />
+<ul>
+<li><a href="#コンソールの準備">1. コンソールの準備</a></li>
+<li><a href="#エミュレータでの実行-ram-版-t-kernel">2. エミュレータでの実行 (RAM 版 T-Kernel)</a></li>
+<li><a href="#エミュレータでのデバッグ実行-ram-版-t-kernel">3. エミュレータでのデバッグ実行 (RAM 版 T-Kernel)</a></li>
+<li><a href="#エミュレータでの実行-rom-版-t-kernel">4. エミュレータでの実行 (ROM 版 T-Kernel)</a></li>
+<li><a href="#実機での実行">5. 実機での実行</a></li>
+</ul>
+<hr />
+<h3 id="コンソールの準備">1. コンソールの準備</h3>
+<p>最初に、ターゲットと通信を行うための、中継プログラム (te_vcom) とターミナルエミュレータ (gterm) の設定を行います。</p>
+<ul>
+<li><p>中継プログラム (te_vcom) は、ターミナルエミュレータ (gterm) と Eclipse のデバッガ (gdb) の両方をターゲットのシリアルポートに接続するために、ターゲットの状態や通信データに応じて、gterm と gdb の接続を動的に切り替えるプログラムです。</p>
+<div class="figure">
+<img src="fig/tevcom.png" />
+</div></li>
+</ul>
+<!-- dummy comment line for breaking list -->
+
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) メニューの「実行」→「外部ツール」→「外部ツールの構成」を選択します。</p>
+<div class="figure">
+<img src="fig/tool-1.png" />
+</div></li>
+<li><p>(2) 「外部ツール構成」ダイアログの左袖に表示されている「プログラム」の左の [+] をクリックすると「te_vcom」と「gterm」が表示されます。</p></li>
+<li><p>(3) 左袖の「te_vcom」を選択して、エミュレータでの実行用に以下の設定を行い、「適用」ボタンを押します。左袖の表示が「te_vcom」から「te_vcom_emu」に変わります。</p>
+<pre><code>  名前  te_vcom_emu
+  引数  ${te_te_vcom_para} -l localhost:10000</code></pre>
+<ul>
+<li><p>&quot;${te_te_vcom_para}&quot; は、メニューの「ウインドウ」→「設定」で設定した内容ですが、続く設定によりオーバーライトされます。</p></li>
+<li><p>&quot;-l localhost:10000&quot; はエミュレータと接続するシリアルポートの指定で、デフォールトで localhost (127.0.0.1) の TCPポート番号 10000 となっています。エミュレータ側の設定を変更した場合は、それに合わせてください。</p></li>
+</ul>
+<div class="figure">
+<img src="fig/tool-2.png" />
+</div></li>
+<li><p>(4) 続いて、左袖の「te_vcom_emu」の表示の上にマウスを移動し、マウスの右ボタンをクリックして表示されるメニューの「複製」を選択します。</p>
+<div class="figure">
+<img src="fig/tool-3.png" />
+</div></li>
+<li><p>(5) 追加された「te_vcom_emu(1)」を選択して、実機での実行用に以下の設定を行い、「適用」ボタンを押します。左袖の表示が「te_vcom_emu(1)」から「te_vcom_tgt」に変わります。</p>
+<pre><code>  名前   te_vcom_tgt
+  引数   ${te_te_vcom_para} -l /dev/ttyS0 -115200</code></pre>
+<ul>
+<li><p>&quot;-l /dev/ttyS0&quot; は、実機と接続するシリアルポートの指定で以下の対応となります。&quot;-115200&quot; は通信速度 (bps) の設定です。実際に使用する環境や実機側の設定に合わせて設定してください。</p>
+<pre><code>    COM1   /dev/ttyS0
+    COM2   /dev/ttyS1
+    COM3   /dev/ttyS2
+     .....</code></pre></li>
+</ul>
+<div class="figure">
+<img src="fig/tool-4.png" />
+</div></li>
+<li><p>(6) 「gterm」に関しては、特に設定は不要です。</p>
+<div class="figure">
+<img src="fig/tool-5.png" />
+</div></li>
+</ol>
+<h3 id="エミュレータでの実行-ram-版-t-kernel">2. エミュレータでの実行 (RAM 版 T-Kernel)</h3>
+<p>以下の手順で、ビルドした RAM 版 T-Kernel をエミュレータ上で実行します。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) エミュレータを起動します。エミュレータの起動方法に間しては、<a href="qemu-tef_em1d.html">エミュレータ (QEMU-tef_em1d) 説明書</a> を参照してください。</p>
+<p>T-Monitor 起動とするため、qeum.bat で &quot;-dipsw dbgsw=on&quot; 指定を行い、システムのビルドで作成した以下のデバッグ用 ROM イメージを指定してください。</p>
+<pre><code>    C:\cygwin\usr\local\tef_em1d\tkernel_source\kernel\sysmain\build\tef_em1d\rom-dbg.bin</code></pre></li>
+<li><p>(2) メニューの「実行」→「外部ツール」→「外部ツールの構成」を選択して、左袖に表示されている「te_vcom_emu」を選択して「実行」ボタンを押します。</p>
+<p>Eclipse ウインドウ下の「コンソール」タブをクリックすると、タブの直下の行(ビューの直上部分)に te_vcom_emu[プログラム] と表示されます。</p></li>
+<li><p>(3) 続いて同様の手順で「gterm」を起動します。</p>
+<p>コンソールに「gterm」の起動メッセージが表示され、エミュレータ上で T-Monitor が起動して、 起動メッセージとプロンプトが表示されます。</p>
+<pre><code>    &lt;&lt; Gterm ver 2.51 : 130221 &gt;&gt;
+
+    T-Monitor/tef_em1d Version 2.01.00
+
+    TM&gt; </code></pre>
+<ul>
+<li><p>「te_vcom_emu」や「gterm」は一度起動すると、メニューの「実行」→「外部ツール」にショートカットが表示されますので、以後は、そのショートカットを選択して起動できます。</p>
+<div class="figure">
+<img src="fig/tool-6.png" />
+</div></li>
+</ul></li>
+<li><p>(4) 「C/C++プロジェクトビュー」上で、以下の実行オブジェクトファイルを選択して、マウス右ボタンを押して「実行」→「実行の構成」を選択します。</p>
+<pre><code>    実行ファイル  kernel/sysmain/build/tef_em1d/kernel-ram.sys</code></pre>
+<div class="figure">
+<img src="fig/execute-1.png" />
+</div></li>
+<li><p>(5) 「実行構成」ダイアログ上の「T-Engineアプリケーション」を選択し、マウス右ボタンを押して、「新規」を選択します。</p>
+<div class="figure">
+<img src="fig/execute-2.png" />
+</div></li>
+<li><p>(6) 「メイン」タブの「実行ファイル」と「転送ファイル」に以下を指定して、「実行」ボタンを押します。</p>
+<pre><code>実行ファイル   sysmain/build/tef_em1d/kernel-ram.sys
+転送ファイル   sysmain/build/tef_em1d/kernel-ram.bin 30006000
+  (または)     sysmain/build/tef_em1d/kernel-ram.mot</code></pre>
+<ul>
+<li><p>転送ファイルの &quot;30006000&quot; は、バイナリイメージの開始アドレスです。アドレス指定の不要な &quot;kernel-ram.mot&quot; (S-Format) は、ファイルサイズが大きいため転送時間も長くなります。</p></li>
+<li><p>コンソール上に T-Monitor のプロンプト &quot;TM&gt; &quot; が表示されていない状態では、「実行」ボタンを押しても実行しません。プロンプト表示状態を確認するには、コンソール内をクリックしてから Enter キーを押してください。</p></li>
+</ul>
+<div class="figure">
+<img src="fig/execute-3.png" />
+</div></li>
+<li><p>(7) 指定した「転送ファイル」がロードされた後、T-Kernel が起動し、サンプルプログラムが実行されます。コンソールには以下の一連のメッセージが表示されます。</p>
+<pre><code>    TM&gt; .cd /cygdrive/C/cygwin/usr/local/tef_em1d/tkernel_source/kernel
+    .. dir: /cygdrive/C/cygwin/usr/local/tef_em1d/tkernel_source/kernel
+    &gt; .load sysmain/build/tef_em1d/kernel-ram.bin 30006000
+    .. LO XM,30006000 [sysmain/build/tef_em1d/kernel-ram.bin: 177392 bytes]
+    ....*....*....*....*....*....*....*....*....*....*....*....*....*....*....*....*....*. (22174.0 bytes/sec)
+
+    Loaded: 30006000 -&gt; 300317FF
+    TM&gt; bd
+
+    T-Kernel Version 2.02.00
+
+    ConsoleIO - OK
+    ClockDrv - OK
+    SysDiskDrv - OK
+    ScreenDrv - OK
+    KbPdDrv - OK
+    LowKbPdDrv - OK
+    1 - Debug sample started.
+    2 - Start sample task (tid=8) and wait.
+    3 - Sample task started (tid=8).
+    4 - Delay 1000 msec.
+    5 - Delay 1000 msec.
+    6 - Delay 1000 msec.
+    7 - Wakeup main task.
+    8 - Wakeup from sample task.
+    9 - Sample task finished.
+    10 - Debug sample finished.
+    Push any key to shutdown the T-Kernel.</code></pre></li>
+</ol>
+<p>ここでコンソールに何かキー入力するとターゲットがシャットダウンされます。 エミュレータで実行している場合は、エミュレータが終了します。</p>
+<h3 id="エミュレータでのデバッグ実行-ram-版-t-kernel">3. エミュレータでのデバッグ実行 (RAM 版 T-Kernel)</h3>
+<p>以下の手順で、デバッグ用にビルドした RAM 版 T-Kernel をエミュレータ上でデバッグ実行します。</p>
+<p>通常の実行用のビルド先ディレクトリは &quot;kernel\sysmain\build\tef_em1d&quot; ですが、デバッグ実行用のビルド先ディレクトリは &quot;kernel\sysmain\build\tef_em1d.debug&quot; となります。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) RAM 版 T-Kernel の通常の実行の場合と同様に、エミュレータを起動し、「te_vcom_emu」と「gterm」を実行します。</p>
+<p>エミュレータで指定するデバッグ用 ROM イメージは、以下のどちらでも構いません。(同じ内容です)</p>
+<pre><code>    C:\cygwin\usr\local\tef_em1d\tkernel_source\kernel\sysmain\build\tef_em1d\rom-dbg.bin
+    C:\cygwin\usr\local\tef_em1d\tkernel_source\kernel\sysmain\build\tef_em1d.debug\rom-dbg.bin</code></pre></li>
+<li><p>(2) 「C/C++プロジェクトビュー」上で、以下の実行オブジェクトファイルを選択して、マウス右ボタンを押して「デバッグ」→「デバッグの構成」を選択します。</p>
+<pre><code>    実行ファイル  kernel/sysmain/build/tef_em1d.debug/kernel-ram.sys</code></pre>
+<div class="figure">
+<img src="fig/debug-1.png" />
+</div></li>
+<li><p>(3) 「デバッグ構成」ダイアログ上の「T-Engineアプリケーション」を選択し、マウス右ボタンを押して、「新規」を選択します。右側に表示される名前を &quot;kernel-ram(1)&quot; から &quot;kernel-ram-dbg&quot; に変更します。</p>
+<p>表示されている &quot;kernel-ram&quot; は、通常実行用のため、デバッグ実行用を新規に作成します。</p></li>
+<li><p>(4) 「メイン」タブの「実行ファイル」と「転送ファイル」に以下を指定して、「適用」ボタンを押します。</p>
+<pre><code>実行ファイル   sysmain/build/tef_em1d.debug/kernel-ram.sys
+転送ファイル   sysmain/build/tef_em1d.debug/kernel-ram.bin 30006000
+  (または)     sysmain/build/tef_em1d.debug/kernel-ram.mot</code></pre>
+<div class="figure">
+<img src="fig/debug-2.png" />
+</div></li>
+<li><p>(5) 「デバッガ」タブの「始動で停止」が「usermain」となっていることを確認して、「デバッグ」ボタンを押します。</p>
+<div class="figure">
+<img src="fig/debug-3.png" />
+</div></li>
+<li><p>(6) 指定した「転送ファイル」がロードされた後、T-Kernel が起動し、&quot;usermain&quot; の先頭で停止します。 同時に「パースペクティブ切り替えの確認」のダイアログが表示されて、「デバッグ」パースペクティブに切り替わります。</p>
+<ul>
+<li><p>「コンソール」の表示が切り替わってしまった場合は、「コンソール」タブの右側に並んでいるボタンのうち、「選択されたコンソールの表示」ボタンを押して &quot;gterm&quot; を選択してください。</p></li>
+<li><p>さらに「コンソールのピン留め」ボタンを押しておくと、表示は勝手に切り替わらなくなります。</p></li>
+</ul>
+<div class="figure">
+<img src="fig/debug-4.png" />
+</div>
+<div class="figure">
+<img src="fig/debug-5.png" />
+</div></li>
+<li><p>(7) ここで、必要な場所にブレークポイントを設定して、デバッグを行います。</p>
+<ul>
+<li><p>「デバッグ」ビューのタブの右側に並んでいる、「再開」「ステップイン」「ステップオーバー」「ステップリターン」などの機能ボタンを使用します。</p></li>
+<li><p>ブレークポイントの設定は、「ソースコード」ビュー上のブレークさせたい行の左端のグレーの部分をダブルクリックするか、またはマウス右ボタンを押して「ブレークポイントの切り替え」を選択します。行の左端にブレークポイントのマークがつきます。</p>
+<div class="figure">
+<img src="fig/debug-6.png" />
+</div>
+<div class="figure">
+<img src="fig/debug-7.png" />
+</div></li>
+<li><p>ブレークポイントにヒットしない限り、実行を強制的に中断して、デバッガに制御を移すことはできませんので、必ず適切なブレークポイントを設定してから、実行を再開してください。</p></li>
+</ul></li>
+</ol>
+<h3 id="エミュレータでの実行-rom-版-t-kernel">4. エミュレータでの実行 (ROM 版 T-Kernel)</h3>
+<p>以下の手順で、ビルドした ROM 版 T-Kernel をエミュレータ上で実行します。この場合、Eclipse のコンソールを単にデバッグ用のコンソールとして使用することになります。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) RAM 版 T-Kernel の通常の実行の場合と同様に、エミュレータを起動し、「te_vcom_emu」と「gterm」を実行します。</p>
+<p>エミュレータでは、以下の ROM イメージを指定します。</p>
+<pre><code>    C:\cygwin\usr\local\tef_em1d\tkernel_source\kernel\sysmain\build\tef_em1d\rom.bin</code></pre></li>
+<li><p>(2) コンソールに「gterm」の起動メッセージが表示され、エミュレータ上で T-Monitor が起動して、起動メッセージとプロンプトが表示されます。</p>
+<pre><code>    &lt;&lt; Gterm ver 2.51 : 130221 &gt;&gt;
+
+    T-Monitor/tef_em1d Version 2.01.00
+
+    TM&gt; </code></pre></li>
+<li><p>(3) この状態で、T-Monitor のコマンド &quot;BD&quot; を入力すると、実行を開始します。</p>
+<pre><code>    TM&gt; BD
+
+    T-Kernel Version 2.02.00
+
+    ConsoleIO - OK
+      ::::::</code></pre></li>
+</ol>
+<h3 id="実機での実行">5. 実機での実行</h3>
+<p>実機 (T-Engine リファレンスボード - tef_em1d) でプログラムを実行する場合の手順は、エミュレータの場合とほぼ同様です。</p>
+<p>上記の <a href="#エミュレータでの実行-ram-版-t-kernel">エミュレータでの実行 (RAM 版 T-Kernel)</a>、<a href="#エミュレータでのデバッグ実行-ram-版-t-kernel">エミュレータでのデバッグ実行 (RAM 版 T-Kernel)</a>、<a href="#エミュレータでの実行-rom-版-t-kernel">エミュレータでの実行 (ROM 版 T-Kernel)</a> を参照してください。ただし、実機の場合は以下の点のみ異なります。</p>
+<ul>
+<li><p>「te_vcom_emu」ではなく、実機と接続するシリアルポートを指定した「te_vcom_tgt」を起動してください。</p></li>
+<li><p>実機の Flash ROM に、T-Monitor が書き込まれている必要があります。また、実機の DIP スイッチを T-Monitor 起動に設定してください。</p></li>
+<li><p>実機とシリアルケーブルで接続した後、「te_vcom_tgt」と「gterm」を起動してから、実機の電源スイッチを入れるか、またはリセットボタンを押してください。T-Monitor の起動メッセージとプロンプトがコンソール上に表示されます。</p></li>
+<li><p>RAM 版 T-Kernel を実行する場合は、以下の ROM 情報(RAM 実行用) を Flash ROM に書き込んでおいてください。</p>
+<pre><code>    C:\cygwin\usr\local\tef_em1d\tkernel_source\bin\tef_em1d\rominfo-ram.mot</code></pre>
+<p>Flash ROM への書き込みは、「te_vcom_tgt」と「gterm」を起動して、Eclipse のコンソールに T-Monitor のプロンプトが表示されている状態で、以下のコマンドを入力して書き込むことができます。</p>
+<pre><code>    TM&gt; .flload /usr/local/tef_em1d/tkernel_source/bin/tef_em1d/rominfo-ram.mot</code></pre></li>
+<li><p>ROM 版 T-Kernel を実行する場合は、以下の ROM 情報(ROM 実行用) と、Kernel の ROM イメージの両方を Flash ROM に書き込んでおいてください。</p>
+<pre><code>    C:\cygwin\usr\local\tef_em1d\tkernel_source\bin\tef_em1d\rominfo-rom.mot
+    C:\cygwin\usr\local\tef_em1d\tkernel_source\bin\tef_em1d\kernel-rom.mot</code></pre>
+<p>Flash ROM への書き込みは、それぞれ、以下のコマンドを入力して書き込むことができます。</p>
+<pre><code>    TM&gt; .flload /usr/local/tef_em1d/tkernel_source/bin/tef_em1d/rominfo-rom.mot
+    TM&gt; .flload /usr/local/tef_em1d/tkernel_source/bin/tef_em1d/kernel-rom.mot</code></pre></li>
+</ul>
+</body>
+</html>

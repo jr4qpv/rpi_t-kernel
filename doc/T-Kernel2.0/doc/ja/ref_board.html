@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="t-engine-リファレンスボード-tef_em1d">T-Engine リファレンスボード (tef_em1d)</h2>
+<hr />
+<ul>
+<li><a href="#実機の動作方法">1. 実機の動作方法</a></li>
+<li><a href="#フラッシュ-rom-への書き込み">2. フラッシュ ROM への書き込み</a></li>
+</ul>
+<hr />
+<h3 id="実機の動作方法">1. 実機の動作方法</h3>
+<p>「T-Engine リファレンスボード (tef_em1d)」の動作方法を説明します。</p>
+<p>ハードウェアに関しては、<a href="../../hardware/tef_em1d/doc/ja/TE_ReferenceBoard_HardwareManual.pdf">ハードウェアマニュアル</a> を参照してください。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p><strong>(1) DIP スイッチの設定</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>ボード上の DIP スイッチ (U11) の設定は以下の通りです。</p>
+<pre><code>    SW1     常に OFF
+    SW2     常に OFF
+    SW3     常に OFF
+    SW4     ON : T-Monitor 起動、OFF : T-Kernel 起動</code></pre></li>
+<li><p>デバッグの場合は、T-Monitor 起動で使用します。起動すると、T-Monitor のコマンド入力待ちになりますので、T-Monitor のコマンド操作により、T-Kernel の実行プログラムをロードして実行します。</p></li>
+<li><p>T-Kernel 起動の場合は、T-Monitor のコマンド入力待ちにならずに、すぐに T-Kernel の実行プログラムを実行します。この場合、フラッシュ ROM に T-Kernel の実行プログラムが書き込まれている必要があります。</p></li>
+</ol></li>
+<li><p><strong>(2) シリアル通信端末との接続</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>ボード上の UART0 (CN3) と開発用ホスト PC のシリアル通信 (COM) ポートを、シリアル通信 (RS232C) クロスケーブルで接続します。</p></li>
+<li><p>開発用ホスト PC 上では、次の設定にて通信ソフト (ターミナルエミュレータ) を起動して、デバッグコンソールとして使用します。</p>
+<pre><code>    通信速度          115200 bps
+    データ            8 bit
+    ストップビット    1 bit
+    パリティ          なし
+    フロー制御        なし</code></pre></li>
+<li><p>本パッケージの開発環境には、通信ソフト (ターミナルエミュレータ) として、&quot;gterm&quot; が含まれていますが、他の汎用の通信ソフトを使用しても構いません。</p></li>
+</ol></li>
+<li><p><strong>(3) システムの起動</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>ボード上の電源コネクタに DC 5V 電源を接続して、電源スイッチ (SW10) を ON にすると電源が入って、システムが起動します。</p></li>
+<li><p>電源が入っている状態で、リセットボタン (SW5) を押すと、システムはリセットされ、再起動します。</p></li>
+<li><p>システムが終了して、&quot;&lt;&lt; SYSTEM SHUTDOWN &gt;&gt;&quot; とデバッグコンソールに出力された状態では、リセットボタンでは再起動しません。電源スイッチを一度 OFF にしてから ON にして再起動してください。</p></li>
+<li><p>なお、マイクロ SD カードなどを使用している状態で、正しいシャットダウン処理を行わずに、リセットボタンを押したり、電源スイッチを OFF にすると、マイクロ SD カードの内容が破壊される可能性がありますので注意してください。</p></li>
+</ol></li>
+<li><p><strong>(4) 実機での動作確認</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>システムが起動すると、T-Monitor が起動して、デバッグコンソール上に以下の起動メッセージが表示されて、コマンド入力待ちのプロンプト &quot;TM&gt;&quot; が表示されます。</p>
+<pre><code>    T-Monitor/tef_em1d Version 2.01.00
+
+    TM&gt;</code></pre></li>
+<li><p>実機のフラッシュ ROM に T-Kernel の実行イメージが書き込まれていれば、T-Monitor の &quot;bd&quot; コマンドにより、T-Kernel を実行します。</p>
+<pre><code>    TM&gt; bd
+
+    T-Kernel Version 2.02.00
+
+    ConsoleIO - OK
+        ::::
+    Push any key to shutdown the T-Kernel.
+
+    &lt;&lt; SYSTEM SHUTDOWN &gt;&gt;</code></pre></li>
+</ol></li>
+</ol>
+<h3 id="フラッシュ-rom-への書き込み">2. フラッシュ ROM への書き込み</h3>
+<p>実機上で T-Kernel のプログラムを動作させるためには、以下のいずれかの方法により、フラッシュ ROM に ROM 情報 (rominfo-rom.mot)、および T-Kernel の ROM イメージ (kernel-rom.mot) を書き込む必要があります。</p>
+<p>ただし、何らかの原因により、あらかじめ書き込まれている T-Monitor が起動しなくなった場合は、ICE を使用して、T-Monitor の ROM イメージ (tmonitor.mot) を書き込み直す必要があります。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p><strong>(1) T-Monitor による書き込み方法</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>通信ソフトに &quot;gterm&quot; を使用している場合は、&quot;<code>.flload</code>&quot; コマンドにより、フラッシュ ROM に書き込むことができます。</p>
+<pre><code>    TM&gt; .flload rominfo-rom.mot
+    .. FLLO  [rominfo-rom.mot: 1762 bytes]
+
+    Copy Flash ROM Image to RAM Area</code></pre>
+<ul>
+<li><p>下記のメッセージが表示されるまで、少し時間がかかります。</p>
+<pre><code>&gt; Load S-Format Data of Flash ROM
+ (125.8 bytes/sec)
+
+Loaded: 70020000 -&gt; 700202A3
+Writing Flash ROM at 70020000 [1 blks] ... wait
+TM&gt; </code></pre></li>
+</ul></li>
+<li><p>通信ソフトに &quot;gterm&quot; 以外を使用している場合は、T-Monitor の &quot;FLLO&quot; コマンドにより、フラッシュ ROM に書き込むことができます。</p>
+<pre><code>    TM&gt; FLLO
+    Copy Flash ROM Image to RAM Area</code></pre>
+<ul>
+<li><p>下記のメッセージが表示されるまで、少し時間がかかります。</p>
+<pre><code>&gt; Load S-Format Data of Flash ROM</code></pre></li>
+<li><p>上記のメッセージが表示された後、通信ソフトの機能により書き込み対象の ROM イメージファイル( .mot ファイル) を無手順で送信してください。</p>
+<pre><code>Loaded: 70020000 -&gt; 700202A3
+Writing Flash ROM at 70020000 [1 blks] ... wait
+TM&gt;</code></pre></li>
+</ul></li>
+</ol></li>
+<li><p><strong>(2) ICE (PARTNER-Jet) による書き込み方法</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>本パッケージに添付された設定ファイル (JETARM.CFG) を使用して PARTNER-Jet を起動してください。起動後、以下のコマンドを使用して T-Monitor の ROM イメージを書き込みます。</p>
+<pre><code>    &gt; rd tmonitor.mot,0x90000000</code></pre>
+<ul>
+<li>ROM イメージファイル( .mot ファイル)のアドレスは T-Monitor/T-Kernel 実行時におけるアドレス (0x70000000 - ) となっているため、フラッシュ ROM のアドレス (0x00000000 - ) となるように 0x90000000 のオフセットを加える必要があります。</li>
+</ul></li>
+</ol></li>
+</ol>
+</body>
+</html>

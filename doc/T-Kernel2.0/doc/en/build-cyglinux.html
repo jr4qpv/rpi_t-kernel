@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="T-Kernel-System-Construction-Cygwin-Linux-shared-use">T-Kernel System Construction (Cygwin/Linux shared use)</h2>
+<hr />
+<ul>
+<li><a href="#System-Build-Procedures">1. System Build Procedures</a></li>
+<li><a href="#Build-for-Debugging">2. Build for Debugging</a></li>
+<li><a href="#Build-Details">3. Build Details</a></li>
+<li><a href="#Makefile-Settings">4. Makefile Settings</a></li>
+</ul>
+<hr />
+<h3 id="System-Build-Procedures">1. System Build Procedures</h3>
+<p>Execute the following commands to build the T-Kernel system.</p>
+<pre><code>    $ cd $BD/kernel/sysmain/build/tef_em1d
+    $ make emu</code></pre>
+<ul>
+<li>$BD is the value of the BD environmental variable, which is the &quot;tkernel_source&quot; sub-directory (&quot;/usr/local/tef_em1d/tkernel_source&quot;) of the directory where the T-Kernel source code package was installed.</li>
+</ul>
+<p>The following build results are copied into the &quot;$BD/bin/tef_em1d&quot; directory.</p>
+<ul>
+<li><p>RAM for execution (for debugging)</p>
+<pre><code>kernel-ram.sys   RAM version T-Kernel execution object
+kernel-ram.map   RAM version T-Kernel link map
+kernel-ram.mot   RAM version T-Kernel load image (S-Format)
+kernel-ram.bin   RAM version T-Kernel load image (Binary)
+
+rominfo-ram.mot  RAM version RomInfo load image (S-Format)
+
+rom-dbg.bin      Emulator use RAM version load image (Binary)
+                   ( T-Monitor + RomInfo )</code></pre></li>
+<li><p>ROM for execution (for writing to Flash ROM)</p>
+<pre><code>kernel-rom.rom   ROM version T-Kernel execution object
+kernel-rom.map   ROM version T-Kernel link map
+kernel-rom.mot   ROM version load image (S-Format)
+
+rominfo-rom.mot  ROM version RomInfo load image (S-Format)
+
+rom.bin          Emulator use ROM version load image (Binary)
+                   ( T-Monitor + RomInfo + T-Kernel )</code></pre></li>
+<li><p>RAM/ROM for execution (for writing to Flash ROM)</p>
+<pre><code>tmonitor.mot     T-Monitor load image (S-Format)
+tmonitor.map     T-Monitor link map</code></pre></li>
+</ul>
+<h3 id="Build-for-Debugging">2. Build for Debugging</h3>
+<p>The execution object with the attached debug information must be created when using gdb or other debuggers.</p>
+<p>For this reason, copy the &quot;tef_em1d&quot; sub-directory and create the sub-directory &quot;tef_em1d.debug&quot;.</p>
+<pre><code>    $ cd $BD/kernel/sysmain/build
+    $ cp -r tef_em1d tef_em1d.debug</code></pre>
+<ul>
+<li>When the suffix &quot;.debug&quot; is included in the name of the build directory, the setting &quot;mode = debug&quot; is added to the Makefile. The result is that the compile option is specified as -g and the object file is generated with the debug information. The -g specification is only applied to the source files under the &quot;sysmain/src&quot; directory.</li>
+</ul>
+<p>Run make in the &quot;tef_em1d.debug&quot; sub-directory which was created to create the object file with the debug information.</p>
+<pre><code>    $ cd $BD/kernel/sysmain/build/tef_em1d.debug
+    $ make emu</code></pre>
+<ul>
+<li>When running make in &quot;tef_em1d&quot;, be sure to first run make clean to clear the build result and then run make.</li>
+</ul>
+<p>The build result is copied to the &quot;$BD/bin/tef_em1d&quot; directory.</p>
+<ul>
+<li>Please note that the &quot;$BD/bin/tef_em1d&quot; directory contains the last make result, so you cannot tell whether it is &quot;tef_em1d&quot; or &quot;tef_em1d.debug&quot;.</li>
+</ul>
+<h3 id="Build-Details">3. Build Details</h3>
+<p>The following make targets are prepared for running make in &quot;$BD/kernel/sysmain/build/tef_em1d&quot;, so use the appropriate target as needed.</p>
+<ul>
+<li><p>make &lt;module&gt;</p>
+<p>Run the particular make for the specified &lt;module&gt;.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Module</th>
+<th align="center">make Execution Directory</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">tkernel</td>
+<td align="left">$(BD)/kernel/tkernel/build/&lt;Model Name&gt;</td>
+</tr>
+<tr class="even">
+<td align="left">sysmgr</td>
+<td align="left">$(BD)/kernel/sysmgr/build/&lt;Model Name&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">sysinit</td>
+<td align="left">$(BD)/kernel/sysinit/build/&lt;Model Name&gt;</td>
+</tr>
+<tr class="even">
+<td align="left">libraries</td>
+<td align="left">$(BD)/lib//build/&lt;Model Name&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">drivers</td>
+<td align="left">$(BD)/driver/&lt;Model Name&gt;/build</td>
+</tr>
+<tr class="even">
+<td align="left">config</td>
+<td align="left">$(BD)/config/build/&lt;Model Name&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">monitor</td>
+<td align="left">$(BD)/monitor/build/&lt;Model Name&gt;</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>make (make all)</p>
+<p>Run make for the following modules to create the kernel object.</p>
+<p>tkernel, sysmgr, sysinit, libraries, drivers</p></li>
+<li><p>make emu</p>
+<p>Run make for the following modules to create the emulator execution image.</p>
+<p>all (tkernel, sysmgr, sysinit, libraries, drivers) + config, monitor</p></li>
+<li><p>make clean</p>
+<p>Run make clean for the following modules to clear objects created with make (make all). (config and monitor module objects are not cleared.)</p>
+<p>tkernel, sysmgr, sysinit, libraries, drivers</p></li>
+<li><p>make source</p>
+<p>Run make source for the following modules to create the source and definition files for the system call/extended SVC interface library. (Source and definition files are created with the typical make.)</p>
+<p>libraries, drivers</p></li>
+<li><p>make clean_source</p>
+<p>Run make clean_source for the following modules to clear the source and definition files created by make source.</p>
+<p>libraries, drivers</p></li>
+<li><p>make clean_all</p>
+<p>Run both make clean and make clean_source.</p></li>
+<li><p>make clean_config</p>
+<p>Run make clean for the config module to clear the RomInfo object.</p></li>
+<li><p>make clean_monitor</p>
+<p>Run make clean for the monitor module to clear the T-Monitor object.</p></li>
+</ul>
+<h3 id="Makefile-Settings">4. Makefile Settings</h3>
+<p>The system build creates an object file which contains all of the device drivers, but to exclude unnecessary device drivers, edit &quot;$BD/kernel/sysmain/build/tef_em1d/Makefile&quot;, and delete unnecessary drivers from the following definitions.</p>
+<pre><code>    DRV_CONSOLE = yes
+    DRV_CLOCK   = yes
+    DRV_SYSDISK = yes
+    DRV_SCREEN  = yes
+    DRV_KBPD    = yes
+    DRV_LOWKBPD = yes</code></pre>
+<p>Sample code for debugging is also contained in usermain.c. To disable this, delete the following definition.</p>
+<pre><code>    CFLAGS += -DDEBUG_SAMPLE</code></pre>
+</body>
+</html>

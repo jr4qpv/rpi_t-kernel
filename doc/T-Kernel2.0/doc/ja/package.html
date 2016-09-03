@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="パッケージ内容">パッケージ内容</h2>
+<hr />
+<ul>
+<li><a href="#パッケージ概要">1. パッケージ概要</a></li>
+<li><a href="#パッケージ内容詳細">2. パッケージ内容詳細</a></li>
+</ul>
+<hr />
+<h3 id="パッケージ概要">1. パッケージ概要</h3>
+<p>本ソフトウェアパッケージは、「T-Engine リファレンスボード (tef_em1d)」をターゲットとした T-Kernel 2.0 システムを構築(ビルド)して、実行やデバッグを行うために必要なソフトウェアをすべて含んでいます。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p><strong>(1) T-Kernel 2.0 ソースコード</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>T-Kernel 2.0 のカーネル本体をはじめ、実際に T-Kernel 2.0 システムを実行するために必要となるターゲットに依存したソフトウェアのソースコードとビルド環境を含んでいます。</p>
+<ul>
+<li><p><strong>T-Kernel 2.0 カーネル</strong></p>
+<p>T-Kernel 2.0 のカーネル本体です。T-Kernel/OS、T-Kernel/SM、T-Kernel/DS を含みます。これらのソースコードは、ターゲット非依存の共通部分とターゲットに依存した機種依存部分にディレクトリ単位で分離されており、別のターゲットへの移植が容易になっています。</p></li>
+<li><p><strong>T-Monitor</strong></p>
+<p>システムの起動や初期化、割込みや例外などの処理を行います。また、デバッグサポート機能も含んでいます。基本的にすべてターゲット依存部分です。</p></li>
+<li><p><strong>デバイスドライバ</strong></p>
+<p>ターゲットに搭載されているデバイスのうち、以下の主要デバイスの T-Kernel 標準仕様に準拠したデバイスドライバです。基本的にすべてターゲット依存部分です。</p>
+<ul>
+<li>時計 ( RTC )</li>
+<li>シリアルコンソール</li>
+<li>タッチパネル、および押しボタンスイッチ</li>
+<li>LCD</li>
+<li>システムディスク ( micro SD 用)</li>
+</ul></li>
+</ul></li>
+</ol></li>
+<li><p><strong>(2) 開発環境</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>T-Kernel 2.0 システムをビルドするために必要な開発環境です。以下の 3 種類を含んでおり、いずれかを選択して使用できます。</p>
+<ul>
+<li>Eclipse 用 GNU 開発環境 ( Windows 上で動作 )</li>
+<li>Cygwin 用 GNU 開発環境 ( Windows 上で動作 )</li>
+<li>Linux 用 GNU 開発環境 ( Linux 上で動作 )</li>
+</ul></li>
+</ol></li>
+<li><p><strong>(3) エミュレータ</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>ターゲットである「T-Engine リファレンスボード (tef_em1d)」用のエミュレータで、Windows 環境用と Linux 環境用の両方を含んでいます。</p></li>
+<li><p>エミュレータの利用により、ターゲットのハードウェアがなくても、開発用ホスト PC のみを使ってシステムの開発やデバッグを行うことが可能となります。</p></li>
+</ol></li>
+<li><p><strong>(4) その他</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>ターゲットである「T-Engine リファレンスボード (tef_em1d)」の操作説明書、ハードウェアマニュアル、および ICE 用の設定ファイルを含んでいます。</p></li>
+<li></li>
+</ol></li>
+</ol>
+<h3 id="パッケージ内容詳細">2. パッケージ内容詳細</h3>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p><strong>(1) ディストリビューション ucode</strong></p>
+<pre><code>    tk2-dist-ucode.png          ディストリビューション ucode</code></pre>
+<ol style="list-style-type: none" class="nonum_list">
+<li>本パッケージに対して割り当てられた識別番号(ディストリビューション番号)と、その番号を表現する ucodeQR の画像を含みます。</li>
+</ol></li>
+<li><p><strong>(2) 説明書</strong></p>
+<pre><code>    TEF000-218-150401.pdf       T-License 2.1 説明書(日本語、英語)
+
+    index.html                  ソフトウェアパッケージ説明書(本書)
+
+    doc/ja/                     テーマごとの説明書、図版(日本語版)
+        *.html                    HTML 形式の説明書
+        *.txt                     テキスト形式の説明書
+        fig/*.png                 図版データ</code></pre></li>
+<li><p><strong>(3) T-Kernel 2.0 ソースコード</strong></p>
+<pre><code>    srcpkg/
+        tkernel_source.tar.gz   ソースコードアーカイブ
+                                (T-Kernel 2.0 本体, T-Monitor, デバイスドライバ)</code></pre>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>【ライセンスについて】</p>
+<ul>
+<li>T-Kernel 2.0 ソースコード (tkernel_source.tar.gz) および上記の説明書 (index.html, doc/*) は、すべて <a href="../../TEF000-218-150401.pdf">T-License 2.1</a> の適用対象となります。</li>
+</ul></li>
+</ol></li>
+<li><p><strong>(4) 開発環境</strong></p>
+<pre><code>    develop/
+        te.Linux-i686.common.15.tar.gz      GNU 開発環境 共通部分 (Linux 用)
+        te.Linux-i686.arm_2.1.0.3.tar.gz    GNU 開発環境 CPU 依存部分 (Linux 用)
+
+        te.Cygwin-i686.common.15.tar.gz     GNU 開発環境 共通部分 (Cygwin 用)
+        te.Cygwin-i686.arm_2.1.0.3.tar.gz   GNU 開発環境 CPU 依存部分 (Cygwin 用)
+        cygwin_d-1.7.17-1.zip               Cygwin インストールパッケージ
+
+        eclipse-cpp-indigo-SR2-incubation-win32.zip
+                                            Eclipse + CDT パッケージ
+        pleiades_1.3.4.zip                  Eclipse 日本語化プラグイン
+        org.t_engine.te.1.1.2.zip           Eclipse T-Kernel 共通プラグイン
+        org.t_engine.tl.tef_em1d.1.1.2.zip  Eclipse tef_em1d 用プラグイン</code></pre>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>【GNUツールについて】</p>
+<ul>
+<li>gcc, gdb などの GNU ツールの原版の入手先は <a href="http://www.gnu.org/software/">http://www.gnu.org/software/</a> です。本開発環境で使用している GNU ツールは、この原版に対して一部パッチを当てて生成しています。</li>
+<li>GNU ツールのライセンスは GPL です。詳細は <a href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a> を参照してください。</li>
+</ul></li>
+<li><p>【Cygwin について】</p>
+<ul>
+<li>Cygwin の入手先は <a href="http://www.cygwin.com/">http://www.cygwin.com/</a> です。本パッケージに含まれている Cygwin は、ここから入手した動作確認済みのバージョンのものです。</li>
+<li>Cygwin のライセンスは GPL です。詳細は <a href="http://cygwin.com/license.html">http://cygwin.com/license.html</a> を参照してください。</li>
+</ul></li>
+<li><p>【Eclipseについて】</p>
+<ul>
+<li>Eclipse の入手先は <a href="http://www.eclipse.org/">http://www.eclipse.org/</a> です。本パッケージに含まれている Eclipse は、ここから入手した動作確認済みのバージョンのものです。</li>
+<li>Eclipse には、Eclipse Public Lincense (EPL) と呼ばれるライセンスが適用されます。詳細は <a href="http://www.eclipse.org/legal/epl-v10.html">http://www.eclipse.org/legal/epl-v10.html</a> を参照してください。</li>
+<li>Eclipse 日本語化プラグインには、Eclipse Public License (EPL)、Mozilla Public License (MPL)、Lesser General Public License (LGPL)、Apache License と呼ばれるライセンスが適用されます。詳細は <a href="http://mergedoc.sourceforge.jp/index.html#/pleiades.html">http://mergedoc.sourceforge.jp/index.html#/pleiades.html</a> を参照してください。</li>
+</ul></li>
+</ol></li>
+<li><p><strong>(5) エミュレータ</strong></p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>オープンソースの汎用エミュレータである、QEMU (qemu-0.12.4) に対して、「T-Engine リファレンスボード (tef_em1d)」の CPU である EMMA Mobile1-D (ARM11 Core) の対応と、ボードに搭載されている基本的なデバイスへの対応を行ったものです。</p>
+<pre><code>emulator/
+    tef_em1d/*           エミュレータ関連ファイル</code></pre></li>
+<li><p>【QEMUについて】</p>
+<ul>
+<li>QEMU の入手先は、<a href="http://wiki.qemu.org/">http://wiki.qemu.org/</a> です。本パッケージに含まれている QEMU は、ここから入手したものに対して「T-Engine リファレンスボード (tef_em1d)」用の対応を追加したものです。</li>
+<li>QEMU のライセンスは GPL です。詳細は <a href="http://wiki.qemu.org/License">http://wiki.qemu.org/License</a> を参照してください。</li>
+</ul></li>
+</ol></li>
+<li><p><strong>(6) その他</strong></p>
+<pre><code>    hardware/tef_em1d/
+        doc/ja/TE_ReferenceBoard_HardwareManual.pdf
+                                ハードウェアマニュアル
+        doc/ja/License_for_Redistribution_of_T-EngineReferenceBoardHardwareManual.pdf
+                                ハードウェアマニュアルの再配布許諾について
+        ice/JETARM.CFG          ICE 設定ファイル (PARTNER-Jet 用) </code></pre></li>
+</ol>
+</body>
+</html>

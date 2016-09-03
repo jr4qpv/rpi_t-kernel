@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="eclipse-作業環境の構築">Eclipse 作業環境の構築</h2>
+<hr />
+<ul>
+<li><a href="#作業環境ワークスペースの作成">1. 作業環境(ワークスペース)の作成</a></li>
+<li><a href="#ワークスペースの環境設定">2. ワークスペースの環境設定</a></li>
+<li><a href="#環境変数の設定">3. 環境変数の設定</a></li>
+<li><a href="#プロジェクトの作成">4. プロジェクトの作成</a></li>
+<li><a href="#ビルド環境の設定">5. ビルド環境の設定</a></li>
+<li><a href="#eclipse-作業環境ファイル">6. Eclipse 作業環境ファイル</a></li>
+</ul>
+<hr />
+<h3 id="作業環境ワークスペースの作成">1. 作業環境(ワークスペース)の作成</h3>
+<p>Eclipse を使って開発を行うために、まず、作業環境である「ワークスペース」を作成します。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) デスクトップ上の Eclipse のショートカット、または &quot;C:\eclipse&quot; フォルダ内の &quot;eclipse.exe&quot; をダブルクリックしてEclipse を起動します。</p></li>
+<li><p>(2) しばらくすると「ワークスペースの選択」ダイアログが表示されますので、Cygwin 上で T-Kernel ソースコードパッケージを展開したディレクトリの Windows から見たパスを指定して、「OK」ボタンを押してください。</p>
+<pre><code>  ワークスペースの選択  C:\cygwin\usr\local\tef_em1d\tkernel_source</code></pre>
+<div class="figure">
+<img src="fig/workspace.png" />
+</div></li>
+<li><p>(3) T-Kernel 開発用の新しいワークスペースが生成され、「ようこそ」画面が表示されます。</p>
+<div class="figure">
+<img src="fig/welcome.png" />
+</div>
+<ul>
+<li>他の用途で Eclipse を使用していた場合、新たにインストールしたプラグインの認識がうまく行かないことがあります。その場合は、Eclipse の状態を初期化するために &quot;C:\eclipse&quot; フォルダ内の &quot;eclipse.exe -clean.cmd&quot; をダブルクリックして起動してください。</li>
+</ul></li>
+<li><p>(4) 次に、「ようこそ」画面の右端にある「ワークベンチ」のアイコンをクリックし、「ワークベンチ」を表示します。</p>
+<ul>
+<li>Eclipse のウィンドウ全体を「ワークベンチ」と呼びます。</li>
+<li>「ワークベンチ」のアイコンは、丸の中に反り返った矢印の絵が出ているアイコンです。この上にマウスを移動すると「ワークベンチ」という説明がポップアップして表示されます。</li>
+</ul></li>
+<li><p>(5) メニューの「ウインドウ」→「パースペクティブを開く」→「その他」→「T-Engine 開発」を選択します。</p>
+<p><img src="fig/start-1.png" /> <img src="fig/start-2.png" /></p></li>
+<li><p>(6) ウィンドウ右上のパースペクティブ表示に「T-Engine 開発」と表示されます。</p>
+<div class="figure">
+<img src="fig/start-3.png" />
+</div></li>
+</ol>
+<ul>
+<li>Eclipse のウィンドウ内の「サブウィンドウの組み合わせと配置」を「パースペクティブ」と呼びます。T-Kernel の開発作業は「T-Engine 開発」および「デバッグ」のパースペクティブで行います。</li>
+<li>表示/設定用のサブウィンドウを「ビュー」と呼び、ファイル編集用のサブウィンドウを「エディタ」と呼びます。</li>
+</ul>
+<h3 id="ワークスペースの環境設定">2. ワークスペースの環境設定</h3>
+<p>次に、ワークスペースの環境設定を行います。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) メニューの「ウインドウ」→「設定」を選択し、「設定」ダイアログを表示します。</p>
+<div class="figure">
+<img src="fig/setting-1.png" />
+</div></li>
+<li><p>(2) このダイアログの左側の袖に出ている「T-Engine 開発環境」をクリックして、以下の設定を確認してください。</p>
+<ul>
+<li><p>T-Engine 開発環境</p>
+<pre><code>  Cygwin ディレクトリ    C:\Cygwin</code></pre>
+<p>Cygwin をインストールしたパスを指定します。Cygwin を標準とは異なる場所にインストールした場合は変更してください。</p></li>
+<li><p>外部ツール: te_vcom</p>
+<pre><code>  ロケーション    ${te_plugin_loc:COMMON}\te\tool\Cygwin-i686\etc\te_vcom.exe
+  引数            -115200 -x -l /dev/ttyS0</code></pre>
+<p>デフォルトのままで変更は不要です。</p></li>
+<li><p>外部ツール: gterm</p>
+<pre><code>  ロケーション    ${te_plugin_loc:COMMON}\te\tool\Cygwin-i686\etc\gterm.exe
+  引数            -i -s -e -lte_vcom</code></pre>
+<p>デフォルトのままで変更は不要です。</p></li>
+</ul>
+<div class="figure">
+<img src="fig/setting-2.png" />
+</div></li>
+</ol>
+<p>外部ツールの設定はレジストリに記録されるため、同一ユーザ内で共通に使用され、本開発環境を再インストールしても保存されています。</p>
+<h3 id="環境変数の設定">3. 環境変数の設定</h3>
+<p>「設定」ダイアログの左側の袖に出ている「T-Engine開発環境」の左側の [+] マークをクリックして、下に表示される「tef_em1d.1.1.2」をクリックして、以下の環境変数の設定を確認してください。</p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>環境変数</p></li>
+<li><table>
+<thead>
+<tr class="header">
+<th align="left">変数名</th>
+<th align="left">値</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">BD</td>
+<td align="left">\usr\local\tef_em1d\tkernel_source</td>
+</tr>
+<tr class="even">
+<td align="left">GNU_BD </td>
+<td align="left">\local\tef_em1d\tool\Cygwin-i686</td>
+</tr>
+<tr class="odd">
+<td align="left">GNUARM_2</td>
+<td align="left">\usr\local\tef_em1d\tool\Cygwin-i686\arm_2-unknown-tkernel</td>
+</tr>
+</tbody>
+</table>
+<p>GNU 開発環境を標準とは異なる場所にインストールした場合は、&quot;\usr\local\tef_em1d&quot; の部分をインストールしたパス名に変更してください。</p>
+<p>他の環境変数はデフォルトのままで変更は不要です。</p>
+<div class="figure">
+<img src="fig/setting-3.png" />
+</div></li>
+</ol>
+<h3 id="プロジェクトの作成">4. プロジェクトの作成</h3>
+<p>Eclipse では「プロジェクト」という単位でプログラムを管理しますので、システムのビルド(コンパイル/リンク)、デバッグ、ファイル操作などを行うためには、プロジェクトを作成する必要があります。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Eclipse のウィンドウの左袖に表示されている「C/C++プロジェクト」ビュー上で、マウスの右ボタンをクリックし、その際に表示されるメニューの「新規」→「T-Engine C/C++プロジェクト」を選択します。</p>
+<div class="figure">
+<img src="fig/project-1.png" />
+</div></li>
+<li><p>(2) 「新規プロジェクト」のダイアログが表示されますので、以下のプロジェクトを作成してください。テンプレート、および出力ディレクトリは何も設定せずにそのままとしてください。</p>
+<pre><code>    プロジェクト名    kernel
+    ロケーション      C:\cygwin\usr\local\tef_em1d\tkernel_source\kernel
+    ターゲット        tef_em1d.1.1.2
+    プログラムタイプ  Kernel</code></pre>
+<div class="figure">
+<img src="fig/project-2.png" />
+</div>
+<ul>
+<li><p>「T-Engine C/C++プロジェクト」では、プロジェクトのロケーションは、ワークスペース内のプロジェクト名のサブディレクトリに自動的に設定されます。</p></li>
+<li><p>上記の &quot;kernel&quot; プロジェクトのみで、T-Kernel システムのビルドは可能ですが、kernel サブディレクトリ以外にあるファイルを閲覧/編集することができません。必要に応じて、他のサブディレクトリに対応するプロジェクトも作成してください。</p>
+<pre><code>例: プロジェクト名    include
+    ロケーション      C:\cygwin\usr\local\tef_em1d\tkernel_source\include
+    ターゲット        tef_em1d.1.1.2
+    プログラムタイプ  Library (何を指定してもよい)</code></pre></li>
+</ul></li>
+<li><p>(3) 作成したプロジェクトは、Eclipse のウィンドウの左袖に表示されている「C/C++プロジェクト」のビューに表示されます。</p></li>
+</ol>
+<h3 id="ビルド環境の設定">5. ビルド環境の設定</h3>
+<p>次に、実際に make を実行するプロジェクトのディレクトリに対して,ビルド環境を設定します。</p>
+<ul>
+<li><p>ビルド環境は、Eclipse の T-Kernel 機種別プラグインの名称やバージョンを示す情報であり、tef_em1d 用の現バージョンでは常に「tef_em1d.1.1.2」となります。</p></li>
+<li><p>Makefile が入っている make を実行するディレクトリをビルド先ディレクトリと呼びます。そこにはビルド結果のオブジェクトが入リます。</p></li>
+</ul>
+<!-- dummy comment line for breaking list -->
+
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Eclipse のウィンドウの左袖に表示されている「C/C++プロジェクト」のビューに表示されているディレクトリの左側の [+] のマークをクリックし、下位のディレクトリをたどって、ビルド先ディレクトリを表示します。</p></li>
+<li><p>(2) 表示されているビルド先ディレクトリの上にマウスを移動し、その上でマウスの右ボタンをクリックして表示されるメニューの一番下にある「プロパティ」を選択して、「プロパティ」ダイアログを表示します。</p>
+<div class="figure">
+<img src="fig/build-1.png" />
+</div></li>
+<li><p>(3) このダイアログの左側の袖に出ている「T-Engine関連」をクリックして、以下の設定を行ってください。</p>
+<pre><code>  パス                    /kernel/sysmain/build/tef_em1d
+  ビルド環境              tef_em1d.1.1.2
+  プログラムタイプ        kernel</code></pre>
+<div class="figure">
+<img src="fig/build-2.png" />
+</div></li>
+</ol>
+<p>パスにビルド先ディレクトリが表示されます。 ビルド先ディレクトリは、何個あっても構いませんが、make を実行するためにはビルド環境の設定が必要です。</p>
+<pre><code>    例:  パス                    /kernel/sysmain/build/tef_em1d.debug
+         ビルド環境              tef_em1d.1.1.2
+         プログラムタイプ        kernel</code></pre>
+<h3 id="eclipse-作業環境ファイル">6. Eclipse 作業環境ファイル</h3>
+<p>Eclipse の作業環境を設定すると、ワークスペースのフォルダ、およびプロジェクトのフォルダに、以下の Eclipse の設定ファイル/フォルダが作成されます。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) ワークスペースフォルダ</p>
+<pre><code>    &quot;C:\cygwin\usr\local\tef_em1d\tkernel_source&quot;
+
+    フォルダ  &quot;.metadata&quot;</code></pre></li>
+<li><p>(2) プロジェクトフォルダ</p>
+<pre><code>    &quot;C:\cygwin\usr\local\tef_em1d\tkernel_source\kernel&quot; など
+
+    フォルダ  &quot;.settings&quot;
+    ファイル  &quot;.cproject&quot;
+    ファイル  &quot;.project&quot;</code></pre></li>
+</ol>
+<p>これらの設定ファイル/フォルダは変更したり、削除したりしないように注意してください。</p>
+</body>
+</html>

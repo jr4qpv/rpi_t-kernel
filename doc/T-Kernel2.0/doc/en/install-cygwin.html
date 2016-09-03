@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="Cygwin-Installation-0">Cygwin Installation</h2>
+<hr />
+<ul>
+<li><a href="#Cygwin-Installation">1. Cygwin Installation</a></li>
+<li><a href="#Cygwin-Post-installation-Settings">2. Cygwin Post-installation Settings</a></li>
+</ul>
+<hr />
+<h3 id="Cygwin-Installation">1. Cygwin Installation</h3>
+<p>The GNU development environment used as the T-Kernel development environment runs on Windows Cygwin, so Cygwin must be installed first. Install Cygwin using the following procedure.</p>
+<ul>
+<li><p>The environment does not run properly on Cygwin 1.5 or older versions. Reinstall the latest Cygwin version if you are using an older version.</p></li>
+<li><p>To install Cygwin, log on to Windows with a user account that has administrator privileges.</p></li>
+</ul>
+<p><!-- dummy comment line for breaking list --></p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Copy the Cygwin install file &quot;cygwin_d-1.7.17-1.zip&quot; located in the &quot;develop&quot; folder of this package to the drive where it is to be installed (Choose a temporary directory on the drive, e.g. &quot;C:\temp&quot;). To continue, right-click the copied file in the Windows &quot;Explorer&quot; and run &quot;Extract All&quot;.</p></li>
+<li><p>(2) The &quot;setup.exe&quot; installer is located in the extracted folder. Double-click &quot;setup.exe&quot; to start the installer.</p></li>
+<li><p>(3) When the installer window opens, press &quot;Next (N)&gt;&quot;.</p>
+<div class="figure">
+<img src="fig/cygwin-1.png" />
+</div></li>
+<li><p>(4) Select &quot;Install from Local Directory&quot; and press &quot;Next (N)&gt;&quot;.</p>
+<div class="figure">
+<img src="fig/cygwin-2.png" />
+</div></li>
+<li><p>(5) Specify the location to set as the Cygwin root directory on Windows. The default root directory is &quot;C:\cygwin&quot;. If there are no issues, please use the default.</p></li>
+<li><p>(6) Select the default &quot;All Users&quot; for the &quot;Install For&quot; option. Press &quot;Next (N)&gt;&quot;.</p>
+<div class="figure">
+<img src="fig/cygwin-3.png" />
+</div></li>
+<li><p>(7) Specify the folder where &quot;cygwin_d-1.7.17-1.zip&quot; was extracted as the &quot;Local Package Directory&quot;. Press &quot;Next (N)&gt;&quot; to check the files.</p>
+<div class="figure">
+<img src="fig/cygwin-4.png" />
+</div></li>
+<li><p>(8) After a few moments, the &quot;Setup Alert&quot; dialog is displayed when first installing Cygwin 1.7. There may be adverse effects when overwriting the installation of a previous version of Cygwin, so please read the WARNING before proceeding.</p></li>
+<li><p>(9) Next, the installation package selection screen is displayed. Click &quot;Default&quot; for &quot;All () Default&quot;, set to &quot;Install&quot;, and press &quot;Next (N)&gt;&quot; to start the installation.</p>
+<p>Press &quot;Next (N)&gt;&quot; when the &quot;Resolving Dependencies : W32api&quot; dialog is displayed.</p>
+<div class="figure">
+<img src="fig/cygwin-5.png" />
+</div>
+<div class="figure">
+<img src="fig/cygwin-5a.png" />
+</div>
+<div class="figure">
+<img src="fig/cygwin-6.png" />
+</div></li>
+<li><p>(10) Finally, the installer will ask if you wish to create Desktop and Start Menu icons. Press &quot;Finish&quot; to exit the installer.</p>
+<div class="figure">
+<img src="fig/cygwin-7.png" />
+</div></li>
+<li><p>(11) Depending on the Windows version, a screen reading &quot;This program might not have installed correctly&quot; may be displayed. In this case, press &quot;This program installed correctly&quot;.</p></li>
+<li><p>(12) The installation process above, installs the minimum requirements to run the GNU development environment. If other functions are required, run &quot;setup.exe&quot; again, and select &quot;Install from Internet&quot; to add the necessary functions.</p></li>
+</ol>
+<h3 id="Cygwin-Post-installation-Settings">2. Cygwin Post-installation Settings</h3>
+<p>After the Cygwin installation finishes, modify the batch file for starting Cygwin using the administrator privileges used to perform the installation.</p>
+<p>The Cygwin root directory is &quot;C:\cygwin&quot; on Windows. For example, the directory shown as &quot;/usr&quot; in Cygwin corresponds to the folder &quot;C:\cygwin\usr&quot; on Windows Explorer.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p><strong>(1) Setting to distinguish between upper and lowercase characters</strong></p>
+<p>The default Cygwin setting does not distinguish between upper and lowercase characters, which may cause a problem, so we will change the setting to make it case-sensitive.</p>
+<p>Use a text editor to open the &quot;C:\cygwin\Cygwin.bat&quot; batch file which is run during Cygwin start up.</p>
+<pre><code>    bash --login -i</code></pre>
+<p>Add the following line before the line above.</p>
+<pre><code>    set CYGWIN=check_case:strict</code></pre>
+<p>After modifying the batch file, double-click the Cygwin icon on the Desktop or the &quot;Cygwin.bat&quot; file in the &quot;C:\cygwin&quot; folder. Cygwin starts up and opens the Cygwin console.</p>
+<p>All Cygwin operations are performed by entering commands in the bash command shell in the Cygwin console.</p>
+<p>Enter &quot;exit&quot; in the Cygwin console to exit Cygwin.</p>
+<pre><code>    $ exit</code></pre></li>
+</ol>
+<p>If the installation user is not the Cygwin user, please log off from Windows, log on as the Cygwin user, and launch Cygwin. The user's &quot;home&quot; directory is initialized when Cygwin is started for the first time.</p>
+<p>If required, edit the &quot;/home/username/.bashrc&quot; bash startup command file to make it easier.</p>
+<p>Please delete the &quot;cygwin_d-1.7.17-1.zip&quot; file copied to &quot;C:\temp&quot; after installation as it is no longer needed.</p>
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h1 id="t-engine-リファレンスボード-tef_em1d-用">T-Engine リファレンスボード (tef_em1d) 用</h1>
+<h1 id="エミュレータ-qemu-tef_em1d-説明書">エミュレータ (QEMU-tef_em1d) 説明書</h1>
+<hr />
+<ul>
+<li><a href="#はじめに">1. はじめに</a></li>
+<li><a href="#qemu-tef_em1d-の使用方法">2. QEMU-tef_em1d の使用方法</a>
+<ul>
+<li><a href="#qemu-tef_em1d-のインストール">2.1. QEMU-tef_em1d のインストール</a></li>
+<li><a href="#qemu-tef_em1d-の実行">2.2. QEMU-tef_em1d の実行</a></li>
+<li><a href="#qemu-tef_em1d-用のシステム作成">2.3. QEMU-tef_em1d 用のシステム作成</a></li>
+</ul></li>
+<li><a href="#qemu-tef_em1d-の対応デバイス">3. QEMU-tef_em1d の対応デバイス</a>
+<ul>
+<li><a href="#メモリ構成">3.1. メモリ構成</a></li>
+<li><a href="#cpu-内蔵デバイス">3.2. CPU 内蔵デバイス</a></li>
+<li><a href="#周辺デバイス">3.3. 周辺デバイス</a></li>
+<li><a href="#その他の機能">3.4. その他の機能</a></li>
+</ul></li>
+<li><a href="#qemu-tef_em1d-のビルド">4. QEMU-tef_em1d のビルド</a>
+<ul>
+<li><a href="#windows-環境でのビルド">4.1. Windows 環境でのビルド</a></li>
+<li><a href="#linux-環境でのビルド">4.2. Linux 環境でのビルド</a></li>
+</ul></li>
+</ul>
+<hr />
+<h2 id="はじめに">1. はじめに</h2>
+<hr />
+<p>T-Engine リファレンスボード (tef_em1d) 用エミュレータ (QEMU-tef_em1d) は、Windows および Linux 上で動作するエミュレータで、T-Kernel 2.0 のアプリケーション開発を効率的に行うための環境を提供します。</p>
+<p>QEMU-tef_em1d は、オープンソースの汎用エミュレータである、QEMU (qemu-0.12.4) に対して、リファレンスボードの CPU である EMMA Mobile1-D (ARM11 Core) の対応と、ボードに搭載されている基本的なデバイスへの対応を行ったものです。</p>
+<p>QEMU に関しての情報、および各種ドキュメントに関しては以下を参照してください。</p>
+<ul>
+<li><a href="http://wiki.qemu.org/">QEMU メインページ</a></li>
+<li><a href="http://qemu.weilnetz.de/qemu-doc.html">QEMU ユーザマニュアル</a></li>
+</ul>
+<p><strong>【Qemu について】</strong></p>
+<ul>
+<li><p>Qemu の入手先は、上記の「QEMU メインページ」です。本パッケージに含まれている Qemu は、ここから入手した QEMU(qemu-0.12.4) を T-Engine リファレンスボード用に調整してビルドしたものです。</p></li>
+<li><p>Qemu のライセンスは GPL です。詳細は <a href="http://wiki.qemu.org/License">QEMU ライセンス</a> を参照してください。</p></li>
+</ul>
+<hr />
+<h2 id="qemu-tef_em1d-の使用方法">2. QEMU-tef_em1d の使用方法</h2>
+<hr />
+<p>ここでは、QEMU-tef_em1d をインストールして使用する方法を説明します。</p>
+<h3 id="qemu-tef_em1d-のインストール">2.1. QEMU-tef_em1d のインストール</h3>
+<p>QEMU-tef_em1d のインストールは、以下の手順で行います。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p><strong>(1) Windows 環境</strong></p>
+<ul>
+<li><p>標準のインストール先である &quot;C:\qemu\bin&quot; フォルダを作成します。</p></li>
+<li><p>本パッケージの以下の 2 つのフォルダ内のファイルをすべて &quot;C:\qemu\bin&quot; にコピーします。</p>
+<pre><code>    emulator\tef_em1d\Windows\
+    emulator\tef_em1d\Image\</code></pre>
+<p>コピー後の内容は以下の通りです。</p>
+<pre><code>    C:\qemu\bin\
+        qemu.bat            起動用バッチファイル
+        qemu-tef_em1d.exe   Emulator プログラム
+        SDL.dll             SDL (Simple DirectMedia Layer) DLL
+        libz-1.dll          ZIP ライブラリ DLL
+        sd.img              SD カードイメージ(サンプル)
+        rom.bin             T-Kernel ROM イメージ(サンプル)</code></pre>
+<ul>
+<li>インストール先を &quot;C:\qemu\bin&quot; 以外にした場合は、&quot;qemu.bat&quot; を修正してください。</li>
+</ul></li>
+</ul></li>
+<li><p><strong>(2) Linux 環境</strong></p>
+<ul>
+<li><p>標準のインストール先である &quot;/usr/local/tef_em1d/tool/qemu/bin&quot; ディレクトリを作成します。</p></li>
+<li><p>本パッケージの以下の 2 つのディレクトリ内のファイルをすべて &quot;/usr/local/tef_em1d/tool/qemu/bin&quot; にコピーします。</p>
+<pre><code>    emulator/tef_em1d/Linux/
+    emulator/tef_em1d/Image/</code></pre>
+<p>コピー後の内容は以下の通りです。</p>
+<pre><code>    /usr/local/tef_em1d/tool/qemu/bin/
+        qemu.sh             起動用スクリプトファイル
+        qemu-tef_em1d       Emulator プログラム
+        sd.img              SD カードイメージ(サンプル)
+        rom.bin             T-Kernel ROM イメージ(サンプル)</code></pre>
+<ul>
+<li>インストール先を &quot;/usr/local/tef_em1d/tool/qemu/bin&quot; 以外にした場合は、&quot;qemu.sh&quot; を修正してください。</li>
+</ul></li>
+</ul></li>
+</ol>
+<h3 id="qemu-tef_em1d-の実行">2.2. QEMU-tef_em1d の実行</h3>
+<p>QEMU-tef_em1d は以下の手順で実行します。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Windows 環境では、コマンドプロンプトから以下のコマンドを実行します。</p>
+<pre><code>    &gt; cd C:\qemu\bin
+    &gt; qemu.bat rom.bin sd.img</code></pre>
+<ul>
+<li><p>起動用に、デスクトップに以下の内容のショートカットを作成しておくとよいでしょう。</p>
+<pre><code>C:\qemu\bin\qemu.bat C:\qemu\bin\rom.bin C:\qemu\bin\sd.img</code></pre></li>
+<li><p>QEMU からのメッセージ出力は、&quot;C:\qemu\bin\stdout.txt&quot; および &quot;stderr.txt&quot; ファイルに出力されますので、起動に失敗した場合や動作が異常な場合は、これらのファイル内容を確認してください。</p></li>
+</ul></li>
+<li><p>(2) Linux 環境では、コンソールから以下のコマンドを実行します。</p>
+<pre><code>    &gt; cd /usr/local/tef_em1d/tool/qemu/bin
+    &gt; ./qemu.sh rom.bin sd.img</code></pre>
+<ul>
+<li><p>起動用に、以下の内容の alias を作成しておくとよいでしょう。</p>
+<pre><code>alias qemu=&#39;/usr/local/tef_em1d/tool/qemu/bin/qemu.sh&#39;</code></pre></li>
+<li><p>QEMU からのメッセージ出力は、QEMU を起動したコンソール上に表示されますので、起動に失敗した場合や動作が異常な場合は、表示内容を確認してください。</p></li>
+</ul></li>
+<li><p>(3) &quot;qemu.bat&quot;,&quot;qemu.sh&quot; の起動パラメータとして、実行するバイナリイメージと SD カードのバイナリイメージの(相対、または絶対)パス名を指定します。</p>
+<p>サンプルとして入っている以下のファイルを使用して、動作の確認を行ってください。</p>
+<pre><code>    rom.bin    本パッケージでビルドした T-Kernel ROM イメージ
+    sd.img     空(すべて 0) のイメージ</code></pre></li>
+<li><p>(4) QEMU 起動時のパラメータは &quot;qemu.bat&quot;,&quot;qemu.sh&quot; ファイル内で指定していますので、変更する場合は、これらのファイルを直接編集してください。</p>
+<p>QEMU 起動時のパラメータに関しては、<a href="#qemu-tef_em1d-の対応デバイス">3. QEMU-tef_em1d の対応デバイス</a> の章の説明を参照してください。さらに詳しくは、<a href="http://qemu.weilnetz.de/qemu-doc.html">QEMU ユーザマニュアル</a> を参照してください。</p></li>
+<li><p>(5) QEMU は起動後、デバッグコンソール(シリアルポート)が接続されるまで、実際のプログラムの実行は開始しません。実行を開始するためには、デバッグコンソールの接続が必要になります。</p></li>
+</ol>
+<p>デバッグコンソールの接続方法などの実際の実行/デバッグ方法については、以下を参照してください。</p>
+<ul>
+<li>Eclipse 開発環境 - <a href="debug-eclipse.html">実行とデバッグ (Eclipse 用)</a></li>
+<li>Cygwin/Linux 開発環境 - <a href="debug-cyglinux.html">実行とデバッグ (Cygwin/Linux 共用)</a></li>
+</ul>
+<h3 id="qemu-tef_em1d-用のシステム作成">2.3. QEMU-tef_em1d 用のシステム作成</h3>
+<p>QEMU-tef_em1d で実行するバイナリイメージは、対象の T-Kernel システムの完全な ROM イメージ &quot;rom.bin&quot; が必要です。これは以下の 3 つの ROM イメージを含みます。</p>
+<pre><code>       T-Monitor (tmonitor.mot)
+       rominfo   (rominfo-rom.mot)
+       T-Kernel  (kernel-rom.mot)</code></pre>
+<p>T-Kernel のシステム作成用ディレクトリ &quot;kernel/sysmain/build/tef_em1d&quot; で、make emu を行うと、T-Kernel 本体のイメージを作成し、さらに以下の 2 つの QEMU 実行用の ROM イメージが生成されます。</p>
+<pre><code>        rom.bin         通常 (ROM 版 T-Kernel)
+        rom-dbg.bin     デバッグ用 (RAM 版 T-Kernel)</code></pre>
+<p>&quot;rom-dbg.bin&quot; は、デバッグ用に RAM 版 T-Kernel (kernel-ram) を QEMU 上でロードして実行する場合に使用し、以下の 2 つの ROM イメージを含みます。</p>
+<pre><code>       T-Monitor (tmonitor.mot)
+       rominfo   (rominfo-ram.mot)</code></pre>
+<p>&quot;rom-dbg.bin&quot; は、起動後に T-Monitor を使用して &quot;kernel-rom&quot; を RAM 上にロードする前提ですので、T-Monitor 起動とする必要があります。</p>
+<hr />
+<h2 id="qemu-tef_em1d-の対応デバイス">3. QEMU-tef_em1d の対応デバイス</h2>
+<hr />
+<p>ここでは、QEMU-tef_em1d が対応している T-Engine リファレンスボード (tef_em1d) のデバイスに関して説明します。</p>
+<h3 id="メモリ構成">3.1. メモリ構成</h3>
+<p>以下のメモリ構成となります。</p>
+<ul>
+<li><p>メモリ構成</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">種別</th>
+<th align="center">サイズ</th>
+<th align="left">開始アドレス</th>
+<th align="left">終了アドレス</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">NOR-FLASH ROM</td>
+<td align="center">32 MB</td>
+<td align="left">0x00000000</td>
+<td align="left">0x001FFFFF</td>
+</tr>
+<tr class="even">
+<td align="left">CPU内蔵 SDRAM</td>
+<td align="center">64 MB</td>
+<td align="left">0x30000000</td>
+<td align="left">0x33FFFFFF</td>
+</tr>
+<tr class="odd">
+<td align="left">CPU内蔵 SRAM</td>
+<td align="center">128 KB</td>
+<td align="left">0xA0000000</td>
+<td align="left">0xA001FFFF</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>NOR-FLASH ROM は単なるメモリ(RAM)と同じ扱いで、FlashROM としての書き込みなどの機能には対応していません。</p></li>
+<li><p>起動時の以下のパラメータ指定により、ROM イメージファイル &quot;rom.bin&quot; の内容が NOR-FLASH ROM 領域にロードさます。</p>
+<pre><code>    -kernel rom.bin</code></pre></li>
+</ul>
+<h3 id="cpu-内蔵デバイス">3.2. CPU 内蔵デバイス</h3>
+<dl>
+<dt><strong>(1) AINT</strong></dt>
+<dd><p>対応しています。</p>
+</dd>
+<dt><strong>(2) Timer</strong></dt>
+<dd><p>対応しています。</p>
+</dd>
+<dt><strong>(3) SDIA (SD カード)</strong></dt>
+<dd><p>対応しています。</p>
+<p>SD カードへの Read/Write は、起動時の以下のパラメータで指定した SD イメージファイルに対して行われます。SD イメージファイルのサイズが SD の容量となります。</p>
+<pre><code>    -sd sd.img</code></pre>
+</dd>
+<dt><strong>(4) I2C1,2</strong></dt>
+<dd><p>対応しています。</p>
+</dd>
+<dt><strong>(5) SP0</strong></dt>
+<dd><p>対応しています。ただし DMA は未対応です。</p>
+</dd>
+<dt><strong>(6) UART0,1,2</strong></dt>
+<dd><p>対応しています。ただし DMA は未対応です。</p>
+<p>起動時の以下のパラメータ指定で、UART を TCP ポートにリダイレクト可能です。パラメータは指定した順に、UART0, UART1, ... に対応します。</p>
+<pre><code>    -serial tcp:127.0.0.1:10000,server
+    -serial tcp:127.0.0.1:10001,server,nowait</code></pre>
+<ul>
+<li><p>起動時に、指定した TCP ポートが接続されるまで待ちますので、ターミナルエミュレータで指定したポートに接続してください。ただし、&quot;nowait&quot; の指定を行うと待ちません。</p>
+<p>Linux 環境では、以下のいずれかの指定も可能です。</p>
+<pre><code>    -serial pty
+    -serial stdio</code></pre></li>
+<li><p>pty 指定では、擬似端末(pty) を生成してリダイレクトします。QEMU を起動したコンソールに、以下の通り、擬似端末のデバイスパス名が表示されますので、ターミナルエミュレータでその擬似端末に接続してください。</p>
+<pre><code>    char device redirected to /dev/pts/6</code></pre></li>
+<li><p>stdio 指定では、標準入出力にリダイレクトします。QEMU を起動したコンソールをそのままデバッグコンソールとして使用しますので、別途ターミナルエミュレータを起動する必要はありません。</p></li>
+</ul>
+</dd>
+<dt><strong>(7) USB</strong></dt>
+<dd><p>EHCI コントローラに対応しています。</p>
+<p>起動時の以下のパラメータ指定で、PC のマウス、キーボードを USB 接続の HMI デバイスとして利用可能です。</p>
+<pre><code>    -usbdevice mouse
+    -usbdevice keyboard</code></pre>
+</dd>
+<dt><strong>(8) その他の内蔵デバイス</strong></dt>
+<dd><p>対応していません。</p>
+<p>各デバイスのレジスタの読み込み値は 0 となり、書き込みは無視されます。ただし、以下のデバイスのレジスタの読み込み値は、正しく起動させるために 0 以外の値となります。</p>
+<pre><code>    ASMU   0x0080 (CLK_MODE_SEL), 0x0520 (PLL_STATUS)
+    MEMC   0x2010 (MEMC_DDR_CONFIGC2), 0x2020 (MEMC_DDR_CONFIGT1)
+    GIO    0x0010 (GIO_I_L), 0x0064 (GIO_MST)</code></pre>
+</dd>
+</dl>
+<h3 id="周辺デバイス">3.3. 周辺デバイス</h3>
+<dl>
+<dt><strong>(1) RTC</strong></dt>
+<dd><p>対応しています。ただしアラーム機能は対応していません。</p>
+<p>起動時の以下のパラメータ指定により、起動時の時刻は PC の時刻と同期し、以後は設定した時刻となります。</p>
+<pre><code>    -rtc base=localtime</code></pre>
+</dd>
+<dt><strong>(2) LCD 画面</strong></dt>
+<dd><p>対応しています。</p>
+<p>起動すると SDL (Simple DirectMedia Layer) ウィンドウが開き、画面が表示されます。</p>
+<p>起動時の以下のパラメータ指定により動作を変更できます。</p>
+<ul>
+<li><p>(指定なし)</p>
+<p>Windows 環境では、SDL ウィンドウが開き、画面が表示されます。Linux 環境では SDL ウィンドウではなく、VNC サーバが起動します。</p></li>
+<li><p><code>-nographic</code></p>
+<p>画面を全く使用しません。SDL ウィンドウは開きません。</p></li>
+<li><p><code>-vnc 127.0.0.1:0</code></p>
+<p>SDL ウィンドウの代わりに VNC サーバを起動して、VNC クライアントのウィンドウに画面表示します。VNC サーバのポートは、&quot;127.0.0.1:5900&quot; となりますので、QEMU の起動後に 適当な VNC クライアントを起動して &quot;127.0.0.1：5900&quot; に接続します。</p>
+<p>Linux 環境では、「リモートディスクトップビューワ」が VNC クライアントとして利用可能です。</p></li>
+</ul>
+</dd>
+<dt><strong>(3) タッチパネル</strong></dt>
+<dd><p>対応しています。</p>
+<p>起動時の以下のパラメータ指定により、PC のマウス操作がタッチパネルの操作となります。</p>
+<pre><code>    -tp xmin=944,xmax=64,ymin=912,ymax=80,xchg=on</code></pre>
+<p>PCのウィンドウ上のマウス座標 (X:0 - Xmax, Y:0 - Ymax) に対して、以下の変換を行った座標値がタッチパネルの生の座標値 (xraw, yraw) となります。</p>
+<pre><code>    xchg=off のとき
+        xraw = xmin + X * (xmax - xmin) / Xmax
+        yraw = ymin + Y * (ymax - ymin) / Ymax
+    xchg=on のとき (X,Yを入れ替え)
+        xraw = ymin + Y * (ymax - ymin) / Ymax
+        yraw = xmin + X * (xmax - xmin) / Xmax
+
+    xmin &gt; xmax、ymin &gt; ymax とすると、それぞれ X, Y が逆方向になります。</code></pre>
+<p>これらのパラメータは、タッチパネルドライバで行っている座標変換のパラメータに合わせて設定する必要があります。</p>
+</dd>
+<dt><strong>(4) LAN</strong></dt>
+<dd><p>対応しています。</p>
+<p>起動時の以下のパラメータ指定により、仮想ネットワークデバイス (TAP-WIn32) に接続可能です。</p>
+<pre><code>    -netnic -net tap,ifname=tap0 </code></pre>
+<p>OpenVPN などの VPN ソフトをインストールし、仮想ネットワークカードの名称を tap0 に設定し、tap0 と実際のネットアダプタと共に選択してブリッジすることで、外部のネットワークアクセスが可能になります。</p>
+<p>詳細に関しては、<a href="http://qemu.weilnetz.de/qemu-doc.html">QEMU ユーザマニュアル</a> を参照してください。</p>
+</dd>
+<dt><strong>(5) 電源管理 (PMIC)</strong></dt>
+<dd><p>以下の機能のみ対応しています。他のレジスタアクセスは無視されます。</p>
+<pre><code>    レジスタ 15 への書き込み
+        0x60 : 電源オフ (QEMU を終了)
+        0xAC : リセット再起動</code></pre>
+</dd>
+<dt><strong>(6) DIP-SW</strong></dt>
+<dd><p>DIP-SW のうち、デバッグモード SW のみ対応しています。スイッチの値は、起動時の以下のパラメータで指定します。</p>
+<pre><code>    -dipsw dbgsw=on    T-Monitor 起動
+    -dipsw dbgsw=off   T-Kernel 直接起動</code></pre>
+</dd>
+<dt><strong>(7) その他の周辺デバイス</strong></dt>
+<dd><p>以下のデバイスには対応していないため、アプリケーションプログラムからアクセスしてはいけません。</p>
+<ul>
+<li>EMMC NAND</li>
+<li>USB-UART</li>
+<li>オーディオ</li>
+<li>高速シリアル(HLS)</li>
+<li>LED, GPIO (絶縁ポート)</li>
+<li>プッシュスイッチ</li>
+<li>カメラ</li>
+<li>照度センサ</li>
+<li>温度センサ</li>
+</ul>
+</dd>
+</dl>
+<h3 id="その他の機能">3.4. その他の機能</h3>
+<dl>
+<dt>(1) &quot;gdb (GNU debugger)&quot; ターゲットモニタ機能</dt>
+<dd><p>起動時の以下のパラメータ指定により、&quot;gdb&quot; が利用可能となります。</p>
+<pre><code>    -S -s</code></pre>
+<p>&quot;gdb&quot; からは、&quot;target&quot; コマンドで、localhost (127.0.0.1) の TCP ポート番号 1234 に接続します。</p>
+<pre><code>        target remote localhost:1234</code></pre>
+<p>&quot;-s&quot; は、起動時に &quot;gdb&quot; に制御を移してコマンド待ちに入る指定です。&quot;-s&quot; 指定を行わないと待ちません。</p>
+</dd>
+</dl>
+<hr />
+<h2 id="qemu-tef_em1d-のビルド">4. QEMU-tef_em1d のビルド</h2>
+<hr />
+<p>ここでは、QEMU-tef_em1d をビルドし直す手順を説明します。</p>
+<h3 id="windows-環境でのビルド">4.1. Windows 環境でのビルド</h3>
+<p>Windows 環境で動作する QEMU-tef_em1d をビルドするための開発環境としては、GNUツールの Windows 移植版である MinGW (Minimalist GNU for Windows) と MSYS (minimal system) を使用します。</p>
+<p>そのため，まず最初に MinGW と MSYS のインストールを行う必要があります。</p>
+<dl>
+<dt>(1) MinGW のインストール</dt>
+<dd><ol style="list-style-type: none" class="nonum_list">
+<li><p>以下の URL から MinGW のインストーラをダウンロードします。</p>
+<p><a href="http://sourceforge.net/projects/mingw/">http://sourceforge.net/projects/mingw/</a></p></li>
+<li><p>ダウンロードした &quot;mingw-get-inst-20110316.exe&quot; を実行し、画面の指示にしたがって、&quot;C:\MinGW&quot; に MinGW をインストールします。</p>
+<ul>
+<li><p>&quot;select components&quot; では、以下を選択してインストールしてください。</p>
+<pre><code>    - MinGW Complier Suite (C Compiler)
+    - MSYS Basic System
+    - MinGW Developer ToolKit</code></pre></li>
+<li><p>他はデフォールト設定としてください。</p></li>
+</ul></li>
+<li><p>QEMU の実行時に &quot;zlib&quot; を使用するため &quot;zlib&quot; をインストールします。</p>
+<p>本パッケージ内の以下の 2 つのファイルを、&quot;C:\MinGW&quot; 上で展開してください。</p>
+<pre><code>    emulator\tef_em1d\build\etc\libz-1.2.3-1-mingw32-dev.tar.gz
+    emulator\tef_em1d\build\etc\libz-1.2.3-1-mingw32-dll-1.tar.gz</code></pre>
+<p>展開したのち、&quot;C:\Mingw\bin\libz-1.dll&quot; を &quot;C:\qemu\bin\libz-1.dll&quot; にコピーしてください。QEMU の実行時に必要となります。</p>
+<ul>
+<li><p>上記ファイルは以下の URL から入手したものです。</p>
+<p><a href="http://sourceforge.net/projects/mingw/files/MinGW/zlib/zlib-1.2.3-1-mingw32/">http://sourceforge.net/projects/mingw/files/MinGW/zlib/zlib-1.2.3-1-mingw32/</a></p></li>
+</ul></li>
+<li><p>QEMU の make で &quot;dd&quot; コマンドを使用しているため、&quot;dd&quot; をインストールします。</p>
+<p>本パッケージ内の以下のファイルを &quot;C:\MinGW\bin&quot; にコピーします。</p>
+<pre><code>    emulator\tef_em1d\build\etc\dd.exe</code></pre>
+<ul>
+<li><p>上記ファイルは、以下の URL から入手したものです。</p>
+<p><a href="http://sourceforge.net/projects/unxutils/files/unxutils/current/UnxUtils.zip">http://sourceforge.net/projects/unxutils/files/unxutils/current/UnxUtils.zip</a></p></li>
+</ul></li>
+</ol>
+</dd>
+</dl>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(2) MSYS のインストール</p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>以下の URL から MSYS のインストーラをダウンロードします。</p>
+<p><a href="http://www.mingw.org/wiki/MSYS">http://www.mingw.org/wiki/MSYS</a></p></li>
+<li>ダウンロードした &quot;MSYS-1.0.11.exe&quot; を実行し、画面の指示にしたがって、&quot;C:\msys\1.0&quot; に MSYS をインストールします。
+<ul>
+<li>インストール中に、&quot;mingw&quot; をインストールしたパスを聞いてくるので &quot;C:/mingw&quot; と入力してください。</li>
+</ul></li>
+</ol></li>
+<li><p>(3) SDL のインストール</p>
+<p>QEMU では画面表示のために SDL (Simple DirectMedia Layer) を使用するため、SDL をインストールする必要があります。</p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>MSYS を起動し、本パッケージ内の以下のファイルを MSYS 環境のホームディレクトリ(~/)上に展開します。</p>
+<pre><code>    emulator\tef_em1d\build\etc\SDL-devel-1.2.14-mingw32.tar.gz</code></pre>
+<ul>
+<li><p>上記ファイルは、以下の URL から入手したものです。</p>
+<p><a href="http://www.libsdl.org/download-1.2.php">http://www.libsdl.org/download-1.2.php</a></p></li>
+</ul></li>
+<li><p>展開した後、&quot;~/SDL-1.2.14/Makefile&quot; の 11 行目を以下のように修正します。</p>
+<pre><code>    make install-sdl prefix=/usr        (修正前)
+ → make install-sdl prefix=/mingw      (修正後)</code></pre></li>
+<li><p>以下のコマンドを実行して、SDL をインストールします。</p>
+<pre><code>    $ cd ~/SDL-1.2.14
+    $ makenative</code></pre></li>
+<li><p>インストール後、&quot;C:/mingw/bin/SDL.dll&quot; を &quot;C:qemu/bin/SDL.dll&quot; にコピーします。QEMU の実行時に必要です。</p>
+<pre><code>    $ cp c:/mingw/bin/SDL.dll c:/qemu/bin</code></pre></li>
+</ol></li>
+<li><p>(4) QEMU のビルド</p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>MSYS を起動し、本パッケージ内の以下のファイルを &quot;C:/qemu&quot; 上に展開します。</p>
+<pre><code>emulator\tef_em1d\build\qemu-0.12.4-tef_em1d.tar.gz</code></pre>
+<ul>
+<li><p>上記は、tef_em1d 用に修正したソースで、qemu-0.12.4 のオリジナルソースは、以下にあります。</p>
+<pre><code>    emulator\tef_em1d\build\etc\qemu-0.12.4.tar.gz</code></pre></li>
+</ul></li>
+<li><p>以下のコマンドを順番に実行して、QEMU をビルドします。</p>
+<pre><code>    $ cd c:/qemu/qemu-0.124-tef_em1d
+    $ ./configure --target-list=arm-softmmu --disable-blobs --prefix=c:/qemu/bin
+    $ make install</code></pre></li>
+<li><p>&quot;make install&quot; が終了すると &quot;C:/qemu/bin&quot; に以下のファイルが生成されます。</p>
+<pre><code>    qemu-system-arm.exe
+    qemu-img.exe
+    qemu-io.exe
+    keymaps/*</code></pre>
+<p>&quot;qemu-system-arm.exe&quot; が、QEMU-tef_em1d の実行プログラムですので、&quot;qemu-tef_em1d.exe&quot; に名称変更してください。他のファイルは使用しませんので削除してください。</p></li>
+</ol></li>
+</ol>
+<h3 id="linux-環境でのビルド">4.2. Linux 環境でのビルド</h3>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) 本パッケージ内の以下のファイルを &quot;/usr/local/tef_em1d/tool/qemu&quot; 上に展開します。</p>
+<pre><code>emulator/tef_em1d/build/qemu-0.12.4-tef_em1d.tar.gz</code></pre>
+<ul>
+<li><p>上記は、tef_em1d 用に修正したソースで、qemu-0.12.4 のオリジナルソースは、以下にあります。</p>
+<pre><code>    emulator/tef_em1d/build/etc/qemu-0.12.4.tar.gz</code></pre></li>
+</ul></li>
+<li><p>(2) 以下のコマンドを順番に実行して、QEMU をビルドします。</p>
+<pre><code>    $ cd /usr/local/tef_em1d/tool/qemu/qemu-0.12.4-tef_em1d
+    $ ./configure --target-list=arm-softmmu --disable-blobs --prefix=/usr/local/tef_em1d/tool/qemu
+    $ make install</code></pre></li>
+<li><p>(3) &quot;make install&quot; が終了すると &quot;/usr/local/tef_em1d/tool/qemu/bin&quot; に以下のファイルが生成されます。</p>
+<pre><code>    qemu-system-arm
+    qemu-img
+    qemu-io</code></pre>
+<p>&quot;qemu-system-arm&quot; が、QEMU-tef_em1d の実行プログラムですので、&quot;qemu-tef_em1d&quot; に名称変更してください。他のファイルは使用しませんので削除してください。また、&quot;/usr/local/tef_em1d/tool/qemu/share/&quot; が作成されますが、使用しませんので削除してください。</p></li>
+</ol>
+</body>
+</html>

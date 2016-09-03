@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="cygwin-のインストール">Cygwin のインストール</h2>
+<hr />
+<ul>
+<li><a href="#cygwin-のインストール">1. Cygwin のインストール</a></li>
+<li><a href="#cygwin-インストール後の設定">2. Cygwin インストール後の設定</a></li>
+</ul>
+<hr />
+<h3 id="cygwin-のインストール-1">1. Cygwin のインストール</h3>
+<p>T-Kernel 開発環境として使用する GNU 開発環境は、Windows の Cygwin 環境で動作するため、まず、Cygwin をインストールする必要があります。以下の手順で、Cygwin のインストールを行ってください。</p>
+<ul>
+<li><p>すでに Cygwin がインストールされている場合も、Cygwin 1.5 以前のバージョンの場合は、正常に動作しませんので、インストールし直してください。</p></li>
+<li><p>Cygwin のインストール作業は、管理者の権限のあるユーザとして、Windows にログオンして行ってください。</p></li>
+</ul>
+<!-- dummy comment line for breaking list -->
+
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) 本パッケージの &quot;develop&quot; フォルダにある Cygwin のインストールファイル &quot;cygwin_d-1.7.17-1.zip&quot; を、インストールするドライブ (&quot;C:\temp&quot; など) にコピーしてください。続いて、コピーしたファイルを Windows の「エクスプローラ」上でマウス右ボタンをクリックし、メニューの「すべて展開」を実行してください。</p></li>
+<li><p>(2) 展開したフォルダの中にインストーラ &quot;setup.exe&quot; があります。この &quot;setup.exe&quot; をダブルクリックしてインストーラを起動してください。</p></li>
+<li><p>(3) インストーラのウインドウが開きますので、「次へ(N)&gt;」を押します。</p>
+<div class="figure">
+<img src="fig/cygwin-1.png" />
+</div></li>
+<li><p>(4) 「Install from Local Directory」を選択して「次へ(N)&gt;」を押します。</p>
+<div class="figure">
+<img src="fig/cygwin-2.png" />
+</div></li>
+<li><p>(5) Cygwin におけるルートディレクトリを Windows 上でどこにするかを指定します。デフォルトでは &quot;C:\cygwin&quot; になっていますので、問題がなければデフォルトのままにしてください。</p></li>
+<li><p>(6) 「Install For」はデフォルトの「All Users」を選択してください。さらに「次へ(N)&gt;」を押します。</p>
+<div class="figure">
+<img src="fig/cygwin-3.png" />
+</div></li>
+<li><p>(7) 「Local Package Directory」は &quot;cygwin_d-1.7.17-1.zip&quot; を展開したフォルダを指定してください。「次へ(N)&gt;」を押すと、ファイルのチェックが行われます。</p>
+<div class="figure">
+<img src="fig/cygwin-4.png" />
+</div></li>
+<li><p>(8) しばらくすると Cygwin 1.7 系列の最初のインストール時には「Setup Alert」ダイアログが表示されます。旧バージョンの Cygwin を使用していて、それに対して上書きでインストールすると、何らかの影響が出る可能性がありますので WARNING の内容をよく読んでから作業を行ってください。</p></li>
+<li><p>(9) 次にインストールパッケージの選択画面になります。「All () Default」の「Default」をクリックし、「Install」の状態にしてから「次へ(N)&gt;」を押すとインストールが開始されます。</p>
+<p>「Resolving Dependencies : W32api」ダイアログが表示された場合は、そのまま「次へ(N)&gt;」を押してください。</p>
+<div class="figure">
+<img src="fig/cygwin-5.png" />
+</div>
+<div class="figure">
+<img src="fig/cygwin-5a.png" />
+</div>
+<div class="figure">
+<img src="fig/cygwin-6.png" />
+</div></li>
+<li><p>(10) 最後にデスクトップとスタートメニューにアイコンを作成するか聞いてきますので、そのまま「完了」を押してインストーラを終了してください。</p>
+<div class="figure">
+<img src="fig/cygwin-7.png" />
+</div></li>
+<li><p>(11) インストール後に Windows のバージョンによっては「このプログラムは正しくインストールされなかった可能性があります」画面が出る場合があります。その場合、「このプログラムは正しくインストールされました」を押してください。</p></li>
+<li><p>(12) 上記のインストールでは、 GNU 開発環境を動作させるために最低限必要なもののみがインストールされます。他の機能が必要な場合は、再度、&quot;setup.exe&quot; を実行し、「Install from Internet」を選択して、必要な機能を追加インストールしてください。</p></li>
+</ol>
+<h3 id="cygwin-インストール後の設定">2. Cygwin インストール後の設定</h3>
+<p>Cygwin のインストールが終わったら、インストールを行った管理者の権限のまま Cygwin 起動用のバッチファイルを修正します。</p>
+<p>Cygwin のルートディレクトリは、Windows から見ると &quot;C:\cygwin&quot; になります。例えば、Cygwin 上で &quot;/usr&quot; と表現されるディレクトリは、Windows のエクスプローラから見た場合には &quot;C:\cygwin\usr&quot; のフォルダになります。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p><strong>(1) ファイル名の大文字と小文字を区別する設定</strong></p>
+<p>Cygwin のデフォルトの状態では、ファイル名の大文字と小文字を区別しませんが、区別しないと問題を生じる場合がありますので、大文字と小文字を区別する設定に変更します。</p>
+<p>Cygwin の起動時に実行されるバッチファイル &quot;C:\cygwin\Cygwin.bat&quot; をテキストエディタで開き、</p>
+<pre><code>    bash --login -i</code></pre>
+<p>の前に</p>
+<pre><code>    set CYGWIN=check_case:strict</code></pre>
+<p>を追加してください。</p>
+<p>バッチファイルを修正した後、デスクトップ上の「Cygwin」アイコン、または、&quot;C:\cygwin&quot; フォルダ内の &quot;Cygwin.bat&quot; をダブルクリックしてください。Cygwin が起動して、Cygwin コンソールが開きます。</p>
+<p>Cygwin の操作は、すべて Cygwin コンソール内でコマンドシェルの bash に対してコマンドを入力して行います。</p>
+<p>Cygwin を終了するには、Cygwin コンソール上で &quot;exit&quot; を入力します。</p>
+<pre><code>    $ exit</code></pre></li>
+</ol>
+<p>インストールしたユーザと実際に使用するユーザが違う場合は、Windows から一度ログオフし、実際に使用するユーザとしてログインし直してから Cygwin を起動してください。最初の起動時にユーザの &quot;home&quot; ディレクトリが初期化されます。</p>
+<p>必要に応じて、bash の起動コマンドファイル &quot;/home/ユーザ名/.bashrc&quot; を使いやすいように編集してください。</p>
+<p>&quot;C:\temp&quot; などにコピーした &quot;cygwin_d-1.7.17-1.zip&quot; のファイルは、インストールの終了後は不要ですので削除してください。</p>
+</body>
+</html>

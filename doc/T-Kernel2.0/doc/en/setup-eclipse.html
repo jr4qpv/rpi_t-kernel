@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="Setting-Up-the-Eclipse-Work-Environment">Setting Up the Eclipse Work Environment</h2>
+<hr />
+<ul>
+<li><a href="#Creating-the-Work-Environment-Workspace">1. Creating the Work Environment (Workspace)</a></li>
+<li><a href="#Workspace-Environment-Settings">2. Workspace Environment Settings</a></li>
+<li><a href="#Environment-Variable-Settings">3. Environment Variable Settings</a></li>
+<li><a href="#Creating-a-Project">4. Creating a Project</a></li>
+<li><a href="#Build-Environment-Settings">5. Build Environment Settings</a></li>
+<li><a href="#Eclipse-Work-Environment-Files">6. Eclipse Work Environment Files</a></li>
+</ul>
+<hr />
+<h3 id="Creating-the-Work-Environment-Workspace">1. Creating the Work Environment (Workspace)</h3>
+<p>In order to use Eclipse for development you must first create the &quot;Workspace&quot; work environment.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Double-click the Eclipse shortcut on the Desktop or the &quot;eclipse.exe&quot; file inside the &quot;C:\eclipse&quot; folder to launch Eclipse.</p></li>
+<li><p>(2) After a few moments the &quot;Select a workspace&quot; dialog is displayed. Use Cygwin to specify the Windows path of the directory where the T-Kernel source code package was extracted and press the &quot;OK&quot; button.</p>
+<pre><code>  Select a workspace  C:\cygwin\usr\local\tef_em1d\tkernel_source</code></pre>
+<div class="figure">
+<img src="fig/workspace.png" />
+</div></li>
+<li><p>(3) Eclipse generates a new workspace for T-Kernel development and displays the &quot;Welcome&quot; screen.</p>
+<div class="figure">
+<img src="fig/welcome.png" />
+</div>
+<ul>
+<li>If Eclipse was previously used for another purpose, newly installed plugins may not be properly recognized. In that case, double-click the &quot;eclipse.exe -clean.cmd&quot; inside the &quot;C:\eclipse&quot; folder to initialize Eclipse.</li>
+</ul></li>
+<li><p>(4) Next, click the &quot;Workbench&quot; icon on the right side of the &quot;Welcome&quot; screen to display the &quot;Workbench&quot;.</p>
+<ul>
+<li>The entire Eclipse window is called the &quot;Workbench&quot;.</li>
+<li>The &quot;Workbench&quot; icon is the round icon containing the curved arrow image. Move the mouse over this icon to display the &quot;Workbench&quot; popup explanation.</li>
+</ul></li>
+<li><p>(5) From the menus, select &quot;Window&quot; -&gt; &quot;Open Perspective&quot; -&gt; &quot;Other&quot; -&gt; &quot;T-Engine Development&quot;.</p>
+<p><img src="fig/start-1.png" /> <img src="fig/start-2.png" /></p></li>
+<li><p>(6) &quot;T-Engine Development&quot; is shown in the perspective display in the upper right section of the window.</p>
+<div class="figure">
+<img src="fig/start-3.png" />
+</div></li>
+</ol>
+<ul>
+<li>The &quot;subwindow combination and arrangement&quot; within the Eclipse window is called a &quot;Perspective&quot;. T-Kernel development work is performed with the &quot;T-Engine Development&quot; and &quot;Debug As&quot; perspectives.</li>
+<li>Display and setting subwindows are called a &quot;View&quot; and subwindows for file editing are called an &quot;Editor&quot;.</li>
+</ul>
+<h3 id="Workspace-Environment-Settings">2. Workspace Environment Settings</h3>
+<p>Next, enter the workspace environment settings.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Select the &quot;Window&quot; -&gt; &quot;Preferences&quot; menu to display the &quot;Preferences&quot; dialog.</p>
+<div class="figure">
+<img src="fig/setting-1.png" />
+</div></li>
+<li><p>(2) Click &quot;T-Engine Development Environment&quot; in the left pane of the dialog and check the following settings.</p>
+<ul>
+<li><p>T-Engine Development Environment</p>
+<pre><code>  Cygwin directory    C:\Cygwin</code></pre>
+<p>Specify the Cygwin installation path. Change the path if Cygwin was installed in a non-standard location.</p></li>
+<li><p>External tools: te_vcom</p>
+<pre><code>  Location            ${te_plugin_loc:COMMON}\te\tool\Cygwin-i686\etc\te_vcom.exe
+  Parameters          -115200 -x -l /dev/ttyS0</code></pre>
+<p>Use the defaults as no changes are needed.</p></li>
+<li><p>External tools: gterm</p>
+<pre><code>  Location            ${te_plugin_loc:COMMON}\te\tool\Cygwin-i686\etc\gterm.exe
+  Parameters          -i -s -e -lte_vcom</code></pre>
+<p>Use the defaults as no changes are needed.</p></li>
+</ul>
+<div class="figure">
+<img src="fig/setting-2.png" />
+</div></li>
+</ol>
+<p>Settings for external tools are stored in the registry and commonly applied to the same user, so they are saved even if the development environment is reinstalled.</p>
+<h3 id="Environment-Variable-Settings">3. Environment Variable Settings</h3>
+<p>Click the [+] mark to the left of &quot;T-Engine Development Environment&quot; in the left pane of the Preferences dialog, click the &quot;tef_em1d.1.1.2&quot; shown underneath, and check the following environment variables.</p>
+<ol style="list-style-type: none" class="nonum_list">
+<li><p>Environment Variables</p></li>
+<li><table>
+<thead>
+<tr class="header">
+<th align="left">Variable name</th>
+<th align="center">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">BD</td>
+<td align="left">\usr\local\tef_em1d\tkernel_source</td>
+</tr>
+<tr class="even">
+<td align="left">GNU_BD </td>
+<td align="left">\local\tef_em1d\tool\Cygwin-i686</td>
+</tr>
+<tr class="odd">
+<td align="left">GNUARM_2</td>
+<td align="left">\usr\local\tef_em1d\tool\Cygwin-i686\arm_2-unknown-tkernel</td>
+</tr>
+</tbody>
+</table>
+<p>If the GNU development environment was installed in a non-standard location, change the &quot;\usr\local\tef_em1d&quot; portion to the installed path name.</p>
+<p>Use the defaults for other environment variables as no changes are needed.</p>
+<div class="figure">
+<img src="fig/setting-3.png" />
+</div></li>
+</ol>
+<h3 id="Creating-a-Project">4. Creating a Project</h3>
+<p>Eclipse manages each program as a &quot;Project&quot;, so a project must be created to perform tasks such as system builds (compile/link), debugging, file operations.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Move the mouse over the &quot;C/C++ Projects&quot; view shown in the left pane of the Eclipse window and right-click the mouse to select &quot;New&quot; -&gt; &quot;T-Engine C/C++ Project&quot; from the displayed menu.</p>
+<div class="figure">
+<img src="fig/project-1.png" />
+</div></li>
+<li><p>(2) When the &quot;New Project&quot; dialog is displayed, create the following project. Do not set anything for the template or output directory but leave them in the default setting.</p>
+<pre><code>    Project name      kernel
+    Location          C:\cygwin\usr\local\tef_em1d\tkernel_source\kernel
+    Target            tef_em1d.1.1.2
+    Program type      Kernel</code></pre>
+<div class="figure">
+<img src="fig/project-2.png" />
+</div>
+<ul>
+<li><p>The project location of a &quot;T-Engine C/C++ Project&quot; is automatically set to the project name sub-directory within the workspace.</p></li>
+<li><p>The T-Kernel system can only be built in the &quot;kernel&quot; project shown above, and only files in the kernel sub-directory may be viewed or edited. Create projects to support other sub-directories as needed.</p>
+<pre><code>Example:    Project name      include
+            Location          C:\cygwin\usr\local\tef_em1d\tkernel_source\include
+            Target            tef_em1d.1.1.2
+            Program type      Library (anything can be specified)</code></pre></li>
+</ul></li>
+<li><p>(3) The created project is displayed in the &quot;C/C++ Projects&quot; view shown in the left pane of the Eclipse window.</p></li>
+</ol>
+<h3 id="Build-Environment-Settings">5. Build Environment Settings</h3>
+<p>Next, set up the build environment for the project directory which will actually run the make command.</p>
+<ul>
+<li><p>The build environment is information which indicates the Eclipse T-Kernel model-specific plugin name and version. The current tef_em1d version is already set to &quot;tef_em1d.1.1.2&quot;.</p></li>
+<li><p>The directory which contains the Makefile and runs make is called the build directory. It contains the build result object.</p></li>
+</ul>
+<p><!-- dummy comment line for breaking list --></p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Click the [+] mark to the left of the directory shown in the &quot;C/C++ Projects&quot; view in the left pane of the Eclipse window and follow the directory structure below to display the build directory.</p></li>
+<li><p>(2) Move the mouse over the displayed build directory and right-click the mouse to select &quot;Properties&quot; from the bottom of the menu to display the &quot;Properties&quot; dialog.</p>
+<div class="figure">
+<img src="fig/build-1.png" />
+</div></li>
+<li><p>(3) Click &quot;T-Engine Related&quot; in the left pane of the dialog and enter the following settings.</p>
+<pre><code>  Path                /kernel/sysmain/build/tef_em1d
+  Build environment   tef_em1d.1.1.2
+  Program type        kernel</code></pre>
+<div class="figure">
+<img src="fig/build-2.png" />
+</div></li>
+</ol>
+<p>The build directory is displayed in the path. You can have as many build directories as you want, but the build environment settings are needed to run make.</p>
+<pre><code>    Example:  Path                /kernel/sysmain/build/tef_em1d.debug
+              Build environment   tef_em1d.1.1.2
+              Program type        kernel</code></pre>
+<h3 id="Eclipse-Work-Environment-Files">6. Eclipse Work Environment Files</h3>
+<p>The following Eclipse setting files and folders are created in the workspace folders and project folders when an Eclipse work environment is set up.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Workspace folder</p>
+<pre><code>    &quot;C:\cygwin\usr\local\tef_em1d\tkernel_source&quot;
+
+    Folder  &quot;.metadata&quot;</code></pre></li>
+<li><p>(2) Project folder</p>
+<pre><code>    &quot;C:\cygwin\usr\local\tef_em1d\tkernel_source\kernel&quot; etc.
+
+    Folder  &quot;.settings&quot;
+    File    &quot;.cproject&quot;
+    File    &quot;.project&quot;</code></pre></li>
+</ol>
+<p>Be careful not to change or delete these setting files and folders.</p>
+</body>
+</html>

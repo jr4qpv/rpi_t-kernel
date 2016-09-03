@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="t-kernel-システムの構築-eclipse-用">T-Kernel システムの構築 (Eclipse 用)</h2>
+<hr />
+<ul>
+<li><a href="#ビルド操作">1. ビルド操作</a></li>
+<li><a href="#システムのビルド手順">2. システムのビルド手順</a></li>
+<li><a href="#デバッグ用ビルド">3. デバッグ用ビルド</a></li>
+<li><a href="#ビルドの詳細">4. ビルドの詳細</a></li>
+<li><a href="#makefile-の設定">5. Makefile の設定</a></li>
+</ul>
+<hr />
+<h3 id="ビルド操作">1. ビルド操作</h3>
+<p>Eclipse のウィンドウの左袖に表示されている「C/C++プロジェクト」ビューに表示されているビルド対象の「ビルド先ディレクトリ」をマウスでクリックして選択状態にします。</p>
+<p>その状態で、ツールバーの「プロジェクト」メニューをクリックして、表示される以下の項目を選択するとビルドを開始します。</p>
+<ul>
+<li><p>「T-Engine Target の Make all」</p>
+<p>&quot;make all&quot; を実行して、オブジェクトを作成します。</p></li>
+<li><p>「T-Engine Target の Make clean」</p>
+<p>&quot;make clean&quot; を実行して、作成したオブジェクトをクリアします。Make clean を行った後に、Make all を行うと、make を完全にやり直すことができます。</p></li>
+<li><p>「T-Engine Target の Make...」</p>
+<p>「Make ターゲット」のダイアログが表示されますので、ターゲットを選択して「ビルド」ボタンを押すことにより、&quot;make <選択したターゲット>&quot; を実行します。</p>
+<p>実行したいターゲットが表示されていない場合は、ダイアログ内の「追加」ボタンを押して、「ターゲット名」と「Make ターゲット」を設定して追加してください。</p></li>
+</ul>
+<p>ビルドを開始すると、「コンソール」ビューにメッセージが順次表示されます。以下のメッセージが表示されたらビルド終了です。</p>
+<pre><code>    **** Build Finished ****</code></pre>
+<p>なお、「ビルド先ディレクトリ」を選択して、右クリックすると「Make ターゲット」 の項目が表示されますが、ここからは「ビルド」できません。必ず、ツールバーの「プロジェクト」メニューから「T-Engine Target の Make ・・・」を選択してください。</p>
+<h3 id="システムのビルド手順">2. システムのビルド手順</h3>
+<p>以下の手順で、T-Kernel システムをビルドします。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) ビルド先ディレクトリとして以下のディレクトリを選択します。</p>
+<pre><code>kernel\sysmain\build\tef_em1d</code></pre></li>
+<li><p>(2) 「プロジェクト」→「T-Engine Target の Make...」を選択して、ターゲットとして「emulator」を選択して「ビルド」ボタンを押します。ターゲットが表示されない場合は「追加」ボタンを押して追加してください。</p>
+<pre><code>ターゲット名      emulator (任意の名称でよい)
+Make ターゲット   emu</code></pre>
+<div class="figure">
+<img src="fig/make-1.png" />
+</div>
+<p><img src="fig/make-2.png" /> <img src="fig/make-3.png" /></p>
+<div class="figure">
+<img src="fig/make-4.png" />
+</div></li>
+<li><p>(3) 「コンソール」ビューに以下のメッセージが表示されたらビルド終了です。</p>
+<div class="figure">
+<img src="fig/make-5.png" />
+</div></li>
+<li><p>(4) 以下のビルド結果がビルド先ディレクトリに作成されます。</p>
+<ul>
+<li><p>RAM 実行用 (デバッグ用)</p>
+<pre><code>kernel-ram.sys   RAM 版 T-Kernel の実行オブジェクト
+kernel-ram.map   RAM 版 T-Kernel のリンクマップ
+kernel-ram.mot   RAM 版 T-Kernel のロードイメージ (S-Format)
+kernel-ram.bin   RAM 版 T-Kernel のロードイメージ (Binary)
+rom-dbg.bin      Emulator 用 RAM 版 ロードイメージ (Binary)
+                   ( T-Monitor + RomInfo )</code></pre></li>
+<li><p>ROM 実行用 (Flash ROM 書込み用)</p>
+<pre><code>kernel-rom.rom   ROM 版 T-Kernel の実行オブジェクト
+kernel-rom.map   ROM 版 T-Kernel のリンクマップ
+kernel-rom.mot   ROM 版 T-Kernel のロードイメージ (S-Format)
+rom.bin          Emulator 用 ROM ロードイメージ (Binary)
+                   ( T-Monitor + RomInfo + T-Kernel )</code></pre></li>
+</ul>
+<p>また、フォルダ &quot;C:\cygwin\usr\local\tef_em1d\tkernel_source\bin\tef_em1d&quot; に、上記のビルド結果、および Flash ROM 書込み用の以下のファイルがコピーされます。</p>
+<pre><code>    rominfo-ram.mot  RAM 版 RomInfo のロードイメージ (S-Format)
+    rominfo-rom.mot  ROM 版 RomInfo のロードイメージ (S-Format)
+    tmonitor.mot     T-Monitor のロードイメージ (S-Format)
+    tmonitor.map     T-Monitor のリンクマップ</code></pre></li>
+</ol>
+<h3 id="デバッグ用ビルド">3. デバッグ用ビルド</h3>
+<p>Eclipse でデバッガ (gdb) を使用する場合は、デバッグ情報付きの実行オブジェクトを作成する必要があります。</p>
+<p>そのために、以下の手順でビルド先ディレクトリの &quot;tef_em1d&quot; ディレクトリをコピーして、&quot;tef_em1d.debug&quot; ディレクトリを作成します。</p>
+<ul>
+<li>ビルドするディレクトリ名に &quot;.debug&quot; が含まれていると、Makefile に &quot;mode = debug&quot; の設定が追加されます。 その結果、コンパイルオプションが -g 指定となり、デバッグ情報付きのオブジェクトファイルが生成されます。-g 指定となるのは、&quot;sysmain/src&quot; ディレクトリの下のソースファイルのみです。</li>
+</ul>
+<!-- dummy comment line for breaking list -->
+
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Eclipse のウィンドウの左袖に表示されている「C/C++プロジェクト」のビューに表示されている &quot;tef_em1d&quot; ディレクトリの上にマウスを移動し、その上でマウスの右ボタンをクリックして表示されるメニューの「コピー」を選択します。</p>
+<div class="figure">
+<img src="fig/make_dbg-1.png" />
+</div></li>
+<li><p>(2) 続いて、&quot;tef_em1d&quot; ディレクトリの親ディレクトリの &quot;build&quot; ディレクトリの上にマウスを移動し、その上でマウスの右ボタンをクリックして表示されるメニューの「貼り付け」を選択します。</p>
+<div class="figure">
+<img src="fig/make_dbg-2.png" />
+</div></li>
+<li><p>(3) 新規名を &quot;tef_em1d.debug&quot; に設定して、「OK」ボタンを押します。</p>
+<div class="figure">
+<img src="fig/make_dbg-3.png" />
+</div></li>
+<li><p>(4) 作成した &quot;tef_em1d.debug&quot; ディレクトリをビルド先ディレクトリとしてシステムのビルド手順を行ってください。</p>
+<p>&quot;tef_em1d&quot; で make を実行した場合は、必ず「T-Engine Target の Make Clean」を選択して、ビルド結果をクリアしてから make を実行してください。</p>
+<div class="figure">
+<img src="fig/make_dbg-4.png" />
+</div>
+<p>フォルダ &quot;C:\cygwin\usr\local\tef_em1d\tkernel_source\bin\tef_em1d&quot; には、&quot;tef_em1d&quot; あるいは &quot;tef_em1d.debug&quot; のどちらかで最後にビルドした結果が入ります。オブジェクトのファイル名はどちらも同じであり、ファイル名による区別はできませんので注意して下さい。</p></li>
+</ol>
+<h3 id="ビルドの詳細">4. ビルドの詳細</h3>
+<p>ビルド先ディレクトリ &quot;tef_em1d&quot; での「T-Engine Target の Make...」実行には、以下に示す「Make ターゲット」が用意されていますので、必要に応じて適切な「Make ターゲット」を設定して使用してください。</p>
+<ul>
+<li><p><モジュール></p>
+<p>指定した <モジュール> 個別の make を実行します。</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">モジュール</th>
+<th align="left">make 実行ディレクトリ</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">tkernel</td>
+<td align="left">kernel/tkernel/build/<機種名></td>
+</tr>
+<tr class="even">
+<td align="left">sysmgr</td>
+<td align="left">kernel/sysmgr/build/<機種名></td>
+</tr>
+<tr class="odd">
+<td align="left">sysinit</td>
+<td align="left">kernel/sysinit/build/<機種名></td>
+</tr>
+<tr class="even">
+<td align="left">libraries</td>
+<td align="left">lib/build/<機種名></td>
+</tr>
+<tr class="odd">
+<td align="left">drivers</td>
+<td align="left">driver/<機種名>/build</td>
+</tr>
+<tr class="even">
+<td align="left">config</td>
+<td align="left">config/build/<機種名></td>
+</tr>
+<tr class="odd">
+<td align="left">monitor</td>
+<td align="left">monitor/build/<機種名></td>
+</tr>
+</tbody>
+</table></li>
+<li><p>all - 「T-Engine Target の Make all」</p>
+<p>以下のモジュールに対して make を実行して、kernel オブジェクトを作成します。</p>
+<p>tkernel, sysmgr, sysinit, libraries, drivers</p></li>
+<li><p>emu</p>
+<p>以下のモジュールに対して make を実行して、エミュレータの実行イメージを作成します。</p>
+<p>all (tkernel, sysmgr, sysinit, libraries, drivers) + config, monitor</p></li>
+<li><p>clean - 「T-Engine Target の Make Clean」</p>
+<p>以下のモジュールに対して make clean を実行して、make (make all) で作成したオブジェクトをクリアします。( config および monitor モジュールのオブジェクトはクリアしません。)</p>
+<p>tkernel, sysmgr, sysinit, libraries, drivers</p></li>
+<li><p>source</p>
+<p>以下のモジュールに対して make source を実行して、システムコール/拡張 SVC インタフェースライブラリのソースおよび定義ファイルを作成します。 ( 通常の make でもソースおよび定義ファイルを作成します。)</p>
+<p>libraries, drivers</p></li>
+<li><p>clean_source</p>
+<p>以下のモジュールに対して、make clean_source を実行して、make source で作成したソースおよび定義ファイルをクリアします。</p>
+<p>libraries, drivers</p></li>
+<li><p>clean_all</p>
+<p>make clean, make clean_source の両方を実行します。</p></li>
+<li><p>clean_config</p>
+<p>config モジュールに対して、make clean を実行して、RomInfo のオブジェクトをクリアします。</p></li>
+<li><p>clean_monitor</p>
+<p>monitor モジュールに対して、make clean を実行して、T-Monitor のオブジェクトをクリアします。</p></li>
+</ul>
+<h3 id="makefile-の設定">5. Makefile の設定</h3>
+<p>システムのビルドでは、全デバイスドライバを含むオブジェクトファイルを作成しますが、不要なデバイスドライバを含めないためには、ビルド先ディレクトリ &quot;tef_em1d&quot; 内の &quot;Makefile&quot; を編集して、以下の定義のうち、不要なドライバに対応するものを削除してください。</p>
+<pre><code>    DRV_CONSOLE = yes
+    DRV_CLOCK   = yes
+    DRV_SYSDISK = yes
+    DRV_SCREEN  = yes
+    DRV_KBPD    = yes
+    DRV_LOWKBPD = yes</code></pre>
+<p>また、&quot;kernel\sysmain\src\usermain.c&quot; には、デバッグ用のサンプルコードが入っていますが、これを無効にするには、以下の定義を削除してください。</p>
+<pre><code>    CFLAGS += -DDEBUG_SAMPLE</code></pre>
+</body>
+</html>

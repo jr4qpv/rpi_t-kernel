@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="GNU-Development-Environment-Settings-Linux-use">GNU Development Environment Settings (Linux use)</h2>
+<hr />
+<ul>
+<li><a href="#Creating-the-Work-Directory">1. Creating the Work Directory</a></li>
+<li><a href="#Extracting-the-Development-Environment-Package">2. Extracting the Development Environment Package</a></li>
+<li><a href="#Preparing-the-Development-Tools">3. Preparing the Development Tools</a></li>
+<li><a href="#Environment-Variable-Settings">4. Environment Variable Settings</a></li>
+<li><a href="#Extracting-the-T-Kernel-Source-Code-Package">5. Extracting the T-Kernel Source Code Package</a></li>
+</ul>
+<hr />
+<h3 id="Creating-the-Work-Directory">1. Creating the Work Directory</h3>
+<p>First, create the directory to install the GNU development environment. This example installs into &quot;/usr/local/tef_em1d&quot;.</p>
+<p>Run the following command from the Linux console to create the directory.</p>
+<pre><code>    $ mkdir /usr/local/tef_em1d</code></pre>
+<ul>
+<li><p>If another T-Kernel GNU development environment is already installed, choose a different installation directory. Installing into the same directory may cause problems to occur.</p></li>
+<li><p>Typically, the &quot;/usr/local&quot; owner is &quot;root&quot;, so root privileges are needed to create &quot;/usr/local/tef_em1d&quot;. Use the &quot;sudo&quot; command if you are not logged in with root privileges. After creating &quot;/usr/local/tef_em1d&quot;, set the appropriate owner and permissions so that the user who performs the T-Kernel development work can access the directory.</p></li>
+</ul>
+<h3 id="Extracting-the-Development-Environment-Package">2. Extracting the Development Environment Package</h3>
+<p>Next, extract the GNU development environment into &quot;/usr/local/tef_em1d&quot;.</p>
+<p>First, copy the following files in the &quot;develop&quot; directory of this package to the &quot;/usr/local/tef_em1d&quot; directory.</p>
+<pre><code>    - te.Linux-i686.arm_2.1.0.3.tar.gz
+    - te.Linux-i686.common.15.tar.gz</code></pre>
+<p>Next, run the following commands in sequence from the Linux console to extract the package. This sets the GNU development environment to &quot;usr/local/tef_em1d/tool&quot;.</p>
+<pre><code>    $ cd /usr/local/tef_em1d
+    $ tar zxpf te.Linux-i686.arm_2.1.0.3.tar.gz
+    $ tar zxpf te.Linux-i686.common.15.tar.gz</code></pre>
+<p>Delete the copied tar.gz file after extraction as they are no longer needed.</p>
+<h3 id="Preparing-the-Development-Tools">3. Preparing the Development Tools</h3>
+<p>The following tools are required to use the GNU development environment. If they are not installed on your Linux system, please download and make sure they are in a usable state.</p>
+<pre><code>    - GNU Make
+    - perl</code></pre>
+<h3 id="Environment-Variable-Settings">4. Environment Variable Settings</h3>
+<p>To continue, set the required environment variables.</p>
+<p>Edit the bash launch command file &quot;/home/username/.bashrc&quot; and add the following setting commands.</p>
+<ul>
+<li><p>Environment variable to compile and build - GNU_BD, GNUARM_2</p>
+<pre><code>export GNU_BD=/usr/local/tef_em1d/tool/Linux-i686
+export GNUARM_2=$GNU_BD/arm_2-unknown-tkernel</code></pre></li>
+<li><p>Environment variable that represents the T-Kernel source's top directory - BD</p>
+<pre><code>export BD=/usr/local/tef_em1d/tkernel_source</code></pre></li>
+</ul>
+<p>Change the path name if required to match the path name of the work directory where the GNU development environment was installed.</p>
+<p>The .bashrc setting changes are valid after the console is rebooted. Run the following command on the console to immediately enable the changes.</p>
+<pre><code>    $ source ~/.bashrc</code></pre>
+<h3 id="Extracting-the-T-Kernel-Source-Code-Package">5. Extracting the T-Kernel Source Code Package</h3>
+<p>First, copy the following files in the &quot;srcpkg&quot; directory of this package to the &quot;/usr/local/tef_em1d&quot; directory.</p>
+<pre><code>    - tkernel_source.tar.gz</code></pre>
+<p>Next, run the following commands from the Linux console to extract the package. The T-Kernel source code package is extracted to &quot;/usr/local/tef_em1d/tkernel_source&quot;.</p>
+<pre><code>    $ cd /usr/local/tef_em1d
+    $ tar zxpf tkernel_source.tar.gz</code></pre>
+<p>Delete the copied tkernel_source.tar.gz file after extraction as it is no longer needed.</p>
+</body>
+</html>

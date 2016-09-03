@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="補足事項-eclipse-用">補足事項 (Eclipse 用)</h2>
+<hr />
+<ul>
+<li><a href="#eclipse-開発環境を他機種用に使用する方法">1. Eclipse 開発環境を他機種用に使用する方法</a></li>
+</ul>
+<hr />
+<h3 id="eclipse-開発環境を他機種用に使用する方法">1. Eclipse 開発環境を他機種用に使用する方法</h3>
+<p>本パッケージに含まれている Eclipse 開発環境のプラグインは、機種 &quot;tef_em1d&quot; 用です。他の機種で Eclipse を利用にするには、その機種に対応したプラグインを作成する必要がありますが、以下の方法により、簡易的に他の機種に対応した Eclipse を用意することも可能です。</p>
+<p>ここでは、機種名 &quot;bbb_cccc&quot; に対応した Eclipse を用意するものとします。条件として、ソースディレクトリの構成は &quot;tef_em1d&quot; と同一であり (機種名の差異によるディレクトリ名の差異を除く)、Makefile 等は機種名 &quot;bbb_cccc&quot; に合わせて修正済みとします。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p><strong>(1) ビルド環境名 &quot;tef_em1d&quot; をそのまま使用する方法</strong></p>
+<p>最も簡単な方法で、以下の操作だけで対応できます。ただし、ビルド環境名として、実際の機種名とは異なる &quot;tef_em1d&quot; を使用する必要があります。</p>
+<ul>
+<li><p>Eclipse を起動し、ワークスペースとして、機種 &quot;bbb_cccc&quot; 用の以下のフォルダを指定します。</p>
+<ul>
+<li>C:\cygwin\usr\local\bbb_cccc\tkernel_source</li>
+</ul></li>
+<li><p>メニュー「ウィンドウ」→「設定」で、機種 &quot;bbb_cccc&quot; 用に以下の設定を行います。</p>
+<ul>
+<li>「環境変数」 &quot;BD&quot;, &quot;GNU_BD&quot;, &quot;GNUARM_2&quot; のパス名中の &quot;tef_em1d&quot; を &quot;bbb_cccc&quot; に変更する。</li>
+</ul></li>
+</ul></li>
+<li><p><strong>(2) 機種に対応したビルド環境名 &quot;bbb_cccc&quot; を追加する方法</strong></p>
+<p>簡易的にプラグインの一部を修正することにより、ビルド環境名として機種名 &quot;bbb_cccc&quot; を使用できるようになります。</p>
+<ul>
+<li><p>&quot;C\:eclipse\plugins&quot; フォルダ内のフォルダ &quot;org.t_engine.tl.tef_em1d.1.1.2_1.1.2&quot; 全体をコピーして &quot;org.t_engine.tl.bbb_cccc.1.1.2_1.1.2&quot; の名称に変更します。</p></li>
+<li><p>コピーした &quot;org.t_engine.tl.bbb_cccc.1.1.2_1.1.2&quot; フォルダ内の以下のファイルを修正します。</p>
+<ul>
+<li><p>ファイル - plugin.xml</p>
+<p>name=&quot;tef_em1d.1.1.2&quot; を以下に変更 name=&quot;bbb_cccc.1.1.2&quot;</p></li>
+<li><p>ファイル - META-INF\MANIFEST.MF</p>
+<pre><code>Bundle-Name: tef_em1d Plug-in
+  を以下に変更
+Bundle-Name: bbb_cccc Plug-in
+
+Bundle-SymbolicName: org.t_engine.tl.tef_em1d.1.1.2;singleton:=true
+  を以下に変更
+Bundle-SymbolicName: org.t_engine.tl.bbb_cccc.1.1.2;singleton:=true
+
+他の部分の &quot;tef_em1d&quot; は変更してはいけません。</code></pre></li>
+</ul></li>
+<li><p>&quot;C:\eclipse&quot; フォルダ内の &quot;eclipse.exe -clean.cmd&quot; をダブルクリックして、Eclipse を初期化起動し、ワークスペースとして、機種 &quot;bbb_cccc&quot; 用の以下のフォルダを指定します。</p>
+<ul>
+<li>C:\cygwin\usr\local\bbb_cccc\tkernel_source</li>
+</ul></li>
+<li><p>メニュー「ウィンドウ」→「設定」で、「T-Engine 開発環境」の下に &quot;tef_em1d.1.1.2&quot; と &quot;bbb_cccc.1.1.2&quot; の両方が表示されていることを確認した後、&quot;bbb_cccc.1.1.2&quot; を選択して、機種 &quot;bbb_cccc&quot; 用に以下の設定を行います。</p>
+<ul>
+<li><p>「環境変数」 &quot;BD&quot;, &quot;GNU_BD&quot;, &quot;GNUARM_2&quot; のパス名中の &quot;tef_em1d&quot; を &quot;bbb_cccc&quot; に変更する。</p></li>
+<li><p>「出力ディレクトリ」は、&quot;bbb_cccc&quot; に変更してもしなくてもどちらでも構いません。</p></li>
+</ul></li>
+<li><p>新規プロジェクト生成時の「ターゲット」を &quot;bbb_cccc.1.1.2&quot; とします。</p></li>
+<li><p>ビルド先ディレクトリの「プロパティ」の「ビルド環境」を &quot;bbb_cccc.1.1.2&quot; とします。</p></li>
+</ul></li>
+</ol>
+</body>
+</html>

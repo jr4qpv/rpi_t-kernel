@@ -1,0 +1,79 @@
+============================================================================
+"Modification of T2EX Source Code Package Ver 2.01.00"
+                                                               June 17, 2015
+
+- Modifications of T2EX Ver 2.01.00 -
+
+----
+Separation of source code:
+
+  - The source code of T2EX main part and the source code derived from NetBSD 
+    or OpenBSD have been separated into different packages.
+
+        - t2ex_source.tar.gz  the source code of T2EX main part
+          (the newly created part)
+            -> This is covered under T-License 2.0.
+
+        - bsd_source.tar.gz   the source code derived from NetBSD or OpenBSD
+            -> This is not covered under T-License 2.0.
+
+----
+UPDATE OF SOURCE CODE:
+
+  - Modification overview
+        - Misspelled and incorrect words and phrases have been corrected.
+        - The end of line sequence has been unified into a LF.
+        - The file headers have been cleaned up.
+        - The warnings such as casting of the pointers of data of mismatched 
+          signedness will no longer be generated.
+
+  - Bugs have been fixed.
+        - Support of BIG ENDIAN
+        - The bug that shows up when TMO_FEVR is specified to so_select_ms(), 
+          and so_select_us() has been fixed.
+        - The bug of failing to read data with certain FAT parameters has been 
+          fixed.
+        - The recognition of FAT32 was not perfect. It has been fixed.
+        - The bug which updated the access date of the first entry when the 
+          root directory of FAT12/16 was accessed has been fixed.
+
+  - The codes have been improved.
+        - Support of T-Kernel 2.02.00
+            - usermain_t2ex/ has been removed and the files under it have been 
+              moved to sysmain/src/.
+            - usermain.c has been renamed to usermain_t2ex.c.
+            - Libraries are now built also when build is attempted in 
+              sysmain/build/tef_em1d.
+            - Suffix _t2ex has been added to the names of binary files 
+              produced during build (to distinguish them from those produced 
+              during TK2-only build).
+            - RAM-Kernel boots via launch.S now.
+        - Memory use has been reduced by code improvement.
+        - Unnecessary codes as T2EX have been deleted.
+        - T2EX will be shut down immediately after appl_main is terminated.
+        - Program load-related commands (load, loadspg, unload) have been 
+          added to sample shell.
+
+  - Improvements for build.
+        - Option specification for build has been fixed to function correctly.
+        - -g is now added to ASFLAGS for build in debug mode.
+        - Libraries to link are now selected automatically according to 
+          selected T2EX functions.
+        - The debug specification of make mode=debug in sysmain no longer 
+          propagates.
+        - Functions such as bchkspc and friends are not included in build.
+        - Library dependency order has been modified with the addition of the 
+          definition of syslog().
+        - Dependencies related to "make source" have been modified.
+        - The files below kernel/sysdepend of TK2 will not be overwritten.
+        - mkt2exsvc has been modified so as not to overwrite imalloc.c.
+        - The file t2ex/etc/mkt2exsvc, and the directory t2ex/etc/sysdepend/ 
+          have been moved under etc/.
+
+----
+UPDATE OF DOCUMENTS:
+
+  - T-License is updated from Version 2.0 to 2.1. 
+      TEF000-218-150401.pdf
+
+============================================================================

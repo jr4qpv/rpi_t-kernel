@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="T-Kernel-System-Construction-for-Eclipse">T-Kernel System Construction (for Eclipse)</h2>
+<hr />
+<ul>
+<li><a href="#Build-Operations">1. Build Operations</a></li>
+<li><a href="#System-Build-Procedures">2. System Build Procedures</a></li>
+<li><a href="#Build-for-Debugging">3. Build for Debugging</a></li>
+<li><a href="#Build-Details">4. Build Details</a></li>
+<li><a href="#Makefile-Settings">5. Makefile Settings</a></li>
+</ul>
+<hr />
+<h3 id="Build-Operations">1. Build Operations</h3>
+<p>Click with the mouse to select the target &quot;build directory&quot; which is displayed in the &quot;C/C++ Projects&quot; view shown in the left pane of the Eclipse window.</p>
+<p>With the directory selected, click the &quot;Project&quot; menu on the toolbar and select the following displayed items to start the build.</p>
+<ul>
+<li><p>&quot;T-Engine Target Make all&quot;</p>
+<p>Run &quot;make all&quot; to create the object.</p></li>
+<li><p>&quot;T-Engine Target Make Clean&quot;</p>
+<p>Run &quot;make clean&quot; to clear the created object. Run Make all after running Make clean to completely redo the make process.</p></li>
+<li><p>&quot;T-Engine Target Make...&quot;</p>
+<p>When the &quot;Make Targets&quot; dialog is displayed, select the target and press the &quot;Build&quot; button to run &quot;make &lt;selected target&gt;&quot;.</p>
+<p>If the target you wish to run is not displayed, press the &quot;Add&quot; button within the dialog and add the settings for &quot;Target name&quot; and &quot;Make Targets&quot;.</p></li>
+</ul>
+<p>Messages are sequentially displayed in the &quot;Console&quot; view when the build starts. When the following message is displayed, the build has finished.</p>
+<pre><code>    **** Build Finished ****</code></pre>
+<p>Selecting and right-clicking the &quot;build directory&quot; displays the &quot;Make Targets&quot; item, but you cannot run &quot;Build&quot; from here. Be sure to select &quot;T-Engine Target Make...&quot; from the &quot;Project&quot; menu on the toolbar.</p>
+<h3 id="System-Build-Procedures">2. System Build Procedures</h3>
+<p>Build the T-Kernel system with the following procedure.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Select the following directory as the build directory.</p>
+<pre><code>kernel\sysmain\build\tef_em1d</code></pre></li>
+<li><p>(2) Select &quot;Project&quot; -&gt; &quot;T-Engine Target Make...&quot;, then select &quot;emulator&quot; as the target, and press the &quot;Build&quot; button. Press the &quot;Add&quot; button to add the target if it is not displayed.</p>
+<pre><code>Target Name   emulator (any name is OK)
+Make target   emu</code></pre>
+<div class="figure">
+<img src="fig/make-1.png" />
+</div>
+<p><img src="fig/make-2.png" /> <img src="fig/make-3.png" /></p>
+<div class="figure">
+<img src="fig/make-4.png" />
+</div></li>
+<li><p>(3) When the following message is displayed in the &quot;Console&quot; view, the build is finished.</p>
+<div class="figure">
+<img src="fig/make-5.png" />
+</div></li>
+<li><p>(4) The following build result is created in the build directory.</p>
+<ul>
+<li><p>RAM for execution (for debugging)</p>
+<pre><code>kernel-ram.sys   RAM version T-Kernel execution object
+kernel-ram.map   RAM version T-Kernel link map
+kernel-ram.mot   RAM version T-Kernel load image (S-Format)
+kernel-ram.bin   RAM version T-Kernel load image (Binary)
+rom-dbg.bin      Emulator use RAM version load image (Binary)
+                   ( T-Monitor + RomInfo )</code></pre></li>
+<li><p>ROM for execution (for writing to Flash ROM)</p>
+<pre><code>kernel-rom.rom   ROM version T-Kernel execution object
+kernel-rom.map   ROM version T-Kernel link map
+kernel-rom.mot   ROM version load image (S-Format)
+rom.bin          Emulator use ROM version load image (Binary)
+                   ( T-Monitor + RomInfo + T-Kernel )</code></pre></li>
+</ul>
+<p>The build result described above and the following files for writing to Flash ROM are copied to the folder &quot;C:\cygwin\usr\local\tef_em1d\tkernel_source\bin\tef_em1d&quot;.</p>
+<pre><code>    rominfo-ram.mot  RAM version RomInfo load image (S-Format)
+    rominfo-rom.mot  ROM version RomInfo load image (S-Format)
+    tmonitor.mot     T-Monitor load image (S-Format)
+    tmonitor.map     T-Monitor link map</code></pre></li>
+</ol>
+<h3 id="Build-for-Debugging">3. Build for Debugging</h3>
+<p>The execution object with the attached debug information must be created when using a debugger (gdb) with Eclipse.</p>
+<p>For this reason, copy the build directory's &quot;tef_em1d&quot; directory and create the directory &quot;tef_em1d.debug&quot; using the following procedure.</p>
+<ul>
+<li>When the suffix &quot;.debug&quot; is included in the name of the build directory, the setting &quot;mode = debug&quot; is added to the Makefile. The result is that the compile option is specified as -g and the object file is generated with the debug information. The -g specification is only applied to the source files under the &quot;sysmain/src&quot; directory.</li>
+</ul>
+<p><!-- dummy comment line for breaking list --></p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Move the mouse over the &quot;tef_em1d&quot; directory which is displayed in the &quot;C/C++ Projects&quot; view shown in the left pane of the Eclipse window and right-click the mouse to select &quot;Copy&quot; from the displayed menu.</p>
+<div class="figure">
+<img src="fig/make_dbg-1.png" />
+</div></li>
+<li><p>(2) To continue, move the mouse to the &quot;build&quot; directory above the &quot;tef_em1d&quot; directory, and right-click the mouse to select &quot;Paste&quot; from the displayed menu.</p>
+<div class="figure">
+<img src="fig/make_dbg-2.png" />
+</div></li>
+<li><p>(3) Set the new name to &quot;tef_em1d.debug&quot; and press the &quot;OK&quot; button.</p>
+<div class="figure">
+<img src="fig/make_dbg-3.png" />
+</div></li>
+<li><p>(4) Set the &quot;tef_em1d.debug&quot; which was created as the build directory and run the system build procedure.</p>
+<p>Be sure to select &quot;T-Engine Target Make Clean&quot; to clear the build result before running the &quot;tef_em1d&quot; make process.</p>
+<div class="figure">
+<img src="fig/make_dbg-4.png" />
+</div>
+<p>The &quot;C:\cygwin\usr\local\tef_em1d\tkernel_source\bin\tef_em1d&quot; folder contains the last build result of either &quot;tef_em1d&quot; or &quot;tef_em1d.debug&quot;. Please note that the object file names are the same, so you cannot tell the difference from the file names.</p></li>
+</ol>
+<h3 id="Build-Details">4. Build Details</h3>
+<p>The following &quot;Make Targets&quot; are prepared for running &quot;T-Engine Target Make...&quot; in the &quot;tef_em1d&quot; build directory, so set and use the appropriate &quot;Make Targets&quot; as needed.</p>
+<ul>
+<li><p>&lt;Module&gt;</p>
+<p>Run the particular make for the specified &lt;module&gt;.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Module make</th>
+<th align="center">Execution Directory</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">tkernel</td>
+<td align="left">kernel/tkernel/build/&lt;Model Name&gt;</td>
+</tr>
+<tr class="even">
+<td align="left">sysmgr</td>
+<td align="left">kernel/sysmgr/build/&lt;Model Name&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">sysinit</td>
+<td align="left">kernel/sysinit/build/&lt;Model Name&gt;</td>
+</tr>
+<tr class="even">
+<td align="left">libraries</td>
+<td align="left">lib/build/&lt;Model Name&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">drivers</td>
+<td align="left">driver/&lt;Model Name&gt;/build</td>
+</tr>
+<tr class="even">
+<td align="left">config</td>
+<td align="left">config/build/&lt;Model Name&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">monitor</td>
+<td align="left">monitor/build/&lt;Model Name&gt;</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>all - &quot;T-Engine Target Make all&quot;</p>
+<p>Run make for the following modules to create the kernel object.</p>
+<p>tkernel, sysmgr, sysinit, libraries, drivers</p></li>
+<li><p>emu</p>
+<p>Run make for the following modules to create the emulator execution image.</p>
+<p>all (tkernel, sysmgr, sysinit, libraries, drivers) + config, monitor</p></li>
+<li><p>clean - &quot;T-Engine Target Make Clean&quot;</p>
+<p>Run make clean for the following modules to clear objects created with make (make all). (config and monitor module objects are not cleared.)</p>
+<p>tkernel, sysmgr, sysinit, libraries, drivers</p></li>
+<li><p>source</p>
+<p>Run make source for the following modules to create the source and definition files for the system call/extended SVC interface library. (Source and definition files are created with the typical make.)</p>
+<p>libraries, drivers</p></li>
+<li><p>clean_source</p>
+<p>Run make clean_source for the following modules to clear the source and definition files created by make source.</p>
+<p>libraries, drivers</p></li>
+<li><p>clean_all</p>
+<p>Run both make clean and make clean_source.</p></li>
+<li><p>clean_config</p>
+<p>Run make clean for the config module to clear the RomInfo object.</p></li>
+<li><p>clean_monitor</p>
+<p>Run make clean for the monitor module to clear the T-Monitor object.</p></li>
+</ul>
+<h3 id="Makefile-Settings">5. Makefile Settings</h3>
+<p>The system build creates an object file which contains all of the device drivers, but to exclude unnecessary device drivers, edit the &quot;Makefile&quot; in the &quot;tef_em1d&quot; build directory, and delete unnecessary drivers from the following definitions.</p>
+<pre><code>    DRV_CONSOLE = yes
+    DRV_CLOCK   = yes
+    DRV_SYSDISK = yes
+    DRV_SCREEN  = yes
+    DRV_KBPD    = yes
+    DRV_LOWKBPD = yes</code></pre>
+<p>Sample code for debugging is also contained in &quot;kernel\sysmain\src\usermain.c&quot;. To disable this, delete the following definition.</p>
+<pre><code>    CFLAGS += -DDEBUG_SAMPLE</code></pre>
+</body>
+</html>

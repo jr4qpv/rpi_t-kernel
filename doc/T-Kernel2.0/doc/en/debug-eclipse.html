@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="Running-and-Debugging-Eclipse-use">Running and Debugging (Eclipse use)</h2>
+<hr />
+<ul>
+<li><a href="#Console-Preparation">1. Console Preparation</a></li>
+<li><a href="#Running-in-the-Emulator-RAM-version-T-Kernel">2. Running in the Emulator (RAM version T-Kernel)</a></li>
+<li><a href="#Debugging-in-the-Emulator-RAM-version-T-Kernel">3. Debugging in the Emulator (RAM version T-Kernel)</a></li>
+<li><a href="#Running-in-the-Emulator-ROM-version-T-Kernel">4. Running in the Emulator (ROM version T-Kernel)</a></li>
+<li><a href="#Running-on-the-Device">5. Running on the Device</a></li>
+</ul>
+<hr />
+<h3 id="Console-Preparation">1. Console Preparation</h3>
+<p>First, set up the relay program (te_vcom) and the terminal emulator (gterm) to communicate with the target.</p>
+<ul>
+<li><p>The relay program (te_vcom) dynamically switches the gterm and gdb connections based on the target status and transmission data in order to connect both the terminal emulator (gterm) and the Eclipse debugger (gdb) to the serial port of the target.</p>
+<div class="figure">
+<img src="fig/tevcom.png" />
+</div></li>
+</ul>
+<p><!-- dummy comment line for breaking list --></p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Select the &quot;Run&quot; -&gt; &quot;External Tools&quot; -&gt; &quot;External Tools Configurations&quot; menu.</p>
+<div class="figure">
+<img src="fig/tool-1.png" />
+</div></li>
+<li><p>(2) Click the [+] to the left of &quot;Program&quot; which is shown in the left pane of the &quot;External Tools Configurations&quot; dialog to display &quot;te_vcom&quot; and &quot;gterm&quot;.</p></li>
+<li><p>(3) Select &quot;te_vcom&quot; in the left pane, enter the following settings to run in the emulator, and click the &quot;Apply&quot; button. &quot;te_vcom&quot; changes to &quot;te_vcom_emu&quot; in the left window pane display.</p>
+<pre><code>  Name  te_vcom_emu
+  Parameter  ${te_te_vcom_para} -l localhost:10000</code></pre>
+<ul>
+<li><p>&quot;${te_te_vcom_para}&quot; is the setting entered under &quot;Window&quot; -&gt; &quot;Preferences&quot; but may be overwritten by later settings.</p></li>
+<li><p>&quot;-l localhost:10000&quot; is the serial port specification for connecting with the emulator. By default, it is the localhost (127.0.0.1) TCP port number 10000. Please adjust to match any changes in the emulator settings.</p></li>
+</ul>
+<div class="figure">
+<img src="fig/tool-2.png" />
+</div></li>
+<li><p>(4) To continue, move the mouse over &quot;te_vcom_emu&quot; in the left pane, right-click the mouse and select &quot;Duplicate&quot; from the displayed menu.</p>
+<div class="figure">
+<img src="fig/tool-3.png" />
+</div></li>
+<li><p>(5) Select the &quot;te_vcom_emu(1)&quot; which was added, enter the following settings to run on the device, and click the &quot;Apply&quot; button. &quot;te_vcom_emu(1)&quot; changes to &quot;te_vcom_tgt&quot; in the left window pane display.</p>
+<pre><code>  Name       te_vcom_tgt
+  Parameter  ${te_te_vcom_para} -l /dev/ttyS0 -115200</code></pre>
+<ul>
+<li><p>&quot;-l /dev/ttyS0&quot; supports the following specification for the serial port connection with the device. &quot;-115200&quot; is the transmission speed (bps) setting. Please match the settings to the actual environment and device being used.</p>
+<pre><code>    COM1   /dev/ttyS0
+    COM2   /dev/ttyS1
+    COM3   /dev/ttyS2
+     .....</code></pre></li>
+</ul>
+<div class="figure">
+<img src="fig/tool-4.png" />
+</div></li>
+<li><p>(6) No special settings are needed for &quot;gterm&quot;.</p>
+<div class="figure">
+<img src="fig/tool-5.png" />
+</div></li>
+</ol>
+<h3 id="Running-in-the-Emulator-RAM-version-T-Kernel">2. Running in the Emulator (RAM version T-Kernel)</h3>
+<p>Run the RAM version T-Kernel which was built in the emulator using the following procedure.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Start the emulator. Please refer to the <a href="qemu-tef_em1d.html">Emulator (QEMU-tef_em1d) Instructions</a> for more information about how to start the emulator.</p>
+<p>Specify &quot;-dipsw dbgsw=on&quot; in qeum.bat to start T-Monitor and specify the following Debug ROM image which was created in the system build.</p>
+<pre><code>    C:\cygwin\usr\local\tef_em1d\tkernel_source\kernel\sysmain\build\tef_em1d\rom-dbg.bin</code></pre></li>
+<li><p>(2) Select the &quot;Run&quot; -&gt; &quot;External Tools&quot; -&gt; &quot;External Tools Configurations&quot; menu. Then select &quot;te_vcom_emu&quot; shown in the left pane and press the &quot;Run&quot; button.</p>
+<p>Click the &quot;Console&quot; tab in the lower part of the Eclipse window to display te_vcom_emu[program] in the line right below the tab (area directly above the view).</p></li>
+<li><p>(3) To continue, start &quot;gterm&quot; in the same way.</p>
+<p>The console displays the &quot;gterm&quot; startup message, T-Monitor starts up on the emulator, and the startup message and prompt are displayed.</p>
+<pre><code>    &lt;&lt; Gterm ver 2.51 : 130221 &gt;&gt;
+
+    T-Monitor/tef_em1d Version 2.01.00
+
+    TM&gt; </code></pre>
+<ul>
+<li><p>Once &quot;te_vcom_emu&quot; and &quot;gterm&quot; have been started, a shortcut is displayed in the &quot;Run&quot; -&gt; &quot;External Tools&quot; menu. You can select the shortcut to start them again later.</p>
+<div class="figure">
+<img src="fig/tool-6.png" />
+</div></li>
+</ul></li>
+<li><p>(4) Select the following execution object file in the &quot;C/C++ Projects View&quot; and right-click the mouse to select &quot;Run&quot; -&gt; &quot;Run Configurations&quot;.</p>
+<pre><code>    Execution file  kernel/sysmain/build/tef_em1d/kernel-ram.sys</code></pre>
+<div class="figure">
+<img src="fig/execute-1.png" />
+</div></li>
+<li><p>(5) Select &quot;T-Engine Application&quot; in the &quot;Run Configurations&quot; dialog and right-click the mouse to select &quot;New&quot;.</p>
+<div class="figure">
+<img src="fig/execute-2.png" />
+</div></li>
+<li><p>(6) Specify the following for &quot;Run file&quot; and &quot;Transfer file&quot; in the &quot;Main&quot; tab and press the &quot;Run&quot; button.</p>
+<pre><code>Run file        sysmain/build/tef_em1d/kernel-ram.sys
+Transfer file   sysmain/build/tef_em1d/kernel-ram.bin 30006000
+    (or)        sysmain/build/tef_em1d/kernel-ram.mot</code></pre>
+<ul>
+<li><p>&quot;30006000&quot; is the starting address of the Transfer file's binary image. &quot;kernel-ram.mot&quot; (S-Format) does not require an address specification, but the transfer time will be long due to the large file size.</p></li>
+<li><p>Pressing the &quot;Run&quot; button while the T-Monitor prompt &quot;TM&gt; &quot; is not displayed in the console will not run the build. Click inside the console and press the Enter key to confirm the prompt display status.</p></li>
+</ul>
+<div class="figure">
+<img src="fig/execute-3.png" />
+</div></li>
+<li><p>(7) T-Kernel starts up after the specified &quot;Transfer file&quot; is loaded and then the sample program is run. The following series of messages are shown in the console.</p>
+<pre><code>    TM&gt; .cd /cygdrive/C/cygwin/usr/local/tef_em1d/tkernel_source/kernel
+    .. dir: /cygdrive/C/cygwin/usr/local/tef_em1d/tkernel_source/kernel
+    &gt; .load sysmain/build/tef_em1d/kernel-ram.bin 30006000
+    .. LO XM,30006000 [sysmain/build/tef_em1d/kernel-ram.bin: 177392 bytes]
+    ....*....*....*....*....*....*....*....*....*....*....*....*....*....*....*....*....*. (22174.0 bytes/sec)
+
+    Loaded: 30006000 -&gt; 300317FF
+    TM&gt; bd
+
+    T-Kernel Version 2.02.00
+
+    ConsoleIO - OK
+    ClockDrv - OK
+    SysDiskDrv - OK
+    ScreenDrv - OK
+    KbPdDrv - OK
+    LowKbPdDrv - OK
+    1 - Debug sample started.
+    2 - Start sample task (tid=8) and wait.
+    3 - Sample task started (tid=8).
+    4 - Delay 1000 msec.
+    5 - Delay 1000 msec.
+    6 - Delay 1000 msec.
+    7 - Wakeup main task.
+    8 - Wakeup from sample task.
+    9 - Sample task finished.
+    10 - Debug sample finished.
+    Push any key to shutdown the T-Kernel.</code></pre></li>
+</ol>
+<p>Pressing any key in the console shuts down the target. If the program is running in the emulator then the emulator will shut down.</p>
+<h3 id="Debugging-in-the-Emulator-RAM-version-T-Kernel">3. Debugging in the Emulator (RAM version T-Kernel)</h3>
+<p>Run the debugging for the RAM version T-Kernel which was built for debugging using the following procedure.</p>
+<p>The typical build directory for running builds is &quot;kernel\sysmain\build\tef_em1d&quot;, but the build directory for debugging is &quot;kernel\sysmain\build\tef_em1d.debug&quot;.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Start the emulator and run &quot;te_vcom_emu&quot; and &quot;gterm&quot; in the same way as for a typical RAM version T-Kernel execution.</p>
+<p>Either of the following can be specified by the emulator as the Debug ROM image. (same content)</p>
+<pre><code>    C:\cygwin\usr\local\tef_em1d\tkernel_source\kernel\sysmain\build\tef_em1d\rom-dbg.bin
+    C:\cygwin\usr\local\tef_em1d\tkernel_source\kernel\sysmain\build\tef_em1d.debug\rom-dbg.bin</code></pre></li>
+<li><p>(2) Select the following execution object file in the &quot;C/C++ Projects View&quot; and right-click the mouse to select &quot;Debug As&quot; -&gt; &quot;Debug Configurations&quot;.</p>
+<pre><code>    Execution file  kernel/sysmain/build/tef_em1d.debug/kernel-ram.sys</code></pre>
+<div class="figure">
+<img src="fig/debug-1.png" />
+</div></li>
+<li><p>(3) Select &quot;T-Engine Application&quot; in the &quot;Debug Configurations&quot; dialog and right-click the mouse to select &quot;New&quot;. Change the name displayed on the right-hand side from &quot;kernel-ram(1)&quot; to &quot;kernel-ram-dbg&quot;.</p>
+<p>The displayed &quot;kernel-ram&quot; is for typical execution, so we will create a new one for debug execution.</p></li>
+<li><p>(4) Specify the following for &quot;Run file&quot; and &quot;Transfer file&quot; in the &quot;Main&quot; tab and press the &quot;Apply&quot; button.</p>
+<pre><code>Run file        sysmain/build/tef_em1d.debug/kernel-ram.sys
+Transfer file   sysmain/build/tef_em1d.debug/kernel-ram.bin 30006000
+    (or)        sysmain/build/tef_em1d.debug/kernel-ram.mot</code></pre>
+<div class="figure">
+<img src="fig/debug-2.png" />
+</div></li>
+<li><p>(5) Confirm that the &quot;Stop on startup at&quot; in the &quot;Debugger&quot; tab is set to &quot;usermain&quot; and press the &quot;Debug As&quot; button.</p>
+<div class="figure">
+<img src="fig/debug-3.png" />
+</div></li>
+<li><p>(6) T-Kernel starts up after the specified &quot;Transfer file&quot; is loaded and then stops at the beginning of &quot;usermain&quot;. At the same time, the &quot;Confirm Perspective Switch&quot; dialog is displayed switch to the &quot;Debug&quot; perspective.</p>
+<ul>
+<li><p>If the &quot;Console&quot; display unintentionally changes, press the &quot;Display Selected Console&quot; button among the buttons on the right-hand side of the &quot;Console&quot; tab and select &quot;gterm&quot;.</p></li>
+<li><p>You can also press &quot;Pin Console&quot; to prevent the display from changing.</p></li>
+</ul>
+<div class="figure">
+<img src="fig/debug-4.png" />
+</div>
+<div class="figure">
+<img src="fig/debug-5.png" />
+</div></li>
+<li><p>(7) Set the necessary breakpoints here to perform debugging.</p>
+<ul>
+<li><p>Use the &quot;Resume&quot;, &quot;Step Into&quot;, &quot;Step Over&quot;, and &quot;Step Return&quot; function buttons which are listed on the right-hand side of the &quot;Debug As&quot; view.</p></li>
+<li><p>To set a breakpoint, double-click the gray area on the far left of the line in the &quot;source code&quot; view where you wish to add a breakpoint or right-click the mouse and select &quot;Toggle Breakpoint&quot;. A breakpoint marker is inserted on the far left of the line.</p>
+<div class="figure">
+<img src="fig/debug-6.png" />
+</div>
+<div class="figure">
+<img src="fig/debug-7.png" />
+</div></li>
+<li><p>Execution cannot be forcefully interrupted to return control to the debugger unless a breakpoint is encountered, so be sure to set an appropriate breakpoint before restarting the execution.</p></li>
+</ul></li>
+</ol>
+<h3 id="Running-in-the-Emulator-ROM-version-T-Kernel">4. Running in the Emulator (ROM version T-Kernel)</h3>
+<p>Run the ROM version T-Kernel which was built in the emulator using the following procedure. In this case, the Eclipse console is used as a simple debugger console.</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) Start the emulator and run &quot;te_vcom_emu&quot; and &quot;gterm&quot; in the same way as for a typical RAM version T-Kernel execution.</p>
+<p>Specify the following ROM image in the emulator.</p>
+<pre><code>    C:\cygwin\usr\local\tef_em1d\tkernel_source\kernel\sysmain\build\tef_em1d\rom.bin</code></pre></li>
+<li><p>(2) The console displays the &quot;gterm&quot; startup message, T-Monitor starts up on the emulator, and the startup message and prompt are displayed.</p>
+<pre><code>    &lt;&lt; Gterm ver 2.51 : 130221 &gt;&gt;
+
+    T-Monitor/tef_em1d Version 2.01.00
+
+    TM&gt; </code></pre></li>
+<li><p>(3) In this case, enter the T-Monitor &quot;BD&quot; command to start the execution.</p>
+<pre><code>    TM&gt; BD
+
+    T-Kernel Version 2.02.00
+
+    ConsoleIO - OK
+      ::::::</code></pre></li>
+</ol>
+<h3 id="Running-on-the-Device">5. Running on the Device</h3>
+<p>The procedure to run the program on the device (T-Engine reference board - tef_em1d) is almost the same as the emulator.</p>
+<p>Please refer above to <a href="#Running-in-the-Emulator-ram-version-t-kernel">Running in the Emulator (RAM version T-Kernel)</a>, <a href="#Debugging-in-the-Emulator-ram-version-t-kernel">Debugging in the Emulator (RAM version T-Kernel)</a>, <a href="#Running-in-the-Emulator-rom-version-t-kernel">Running in the Emulator (ROM version T-Kernel)</a>. However, only the following point differs for the device.</p>
+<ul>
+<li><p>Start &quot;te_vcom_tgt&quot;, which specified the device and connecting serial port, not &quot;te_vcom_emu&quot;.</p></li>
+<li><p>T-Monitor must be written to the Flash ROM of the device. The device's DIP switch must also be set for T-Monitor startup.</p></li>
+<li><p>After connecting the device and the serial cable, start &quot;te_vcom_tgt&quot; and &quot;gterm&quot;, and then turn on the device's power switch or press the reset button. The T-Monitor startup message and prompt are displayed on the console.</p></li>
+<li><p>Write the following ROM information (for RAM execution) to the Flash ROM when running the RAM version T-Kernel.</p>
+<pre><code>    C:\cygwin\usr\local\tef_em1d\tkernel_source\bin\tef_em1d\rominfo-ram.mot</code></pre>
+<p>To write to Flash ROM, start &quot;te_vcom_tgt&quot; and &quot;gterm&quot;, and enter the following commands with the T-Monitor prompt displayed.</p>
+<pre><code>    TM&gt; .flload /usr/local/tef_em1d/tkernel_source/bin/tef_em1d/rominfo-ram.mot</code></pre></li>
+<li><p>Write both the following ROM information (for ROM execution) and the Kernel ROM image to the Flash ROM when running the ROM version T-Kernel.</p>
+<pre><code>    C:\cygwin\usr\local\tef_em1d\tkernel_source\bin\tef_em1d\rominfo-rom.mot
+    C:\cygwin\usr\local\tef_em1d\tkernel_source\bin\tef_em1d\kernel-rom.mot</code></pre>
+<p>Enter each of the following commands to write to Flash ROM.</p>
+<pre><code>    TM&gt; .flload /usr/local/tef_em1d/tkernel_source/bin/tef_em1d/rominfo-rom.mot
+    TM&gt; .flload /usr/local/tef_em1d/tkernel_source/bin/tef_em1d/kernel-rom.mot</code></pre></li>
+</ul>
+</body>
+</html>

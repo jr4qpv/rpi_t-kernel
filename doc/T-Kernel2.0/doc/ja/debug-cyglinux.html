@@ -1,0 +1,262 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../manual.css" type="text/css" />
+</head>
+<body>
+<hr />
+<h2 id="実行とデバッグ-cygwinlinux-共用">実行とデバッグ (Cygwin/Linux 共用)</h2>
+<hr />
+<ul>
+<li><a href="#コンソールの準備">1. コンソールの準備</a></li>
+<li><a href="#エミュレータでの実行-ram-版-t-kernel">2. エミュレータでの実行 (RAM 版 T-Kernel)</a></li>
+<li><a href="#エミュレータでのデバッグ実行-ram-版-t-kernel">3. エミュレータでのデバッグ実行 (RAM 版 T-Kernel)</a></li>
+<li><a href="#エミュレータでの実行-rom-版-t-kernel">4. エミュレータでの実行 (ROM 版 T-Kernel)</a></li>
+<li><a href="#実機での実行">5. 実機での実行</a></li>
+</ul>
+<hr />
+<h3 id="コンソールの準備">1. コンソールの準備</h3>
+<p>最初に、ターゲットと通信を行うためのターミナルエミュレータの準備を行います。</p>
+<p>開発環境のプラットホームに対応した任意のターミナルエミュレータのプログラム ( &quot;Tera Term&quot;, &quot;Hyper Terminal&quot;, &quot;minicom&quot; など ) が利用可能ですが、ここでは、本パッケージに含まれている Eclipse 開発環境でも使用している &quot;gterm&quot; を使用するものとします。</p>
+<p>&quot;gterm&quot; は、コンソールから以下のコマンドで実行できます。</p>
+<pre><code>    $ $GNU_BD/etc/gterm</code></pre>
+<ul>
+<li>$GNU_BD は、環境変数 GNU_BD の値、すなわち、開発環境をインストールしたディレクトリとなります。</li>
+<li>&quot; gterm -h &quot; とするとコマンドラインのヘルプメッセージが表示されます。</li>
+</ul>
+<h3 id="エミュレータでの実行-ram-版-t-kernel">2. エミュレータでの実行 (RAM 版 T-Kernel)</h3>
+<p>以下の手順で、ビルドした RAM 版 T-Kernel をエミュレータ上で実行します。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) エミュレータを起動します。エミュレータの起動方法に関しては、<a href="qemu-tef_em1d.html">エミュレータ (QEMU-tef_em1d) 説明書</a> を参照してください。</p>
+<p>T-Monitor 起動とするため、&quot;-dipsw dbgsw=on&quot; 指定を行い、システムのビルドで作成した以下のデバッグ用 ROM イメージを指定してください。</p>
+<pre><code>    $BD/kernel/sysmain/build/tef_em1d/rom-dbg.bin</code></pre>
+<ul>
+<li>$BD は、環境変数 BD の値、すなわち TｰKernel ソースコードパッケージをインストールしたディレクトリの &quot;tkernel_source&quot; サブディレクトリ ( &quot;/usr/local/tef_em1d/tkernel_source&quot; ) となります。</li>
+</ul></li>
+<li><p>(2) コンソールから以下のコマンドにより、&quot;gterm&quot; を実行します。</p>
+<pre><code>    $ cd $BD/kernel/sysmain/build/tef_em1d
+    $ $GNU_BD/etc/gterm -l localhost:10000</code></pre>
+<ul>
+<li><p>&quot;-l localhost:10000&quot; はエミュレータと接続するシリアルポートの指定で、デフォールトで localhost (127.0.0.1) の TCP ポート番号 10000 となっています。エミュレータ側の設定を変更した場合は、それに合わせてください。</p></li>
+<li><p>&quot;gterm&quot; の実行は、パラメータを含めて alias を定義しておくと便利です。</p>
+<pre><code>  例: alias gterm=&#39;$GNU_BD/etc/gterm -l localhost:10000&#39;</code></pre></li>
+<li><p>&quot;Tera Term&quot; などの汎用のターミナルエミュレータを使用する場合は、以下の設定としてください。</p>
+<pre><code>    接続方法            TCP/IP
+    接続先 (ホスト)     localhost (または、127.0.0.1)
+    TCP ポート番号      10000 
+    サービス            その他 
+    プロトコル          なし / raw</code></pre></li>
+</ul></li>
+<li><p>(3) コンソールに &quot;gterm&quot; の起動メッセージが表示され、エミュレータ上で T-Monitor が起動して、起動メッセージとプロンプトが表示されます。</p>
+<pre><code>    &lt;&lt; Gterm ver 2.51 : 130221 &gt;&gt;
+
+    T-Monitor/tef_em1d Version 2.01.00
+
+    TM&gt;</code></pre></li>
+<li><p>(4) コンソールから &quot;<code>.load</code>&quot; コマンドで、実行イメージファイルをロードします。</p>
+<pre><code>    TM&gt; .load kernel-ram.bin 30006000
+    .. LO XM,30006000 [kernel-ram.bin: 177392 bytes]
+    ....*....*....*....*....*....*....*....*....*....*....*....*....*....*....*....*....*. (29565.3 bytes/sec)
+
+    Loaded: 30006000 -&gt; 300317FF
+    TM&gt;</code></pre>
+<ul>
+<li><p>&quot;30006000&quot; は、バイナリイメージの開始アドレスです。アドレス指定の不要な &quot;kernel-ram.mot&quot; (S-Format) を指定してロードすることもできますが、ファイルサイズが大きいため転送時間も長くなります。</p></li>
+<li><p>&quot;<code>.load</code>&quot; は、&quot;gterm&quot; 専用のコマンドです。&quot;Tera Term&quot; などの汎用のターミナルエミュレータを使用する場合は、以下の T-Monitor のコマンドを入力した後、ファイル &quot;kernel-ram.bin&quot; を X-Modem で送信してください。</p>
+<pre><code>    TM&gt; LO XM,30006000</code></pre>
+<p>または、以下を入力した後、ファイル &quot;kernel-ram.mot&quot; を無手順で送信してください。</p>
+<pre><code>    TM&gt; LO S</code></pre></li>
+</ul></li>
+<li><p>(5) コマンド &quot;BD&quot; を入力すると、実行を開始します。</p>
+<pre><code>    TM&gt; BD
+
+    T-Kernel Version 2.02.00
+
+    ConsoleIO - OK
+    ClockDrv - OK
+    SysDiskDrv - OK
+    ScreenDrv - OK
+    KbPdDrv - OK
+    LowKbPdDrv - OK
+    1 - Debug sample started.
+    2 - Start sample task (tid=8) and wait.
+    3 - Sample task started (tid=8).
+    4 - Delay 1000 msec.
+    5 - Delay 1000 msec.
+    6 - Delay 1000 msec.
+    7 - Wakeup main task.
+    8 - Wakeup from sample task.
+    9 - Sample task finished.
+    10 - Debug sample finished.
+    Push any key to shutdown the T-Kernel.</code></pre></li>
+<li><p>(6) &quot;gterm&quot; は、&quot;<code>.q</code>&quot; コマンドで、終了します。</p>
+<ul>
+<li>終了しない場合は、&quot;Ctrl-C&quot; を入力して、&quot;^C&gt; &quot; が表示されてから &quot;<code>.q</code>&quot; を入力してください。</li>
+</ul></li>
+</ol>
+<h3 id="エミュレータでのデバッグ実行-ram-版-t-kernel">3. エミュレータでのデバッグ実行 (RAM 版 T-Kernel)</h3>
+<p>以下の手順で、デバッグ用にビルドした RAM 版 T-Kernel をエミュレータ上でデバッグ実行します。</p>
+<p>デバッガとしては、&quot;gdb&quot; (GNU debugger) を使用します。</p>
+<ul>
+<li>エミュレータは &quot;gdb&quot; のターゲットデバッガの機能を持っています。</li>
+<li>&quot;gdb&quot; の操作方法やコマンドに関しては、<a href="ftp://ftp.gnu.org/pub/old-gnu/Manuals/gdb/html_chapter/gdb_1.html">gdb のマニュアル</a> などを参照してください。</li>
+</ul>
+<p>通常の実行用のビルドディレクトリは &quot;<span class="math">$BD/kernel/sysmain/build/tef_em1d&quot; ですが、デバッグ実行用のビルドディレクトリは &quot;$</span>BD/kernel/sysmain/build/tef_em1d.debug&quot; となります。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) RAM 版 T-Kernel の通常の実行の場合と同様に、エミュレータを起動します。</p>
+<p>エミュレータの起動パラメータには、&quot;gdb&quot; 対応とするために、&quot;-S -gdb tcp:127.0.0.1:1234&quot; を追加してください。また、指定するデバッグ用 ROM イメージは、以下のどちらでも構いません。(同じ内容です)</p>
+<pre><code>    $BD/kernel/sysmain/build/tef_em1d/rom-dbg.bin
+    $BD/kernel/sysmain/build/tef_em1d.debug/rom-dbg.bin</code></pre></li>
+<li><p>(2) コンソールから以下のコマンドにより、&quot;gterm&quot; を実行します。&quot;gterm&quot; の起動メッセージが表示されますが、デバッガで停止しているため T-Monitor の起動メッセージはまだ表示されません。</p>
+<pre><code>    $ cd $BD/kernel/sysmain/build/tef_em1d.debug
+    $ $GNU_BD/etc/gterm -l localhost:10000
+
+    &lt;&lt; Gterm ver 2.51 : 130221 &gt;&gt;</code></pre></li>
+<li><p>(3) 別のコンソールから以下のコマンドにより、&quot;gdb&quot; を実行します。</p>
+<pre><code>    $ cd $BD/kernel/sysmain/build/tef_em1d.debug
+    $ $GNU_BD/bin/arm_2-unknown-tmonitor-gdb kernel-ram.sys
+    ::::
+    (gdb)</code></pre></li>
+<li><p>(4) &quot;gdb&quot; の &quot;target&quot; コマンドにより、エミュレータと接続して、&quot;c (continue)&quot; コマンドを入力して実行を再開します。</p>
+<pre><code>    (gdb) target remote localhost:1234
+    Remote debugging using localhost:1234
+    0x00000000 in ?? ()
+    (gdb) c
+    Continuing.</code></pre>
+<ul>
+<li><p>&quot;gdb&quot; は、ホームディレクトリ、またはカレントディレクトリに &quot;<code>.gdbinit</code>&quot; ファイルがあると、起動時にその内容をコマンドとして実行しますので、以下の内容の &quot;<code>.gdbinit</code>&quot; ファイルを作成しておけば、コマンド入力の手間が省けます。</p>
+<pre><code>    target remote localhost:1234
+    c</code></pre></li>
+</ul></li>
+<li><p>(5) &quot;gterm&quot; のコンソール上に T-Monitor の起動メッセージとプロンプトが表示されますので、&quot;<code>.load</code>&quot; コマンドで、実行イメージファイルをロードします。</p>
+<pre><code>    T-Monitor/tef_em1d Version 2.01.00
+    TM&gt;
+
+    TM&gt; .load kernel-ram.bin 30006000
+    ::::
+    Loaded: 30006000 -&gt; 300317FF
+    TM&gt;</code></pre></li>
+<li><p>(6) ロードが完了したら、&quot;gdb&quot; コンソール上で、&quot;Ctrl-C&quot; を入力して、実行を中断し、&quot;gdb&quot; に制御を移してから、最初のブレークポイント (例えば &quot;usermain&quot;) を設定して実行を再開します。</p>
+<pre><code>    ( CtrlｰC Key-in ) 
+    Program received signal SIGINT, Interrupt.
+    0x70000dd4 in ?? ()
+    (gdb) b usermain
+    (gdb) c
+    Continuing.</code></pre></li>
+<li><p>(7) 次に &quot;gterm&quot; のコンソール上で、コマンド &quot;BD&quot; を入力すると、ロードした &quot;kernel-ram.bin&quot; の実行を開始し、設定したブレークポイント &quot;usermain&quot; で停止して、&quot;gdb&quot; に制御が移ります。</p>
+<pre><code>    TM&gt; BD
+
+    T-Kernel Version 2.02.00</code></pre></li>
+<li><p>(8) 以降は、&quot;gdb&quot; のコンソール上で、&quot;gdb&quot; の各種コマンドを使用して、デバッグ実行します。なお、&quot;gterm&quot; のコンソールは、プログラムからの入出力を行います。</p>
+<ul>
+<li>&quot;gdb&quot; は、&quot;q&quot; コマンドで終了しますが、ターゲットが終了していた場合など終了できない場合があります。その場合は、&quot;Ctrl-C&quot; を 2 回入力して動作を停止してから &quot;q&quot; コマンドで終了してください。</li>
+</ul></li>
+</ol>
+<h3 id="エミュレータでの実行-rom-版-t-kernel">4. エミュレータでの実行 (ROM 版 T-Kernel)</h3>
+<p>以下の手順で、ビルドした ROM 版 T-Kernel をエミュレータ上で実行します。</p>
+<ol style="list-style-type: none" class="mynum_list">
+<li><p>(1) RAM 版 T-Kernel の通常の実行の場合と同様に、エミュレータを起動し、&quot;gterm&quot; を実行します。</p>
+<p>エミュレータでは、以下の ROM イメージを指定します。</p>
+<pre><code>    $BD/kernel/sysmain/build/tef_em1d/rom.bin</code></pre></li>
+<li><p>(2) コンソールに &quot;gterm&quot; の起動メッセージが表示され、エミュレータ上で T-Monitor が起動して、 起動メッセージとプロンプトが表示されます。</p>
+<pre><code>    &lt;&lt; Gterm ver 2.51 : 130221 &gt;&gt;
+
+    T-Monitor/tef_em1d Version 2.01.00
+
+    TM&gt; </code></pre></li>
+<li><p>(3) この状態で、T-Monitor のコマンド &quot;BD&quot; を入力すると、実行を開始します。</p>
+<pre><code>    TM&gt; BD
+
+    T-Kernel Version 2.02.00
+
+    ConsoleIO - OK
+      ::::::</code></pre></li>
+</ol>
+<h3 id="実機での実行">5. 実機での実行</h3>
+<p>実機 (T-Engine リファレンスボード - tef_em1d) でプログラムを実行する場合の手順は、エミュレータの場合とほぼ同様です。</p>
+<p>上記の <a href="#エミュレータでの実行-ram-版-t-kernel">エミュレータでの実行 (RAM 版 T-Kernel)</a>、<a href="#エミュレータでのデバッグ実行-ram-版-t-kernel">エミュレータでのデバッグ実行 (RAM 版 T-Kernel)</a>、<a href="#エミュレータでの実行-rom-版-t-kernel">エミュレータでの実行 (ROM 版 T-Kernel)</a> を参照してください。ただし、実機の場合は以下の点のみ異なります。</p>
+<ul>
+<li><p>&quot;gterm&quot; の起動パラメータで、実機と接続するシリアルポートを指定します。</p>
+<pre><code>    $ cd $BD
+    $ $GNU_BD/etc/gterm -l /dev/ttyS0 -115200 -x</code></pre>
+<ul>
+<li><p>&quot;-l /dev/ttyS0&quot; は、実機と接続するシリアルポートの指定で以下の対応となります。&quot;-115200&quot; は通信速度 (bps) の設定です。&quot;-x&quot; は，フロー制御なしの指定です。実際に使用する環境や実機側の設定に合わせて設定してください。</p>
+<pre><code>    COM1   /dev/ttyS0
+    COM2   /dev/ttyS1
+    COM3   /dev/ttyS2
+     .....</code></pre></li>
+<li><p>&quot;Tera Term&quot; などの汎用のターミナルエミュレータを使用する場合は、以下の設定としてください。</p>
+<pre><code>    接続方法       シリアル
+    ポート         COM1
+    ボーレート     115200
+    データ         8 bit
+    ストップ       1 bit
+    パリティ       none
+    フロー制御     none</code></pre></li>
+</ul></li>
+<li><p>実機の Flash ROM に、T-Monitor が書き込まれている必要があります。また、実機の DIP スイッチを T-Monitor 起動に設定してください。</p></li>
+<li><p>実機とシリアルケーブルで接続した後、&quot;gterm&quot; を起動してから、実機の電源スイッチを入れるか、またはリセットボタンを押してください。T-Monitor の起動メッセージとプロンプトがコンソール上に表示されます。</p></li>
+<li><p>RAM 版 T-Kernel を実行する場合は、以下の ROM 情報(RAM 実行用) を Flash ROM に書き込んでおいてください。</p>
+<pre><code>    $BD/bin/tef_em1d/rominfo-ram.mot</code></pre>
+<p>Flash ROM への書き込みは、&quot;gterm&quot; を起動して、T-Monitor のプロンプトが表示されている状態で、 以下のコマンドを入力して書き込むことができます。</p>
+<pre><code>    TM&gt; .flload bin/tef_em1d/rominfo-ram.mot</code></pre>
+<ul>
+<li><p>&quot;.flload&quot; は、&quot;gterm&quot; 専用のコマンドです。&quot;Tera Term&quot; などの汎用のターミナルエミュレータを使用する場合は、以下の T-Monitor のコマンドを入力した後、ファイル &quot;rominfo-ram.mot&quot; を無手順で送信してください。</p>
+<pre><code>TM&gt; FLLO</code></pre></li>
+</ul></li>
+<li><p>ROM 版 T-Kernel を実行する場合は、以下の ROM 情報(ROM 実行用) と、Kernel の ROM イメージの両方を Flash ROM に書き込んでおいてください。</p>
+<pre><code>    $BD/bin/tef_em1d/rominfo-rom.mot
+    $BD/bin/tef_em1d/kernel-rom.mot</code></pre>
+<p>Flash ROM への書き込みは、それぞれ、以下のコマンドを入力して書き込むことができます。</p>
+<pre><code>    TM&gt; .flload bin/tef_em1d/rominfo-rom.mot
+    TM&gt; .flload bin/tef_em1d/kernel-rom.mot</code></pre></li>
+<li><p>&quot;gdb&quot; を使用したデバッグ実行に関しては以下の通りです。</p>
+<ul>
+<li><p>&quot;gdb&quot; の動作に必要なターゲットデバッガとして、T-Monitor を使用します。</p></li>
+<li>&quot;gdb&quot; と &quot;gterm&quot; は、どちらも同じシリアルポートを使用しますので、両方同時には使用できません。&quot;gdb&quot; を使用する場合は、&quot;gterm&quot; を終了してください。
+<ul>
+<li>&quot;gterm&quot; を使用できないため、プログラムからのデバッグコンソールへの出力は表示されますが、入力はできません。</li>
+</ul></li>
+<li><p>&quot;gdb&quot; での実機への接続は、シリアルポートを指定する以下のコマンドを使用します。&quot;tmon&quot; は、 ターゲットデバッガの指定です。</p>
+<pre><code>    set remotebaud 115200
+    target tmon /dev/ttyS0</code></pre></li>
+<li><p>プログラムのロードは、&quot;gdb&quot; の &quot;load&quot; コマンドで行います。実行例を以下に示します。</p>
+<ul>
+<li>&quot;from target&gt;&quot; の行がプログラムからのデバッグコンソールへの出力です。入力はできません。</li>
+<li><p>&quot;s&quot; はステップ実行のコマンドです。</p>
+<pre><code>$ $GNU_BD/bin/arm_2-unknown-tmonitor-gdb kernel-ram.sys
+::::
+(gdb) set remotebaud 115200
+(gdb) target tmon /dev/ttyS0
+Remote target tmon connected to /dev/ttyS0
+0x34000000 in ?? ()
+(gdb) load
+.text   : 0x30006000 .. 0x30031000
+.data   : 0x30031000 .. 0x300314f0
+Transfer rate: 2 KB/sec.
+(gdb) b usermain
+Breakpoint 1 at 0x300062d8: file ../../src/usermain.c, line 133.
+(gdb) c
+Continuing.
+from target&gt; 
+from target&gt; T-Kernel Version 2.02.00
+from target&gt; 
+
+Breakpoint 1, usermain () at ../../src/usermain.c:133
+133     ercd = ConsoleIO(0, NULL);  ercd = ConsoleIO(0, NULL);
+(gdb) s
+134     tm_putstring(ercd &gt;= E_OK ? &quot;ConsoleIO - OK\n&quot; : &quot;ConsoleIO - ERR\n&quot;);
+(gdb) s
+from target&gt; ConsoleIO - OK
+137     ercd = ClockDrv(0, NULL);
+(gdb) s</code></pre></li>
+</ul></li>
+</ul></li>
+</ul>
+</body>
+</html>
