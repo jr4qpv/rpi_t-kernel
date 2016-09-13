@@ -11,6 +11,10 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2016/09/08.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
@@ -40,7 +44,14 @@ EXPORT INT init_task_main( void )
 
 	/* Start message */
 #if USE_KERNEL_MESSAGE
+ #ifdef _TEF_EM1D_
 	tm_putstring((UB*)BOOT_MESSAGE);
+ #else
+extern char const * const TitleAPP[];		/* ブートメッセージ */
+	tm_putstring("\n");
+	tm_putstring(TitleAPP[0]);
+	tm_putstring("\n\n");
+ #endif
 #endif
 
 	fin = 1;
@@ -60,3 +71,11 @@ EXPORT INT init_task_main( void )
 
 	return fin;
 }
+
+
+/*----------------------------------------------------------------------
+#|History of "inittask_main.c"
+#|============================
+#|* 2016/09/08	起動時にTitleAPP[0]の文字列を表示するようにした。
+#|
+*/

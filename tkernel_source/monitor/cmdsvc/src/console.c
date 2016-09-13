@@ -10,10 +10,14 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2016/04/13.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
- *	console.c
+ *	@(#)console.c () 2016/04/19
  *
  *       console I/O
  */
@@ -179,6 +183,9 @@ EXPORT W getString( UB *str )
 	W	i, c, c1;
 	W	cp, ep, hp, esc;
 	W	len;
+#ifdef LED_MONKEYIN_INV
+	B	ind = 0;
+#endif
 
 	CTRL_C_IN = 0;
 	c = c1 = 0;
@@ -186,7 +193,21 @@ EXPORT W getString( UB *str )
 	hp = -1;
 
 	while (ep < L_LINE - 2) {
+#ifdef LED_MONKEYIN_INV
+		/* 入力待ちの時にLEDを'S'点滅(･･･)させる */
+		c = getSIO(150);
+		if ((ind & 1) == 0) {						/* 偶数 ? */
+			if (ind <= 4)
+				cpuLED(LED_MONKEYIN_INV);			/* LED点灯 */
+		}
+		else {										/* 奇数 */
+			cpuLED(LED_MONKEYIN_INV & 0xffff0000);	/* LED消灯 */
+		}
+		if (++ind > 10) ind = 0;
+		if (c <= 0) continue;
+#else
 		if ((c = getSIO(0)) <= 0) continue;
+#endif
 		len = 1;
 		if (c & 0x80) {		// EUC 2 bytes characters
 			if (c1 == 0) {c1 = c; continue;}
@@ -291,3 +312,11 @@ EXPORT W getString( UB *str )
 	}
 	return ep;
 }
+
+
+/*----------------------------------------------------------------------
+#|【console.c 変更履歴】
+#|□2016/04/13	[tef_em1d]の"console.c"から修正
+#|□2016/04/19	getString()の入力待ち中に、LED'S'点滅する処理追加。
+#|
+*/

@@ -11,6 +11,10 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2015/12/22.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
@@ -22,6 +26,12 @@
 #include <tk/tkernel.h>
 #include <tm/tmonitor.h>
 #include <libstr.h>
+
+#ifdef DEBUG_TEST	/////// for debug ////////
+#include <device/serialio.h>
+#include <sys/consio.h>
+#endif
+
 
 /* Device drivers */
 IMPORT ER ConsoleIO( INT ac, UB *av[] );
@@ -113,6 +123,33 @@ err_ret:
 }
 #endif	/* DEBUG_SAMPLE */
 
+
+#ifdef DEBUG_TEST	////////////////// for debug ////////////////////
+LOCAL	void	debug_test(void)
+{
+	ER	err;
+	B	buff[256];
+	W	len, alen;
+	int c;
+
+	_PutString(">>>");
+	while (1) {
+		c = _GetChar();
+		_PutChar(c);
+		continue;
+
+
+		err = serial_out(0, ">>>", 3, &alen, 3000);
+		err = serial_in(0, buff, 4, &len, TMO_FEVR);
+		err = serial_out(0, buff, len, &alen, 3000);
+///		tm_printf(" err=%d\n", err>>16);
+
+		tk_dly_tsk(10);
+	}
+}
+#endif	//////////////////////////////////////////////////////////////
+
+
 /*
  * Entry routine for the user application.
  * At this point, Initialize and start the user application.
@@ -155,10 +192,28 @@ EXPORT	INT	usermain( void )
 	tm_putstring(ercd >= E_OK ? "LowKbPdDrv - OK\n" : "LowKbPdDrv - ERR\n");
 #endif
 
+#ifdef DEBUG_TEST
+	/* Debug test */
+	debug_test();
+#endif
+
 #ifdef DEBUG_SAMPLE
 	/* Debug sample */
 	debug_sample();
 #endif
+
+////////////////////
+	ercd = 0;
+	while (1) {
+		tm_printf("%d ", ercd);
+		tk_dly_tsk(1000);
+		ercd++;
+		if (ercd & 1)
+			tm_extsvc(0x11, 0x01, 0, 0);	/* LED on */
+		else
+			tm_extsvc(0x11, 0x00, 0, 0);	/* LED off */
+	}
+////////////////////
 
 	/* System shutdown */
 	tm_putstring((UB*)"Push any key to shutdown the T-Kernel.\n");
@@ -186,3 +241,11 @@ EXPORT	INT	usermain( void )
 
 	return 0;
 }
+
+
+/*----------------------------------------------------------------------
+#|History of "usermain.c"
+#|======================
+#|* 2015/12/22	It's modified.
+#|
+*/

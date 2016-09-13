@@ -10,10 +10,14 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2015/11/25.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
- *	@(#)sysdef_common.h (tk)
+ *	@(#)sysdef_common.h (tk) 2016/03/14
  *
  *	System dependencies definition.
  *	Included also from assembler program.
@@ -53,4 +57,25 @@
 #  include <tk/sysdepend/tef_em1d/sysdef_depend.h>
 #endif
 
+#if RPI_BCM283x
+#  include <tk/sysdepend/rpi_bcm283x/sysdef_depend.h>
+#endif
+#if APP_SH7760
+#  include <tk/sysdepend/app_sh7760/sysdef_depend.h>
+#endif
+#if APP_RZT1
+#  include <tk/sysdepend/app_rzt1/sysdef_depend.h>
+#endif
+
 #endif /* __TK_SYSDEF_COMMON_H__ */
+
+
+/*----------------------------------------------------------------------*/
+#if 0
+#|History of "sysdef_common.h"
+#|============================
+#|* 2015/11/25	[app_sh7760]用に、APP_SH7760 処理の追加
+#|* 2016/03/01	[rpi_bcm283x]用に、RPI_BCM283x 処理の追加
+#|* 2016/03/14	[app_rzt1]用に、APP_RZT1 処理の追加
+#|
+#endif

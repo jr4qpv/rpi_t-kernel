@@ -11,6 +11,10 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/04.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2016/02/19.
+ *
+ *----------------------------------------------------------------------
  */
 /*
  * This software package is available for use, modification, 
@@ -51,18 +55,27 @@
 
 #include <basic.h>
 #include <stdlib.h>
+#ifdef	USE_T2EX_FS
 #include <stdio.h>
+#endif
 #include <string.h>
 #include <tk/tkernel.h>
 #include <t2ex/datetime.h>
 #include <t2ex/fs.h>
 #include <t2ex/load.h>
 #include <device/clk.h>
+#include <misc/libmisc.h>
+
+#ifdef	USE_MISC_CPRINT
+#define	P		cprintf
+#else
 
 #ifdef	USE_T2EX_FS
 #define	P		printf
 #else
 #define	P		tm_printf
+#endif
+
 #endif
 
 #define	N_ARGS		16
@@ -71,7 +84,11 @@
 	ref command
 */
 #include "ref_command.c"
+#ifdef	USE_APP_EXTCMD
+#include "ext_command.c"
+#endif
 
+#ifdef	USE_T2EX_DT
 /*
 	Get from / Set to RTC
 */
@@ -224,7 +241,10 @@ static	const B	*week[] = {"sun","mon","tue","wed","thu","fri","sat"};
 		init_calendar_date();
 	}
 }
+#endif	/* USE_T2EX_DT */
 
+
+#ifdef	USE_T2EX_FS
 /*
 	attach command
 */
@@ -693,7 +713,10 @@ LOCAL	void	cmd_chmod(INT ac, B *av[])
 		P("fs_chmod(%s, %#x/0%o) ERR [%#x]\n", av[1], md, md, er);
 	}
 }
+#endif	/* USE_T2EX_FS */
 
+
+#ifdef	USE_T2EX_PM
 /*
 	load command
 */
@@ -754,6 +777,8 @@ LOCAL	void	cmd_unload(INT ac, B *av[])
 		P("pm_unload(%d) ERR [%#x]\n", progid, er);
 	}
 }
+#endif	/* USE_T2EX_PM */
+
 
 /*
 	call command
@@ -765,13 +790,29 @@ LOCAL	void	cmd_call(INT ac, B *av[])
 
 	if (ac < 2) return;
 
+#if 1
+	fnc = (FP)atolhex(av[1]);				/* ｱﾄﾞﾚｽの獲得 */
+#else
 	fnc = (FP)strtol(av[1], NULL, 0);
+#endif
 	p1 = (ac >= 3) ? strtol(av[2], NULL, 0) : 0;
 	p2 = (ac >= 4) ? strtol(av[3], NULL, 0) : 0;
 	p3 = (ac >= 5) ? strtol(av[4], NULL, 0) : 0;
 
 	(*fnc)(p1, p2, p3);
 }
+
+/*
+	call net sample
+*/
+#ifdef	NET_SAMPLE
+LOCAL	void	cmd_net(INT ac, B *av[])
+{
+IMPORT	void	net_test(void);
+		net_test();
+}
+#endif	/* NET_SAMPLE */
+
 
 /*
 	setup parameters
@@ -781,10 +822,10 @@ LOCAL	INT	setup_param(B *bp, B **av)
 	INT	ac;
 
 	for (ac = 0; ac < N_ARGS; ac++) {
-		while (*((UB*)bp) <= ' ' && *bp != '\0') bp++;
+		while (*((UB*)bp) <= ' ' && *bp != '\0') bp++;	// 先頭の文字以外削除
 		if (*bp == '\0') break;
 		av[ac] = bp;
-		while (*((UB*)bp) > ' ') bp++;
+		while (*((UB*)bp) > ' ' && *bp != ',') bp++;	// 区切りに','も含める
 		if (*bp != '\0') {
 			*bp++ = '\0';
 		}
@@ -793,92 +834,163 @@ LOCAL	INT	setup_param(B *bp, B **av)
 	return ac;
 }
 
-/*
+
+/*============================================
+      使用法の表示 (?)
+ =============================================*/
+LOCAL void help_cmd(INT ac, B *av[])
+{
+#ifdef	USE_T2EX_DT
+	P("date     [y m d [h m s]]\n");
+#endif
+#ifdef	USE_T2EX_PM
+	P("attach   devnm connm\n");
+	P("detach   connm\n");
+	P("cd       dir\n");
+	P("pwd      \n");
+	P("ls       [-t][-l][dir]\n");
+	P("mkdir    dir [mode]\n");
+	P("rmdir    dir\n");
+	P("rm       path\n");
+	P("mv       o-path n-path\n");
+	P("trunc    path len\n");
+	P("df       path\n");
+	P("sync     [path [d]]\n");
+	P("chmod    path mode\n");
+	P("tp       path [ofs len]\n");
+	P("tpx      path [ofs len]\n");
+	P("cp       s-path d-path/dir [wofs [wlen]]\n");
+#endif
+
+	P("ref      [item]\n");
+	P("call     addr [p1 p2 p3]\n");
+
+#ifdef	USE_T2EX_PM
+	P("load     path\n");
+	P("loadspg  path [arg ...]\n");
+	P("unload   progid\n");
+#endif
+#ifdef	NET_SAMPLE
+	P("net      execute network sample\n");
+#endif
+}
+
+
+
+
+
+extern void cmd_dir(INT argc, B *argv[]);
+extern void cmd_fload(INT argc, B *argv[]);
+
+extern void cmd_test(INT argc, B *argv[]);		//////////
+
+
+/*---------------------------------------------------------
 	execute command
 */
 EXPORT	INT	exec_cmd(B *cmd)
 {
+	int i, n_cmd_table;
 	INT	ac;
 	B	*av[N_ARGS];
 
+	/*** コマンドテーブル ***/
+	static const struct {
+		char  *cmd_str ;
+		void (*cmd_func)(INT ac, B *av[]) ;
+    } cmd_table[] = {
+#ifdef	USE_APP_EXTCMD
+		{ "d",			cmd_dump		},
+		{ "db",			cmd_dump		},
+		{ "dh",			cmd_dump		},
+		{ "dw",			cmd_dump		},
+
+		{ "m",			cmd_mem			},
+		{ "mb",			cmd_mem			},
+		{ "mh",			cmd_mem			},
+		{ "mw",			cmd_mem			},
+
+		{ "LO",			cmd_load		},
+		{ "lo",			cmd_load		},
+		{ "load",		cmd_load		},
+
+///		{ "dir",		cmd_dir		},
+		{ "fload",		cmd_fload		},
+
+		{ "t",			cmd_test		},
+		{ "test",		cmd_test		},
+#endif
+
+#ifdef	USE_T2EX_DT
+		{ "date",		cmd_date		},
+#endif
+#ifdef	USE_T2EX_FS
+		{ "attach",		cmd_attach		},
+		{ "detach",		cmd_detach		},
+		{ "mkdir",		cmd_mkdir		},
+		{ "rmdir",		cmd_rmdir		},
+		{ "pwd",		cmd_pwd			},
+		{ "cd",			cmd_cd			},
+		{ "rm",			cmd_rm			},
+		{ "mv",			cmd_mv			},
+		{ "ls",			cmd_ls			},
+		{ "tp",			cmd_tp			},
+		{ "tpx",		cmd_tp			},
+		{ "cp",			cmd_cp			},
+		{ "trunc",		cmd_trunc		},
+		{ "df",			cmd_df			},
+		{ "sync",		cmd_sync		},
+		{ "chmod",		cmd_chmod		},
+#endif	/* USE_T2EX_FS */
+
+		{ "ref",		cmd_ref			},
+		{ "call",		cmd_call		},
+
+#ifdef	USE_T2EX_PM
+		{ "load",		cmd_load		},
+		{ "loadspg",	cmd_loadspg		},
+		{ "unload",		cmd_unload		},
+#endif
+#ifdef	NET_SAMPLE
+		{ "net",		cmd_net			},
+#endif
+		{ "h",			help_cmd		},
+		{ "?",			help_cmd		}
+	};
+
+	/*======( コマンドの抽出 )======*/
 	ac = setup_param(cmd, av);
 	if (ac < 1) return 0;
 
-	if (strcmp(av[0], "date") == 0) {
-		cmd_date(ac, av);
-	} else if (strcmp(av[0], "attach") == 0) {
-		cmd_attach(ac, av);
-	} else if (strcmp(av[0], "detach") == 0) {
-		cmd_detach(ac, av);
-	} else if (strcmp(av[0], "mkdir") == 0) {
-		cmd_mkdir(ac, av);
-	} else if (strcmp(av[0], "rmdir") == 0) {
-		cmd_rmdir(ac, av);
-	} else if (strcmp(av[0], "pwd") == 0) {
-		cmd_pwd(ac, av);
-	} else if (strcmp(av[0], "cd") == 0) {
-		cmd_cd(ac, av);
-	} else if (strcmp(av[0], "rm") == 0) {
-		cmd_rm(ac, av);
-	} else if (strcmp(av[0], "mv") == 0) {
-		cmd_mv(ac, av);
-	} else if (strcmp(av[0], "ls") == 0) {
-		cmd_ls(ac, av);
-	} else if (strcmp(av[0], "tp") == 0 || strcmp(av[0], "tpx") == 0) {
-		cmd_tp(ac, av);
-	} else if (strcmp(av[0], "cp") == 0) {
-		cmd_cp(ac, av);
-	} else if (strcmp(av[0], "trunc") == 0) {
-		cmd_trunc(ac, av);
-	} else if (strcmp(av[0], "df") == 0) {
-		cmd_df(ac, av);
-	} else if (strcmp(av[0], "sync") == 0) {
-		cmd_sync(ac, av);
-	} else if (strcmp(av[0], "chmod") == 0) {
-		cmd_chmod(ac, av);
-	} else if (strcmp(av[0], "ref") == 0) {
-		cmd_ref(ac, av);
-	} else if (strcmp(av[0], "load") == 0) {
-		cmd_load(ac, av);
-	} else if (strcmp(av[0], "loadspg") == 0) {
-		cmd_loadspg(ac, av);
-	} else if (strcmp(av[0], "unload") == 0) {
-		cmd_unload(ac, av);
-	} else if (strcmp(av[0], "call") == 0) {
-		cmd_call(ac, av);
-	} else if (strncmp(av[0], "?", 1) == 0) {
-		P("date     [y m d [h m s]]\n");
-		P("attach   devnm connm\n");
-		P("detach   connm\n");
-		P("cd       dir\n");
-		P("pwd      \n");
-		P("ls       [-t][-l][dir]\n");
-		P("mkdir    dir [mode]\n");
-		P("rmdir    dir\n");
-		P("rm       path\n");
-		P("mv       o-path n-path\n");
-		P("trunc    path len\n");
-		P("df       path\n");
-		P("sync     [path [d]]\n");
-		P("chmod    path mode\n");
-		P("tp       path [ofs len]\n");
-		P("tpx      path [ofs len]\n");
-		P("cp       s-path d-path/dir [wofs [wlen]]\n");
-		P("ref      [item]\n");
-		P("call     addr [p1 p2 p3]\n");
-		P("load     path\n");
-		P("loadspg  path [arg ...]\n");
-		P("unload   progid\n");
-#ifdef	NET_SAMPLE
-		P("net      execute network sample\n");
+	/*======( コマンド行の解析＆実行 )======*/
+	n_cmd_table = sizeof(cmd_table) / sizeof(cmd_table[0]) ;
+	for (i=0 ; i<n_cmd_table ; i++) {
+	    if (strcmp(av[0], cmd_table[i].cmd_str) == 0)
+			break;
+	}
 
-	} else if (strcmp(av[0], "net") == 0) {
-IMPORT	void	net_test(void);
-		net_test();
-#endif
-	} else {
+	if (i < n_cmd_table) {					// ﾃｰﾌﾞﾙにあった?
+		/* コマンド関数の呼び出し */
+		(*(cmd_table[i].cmd_func))(ac, av);
+	}
+	else {									// ﾃｰﾌﾞﾙにない
 		return 0;
 	}
+
 	return 1;
 }
 
+
+/*----------------------------------------------------------------------
+#|History of "command.c"
+#|======================
+#|* 2016/02/04	"USE_T2EX_PM"未定義時には、pm_*()関数は呼びださないようにした。
+#|* 2016/02/04	"USE_T2EX_DT"未定義時には、dt_*()関数は呼びださないようにした。
+#|* 2016/02/04	"USE_T2EX_FS"未定義時には、fs_*()関数は呼びださないようにした。
+#|* 2016/02/06	"USE_MISC_CPRINT"定義時には、cprintf()を使うようにした。
+#|  "#include <misc/libmisc.h>"の追加。
+#|* 2016/02/10	コマンド解析を、cmd_table[]を使った方式に見直し。
+#|* 2016/02/19	setup_param()で区切文字に空白の他に','文字も見るようにした。
+#|* 2016/09/12	APP拡張コマンド"USE_APP_EXTCMD"関連を追加。
+#|
+*/

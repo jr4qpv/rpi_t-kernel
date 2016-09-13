@@ -1,0 +1,80 @@
+#
+# ----------------------------------------------------------------------
+#    T-Kernel Software Library
+# ----------------------------------------------------------------------
+#
+
+#
+#  @(#)Makefile.common for gmake (test) 2016/02/26
+#  application module
+#
+
+DEPS = Dependencies
+DEPENDENCIES_OUTPUT := $(DEPS)
+
+# module type
+MOD_TYP = s
+REL_TYP = q
+
+include $(BD)/module/etc/makerules
+
+# ----------------------------------------------------------------------------
+# target objects
+TARGET     = test
+TARGET_MOT = $(TARGET).mot
+TARGET_BIN = $(TARGET).bin
+
+S = ../../src
+
+VPATH = $(S)
+HEADER += $(S)
+
+SRC = main.c
+
+OBJ = $(addsuffix .o, $(basename $(SRC)))
+
+CFLAGS += $(CFLAGS_WARNING)
+
+LDLIBS += -lmisc -ltm -lconsolesvc -lsvc -lc
+
+
+# ロードアドレス指定
+START_ADR = -Wl,-Ttext,0x8cc00000
+
+
+# ----------------------------------------------------------------------------
+
+.PHONY: all clean install
+
+ALL = $(TARGET_BIN) $(TARGET_MOT) $(TARGET) $(TARGET).map
+
+all: $(ALL)
+
+$(TARGET_BIN): $(TARGET)
+	$(OBJCOPY) -O binary $< $@
+	cp -v $@ $(EXE_INSTALLDIR)		### kari for debug ###
+
+$(TARGET_MOT): $(TARGET)
+	$(OBJCOPY) $(OUTPUT_SREC) $< $@
+	cp -v $@ $(EXE_INSTALLDIR)		### kari for debug ###
+
+$(TARGET): $(OBJ)
+	$(LINK.o) $^ $(LDLIBS) $(OUTPUT_OPTION)
+
+clean:
+	$(RM) $(OBJ) $(ALL) $(DEPS)
+
+install: $(addprefix $(MODULE_INSTALLDIR)/, $(ALL))
+
+ifdef DEPENDENCIES_OUTPUT
+  $(DEPS): ; touch $(DEPS)
+else
+  $(DEPS): $(SRC) ; $(MAKEDEPS) $@ $?
+endif
+-include $(DEPS)
+
+
+# ----------------------------------------------------------------------
+#|【Makefile.common 変更履歴】
+#|□2016/02/26	新規作成(by T.Yokobayashi)
+#|

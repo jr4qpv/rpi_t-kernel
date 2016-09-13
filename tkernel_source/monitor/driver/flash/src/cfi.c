@@ -10,6 +10,10 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2016/01/14.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
@@ -52,6 +56,13 @@
 		xa<-90, man-id<- ba:0, dev-id <- ba:2
 		man-id:	89	Intel
 		dev-id:	001C	28F256P30B
+
+
+  Flash ROM specification:
+	SST SST39VF1601 2MB (16Mbits) 1M x16
+		 2KWord(4 KB) x 512 Sector
+		32KWord(64 KB) x  32 Block
+
 */
 
 /*
@@ -59,6 +70,17 @@
  */
 EXPORT	const JEDEC_SPEC	JedecSpec[] = {
  { 0x0089, 0x001c, 0x0000, 0x0000, 32, 0, 0x8888, 0x8000 }, /* 28F256P30B */
+ { 0x00bf, 0x004b, 0x0000, 0x0000, 2, 0, 0x0000, 0x0000 },  /* SST39VF1601 */
+ { 0x0011, 0x0022, 0x0000, 0x0000, 64, 0, 0x0000, 0x0000 },  /* MX25L51245G ////kari */
 };
 
 EXPORT	const W	N_JedecSpec = sizeof(JedecSpec) / sizeof(JEDEC_SPEC);
+
+
+/*----------------------------------------------------------------------
+#|History of "cfi.c"
+#|=======================
+#|* 2016/01/14	[app_sh7760]用に、｢SST39VF1601｣情報を追加。
+#|
+#endif
+*/

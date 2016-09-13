@@ -10,10 +10,14 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2015/11/24.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
- *	@(#)machine_common.h (sys)
+ *	@(#)machine_common.h (sys) 2016/03/14
  *
  *	Machine type definition
  */
@@ -52,4 +56,25 @@
 #  include <sys/sysdepend/tef_em1d/machine_depend.h>
 #endif
 
+#ifdef _RPI_BCM283x_
+#  include <sys/sysdepend/rpi_bcm283x/machine_depend.h>
+#endif
+#ifdef _APP_SH7760_
+#  include <sys/sysdepend/app_sh7760/machine_depend.h>
+#endif
+#ifdef _APP_RZT1_
+#  include <sys/sysdepend/app_rzt1/machine_depend.h>
+#endif
+
 #endif /* __SYS_MACHINE_COMMON_H__ */
+
+
+/*----------------------------------------------------------------------*/
+#if 0
+#|History of "machine_common.h"
+#|=============================
+#|* 2015/11/24	[app_sh7760]用に、_APP_SH7760_ 処理の追加
+#|* 2016/03/01	[rpi_bcm283x]用に、_RPI_BCM283x_ 処理の追加
+#|* 2016/03/14	[app_rzt1]用に、_APP_RZT1_ 処理の追加
+#|
+#endif

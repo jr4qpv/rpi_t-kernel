@@ -1,0 +1,30 @@
+#!/bin/sh
+#	@(#)gcc4arm 09-11-16
+#	Copyright 2011 by Ken Sakamura.
+#	This software is distributed under the T-License 2.0.
+#       Modified by T.Yokobayashi at 2016/08/19.
+
+: ${BD:=/usr/local/te}
+: ${GNU_BD:=$BD/tool/`$BD/etc/platform`}
+: ${_GNU_CONFIG:=arm_2-unknown-tkernel-}
+
+libdir=${GNU_BD}/lib/gcc
+
+for i
+do
+    case "$i" in
+      -D_S5PC100_)	libdir=$BD/lib/s5pc100       ; break ;;
+      -D_EM1D512_)	libdir=$BD/lib/em1d512       ; break ;;
+    esac
+done
+
+: ${COMMONLIB:=$libdir}
+
+if test "${APD_LD_LIB_PATH}" = "" ; then
+  LD_LIBRARY_PATH=${GNU_BD}/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+  export LD_LIBRARY_PATH
+fi
+
+exec "${GNU_BD}/bin/${_GNU_CONFIG}gcc" \
+	-B ${COMMONLIB}/ \
+	"$@"

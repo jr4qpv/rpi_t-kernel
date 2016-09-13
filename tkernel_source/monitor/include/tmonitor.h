@@ -11,10 +11,14 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2015/12/14.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
- *	tmonitor.h
+ *	@(#)tmonitor.h () 2016/04/14
  *
  *       T-Monitor internal common definitions
  */
@@ -29,6 +33,9 @@
 /* CPU-dependent definitions */
 #if CPU_ARM
 #  include "arm/cpudepend.h"
+#endif
+#if CPU_SH4
+#  include "sh4/cpudepend.h"
 #endif
 
 /*
@@ -210,9 +217,9 @@ typedef struct {
 	UW	top;		/* area start address */
 	UW	end;		/* area end address */
 	UW	attr;		/* attribute */
-#if (CPU_ARM|CPU_I386) && VIRTUAL_ADDRESS
+///#if (CPU_ARM|CPU_I386) && VIRTUAL_ADDRESS
 	UW	pa;		/* physical address | page attribute */
-#endif
+///#endif
 } MEMSEG;
 
 /*
@@ -245,6 +252,16 @@ typedef struct {
 #define	PGA_D		0x00004	/* TEX0:C:B='001', Device, CacheOff */
 #define	PGA_S		0x10000	/* shareable */
 #endif	/*CPU_ARMv6*/
+
+#if CPU_ARMv7
+#define	PGA_RW		0x00402	/* Kernel/RW (effective section, AP0='1') */
+#define	PGA_RO		0x08402	/* Kernel/RO (effective section) AP0='1') */
+#define	PGA_XN		0x00010	/* code execution prohibited */
+#define	PGA_C		0x0100c	/* TEX0:C:B='111', Normal, WB/WA  */
+#define	PGA_NC		0x01000	/* TEX0:C:B='100', Normal, CacheOff */
+#define	PGA_D		0x00004	/* TEX0:C:B='001', Device, CacheOff */
+#define	PGA_S		0x10000	/* shareable */
+#endif	/*CPU_ARMv7*/
 #endif	/*CPU_ARM*/
 
 /*
@@ -393,3 +410,13 @@ IMPORT	char*	strncpy( char *dst, const char *src, size_t n );
 /* ======================================================================== */
 
 #endif /* __MONITOR_TMONITOR_H__ */
+
+
+/*----------------------------------------------------------------------
+#|History of "tmonitor.h"
+#|=======================
+#|* 2015/12/14	[app_sh7760]用に、｢CPU_SH4｣時の"sh4/cpudepend.h"読込み追加。
+#|* 2016/04/13	[rpi_bcm283x],[app_rzt1]用に、｢CPU_ARMv7｣への対応。
+#|* 2016/04/14	MEMSEGのpaメンバはVIRTUAL_ADDRESSの指定に関係なく定義する
+#|
+*/

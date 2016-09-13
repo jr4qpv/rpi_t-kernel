@@ -10,10 +10,14 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2016/03/02.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
- *	cpudepend.h
+ *	@(#)cpudepend.h () 2016/08/24
  *
  *       ARM-related definitions
  */
@@ -85,6 +89,33 @@ Inline UB in_b( INT port )
 #define	ENB_MMUONLY	(0x0003)		/* I=0,R=0,S=0,C=0,A=1,M=1 */
 #endif
 
+#if CPU_CORTEX_A7
+#define	MASK_CACHEMMU	(0xFFFFCC78)		/* V,I,R,S,C,A,M (B = 0)   */
+#define	VALID_CACHEMMU	(0x3307)		/* B = 0		   */
+#define	DIS_CACHEMMU	(0x0000)		/* I=0,R=0,S=0,C=0,A=0,M=0 */
+#define	DIS_CACHEONLY	(0x0001)		/* I=0,R=0,S=0,C=0,A=0,M=1 */
+#define	ENB_CACHEMMU	(0x1007)		/* I=1,R=0,S=0,C=1,A=1,M=1 */
+#define	ENB_MMUONLY	(0x0003)		/* I=0,R=0,S=0,C=0,A=1,M=1 */
+#endif
+
+#if CPU_CORTEX_A53
+#define	MASK_CACHEMMU	(0xFFFFCC78)		/* V,I,R,S,C,A,M (B = 0)   */
+#define	VALID_CACHEMMU	(0x3307)		/* B = 0		   */
+#define	DIS_CACHEMMU	(0x0000)		/* I=0,R=0,S=0,C=0,A=0,M=0 */
+#define	DIS_CACHEONLY	(0x0001)		/* I=0,R=0,S=0,C=0,A=0,M=1 */
+#define	ENB_CACHEMMU	(0x1007)		/* I=1,R=0,S=0,C=1,A=1,M=1 */
+#define	ENB_MMUONLY	(0x0003)		/* I=0,R=0,S=0,C=0,A=1,M=1 */
+#endif
+
+#if CPU_CORTEX_R4
+#define	MASK_CACHEMMU	(0xFFFFCC78)		/* V,I,R,S,C,A,M (B = 0)   */
+#define	VALID_CACHEMMU	(0x3307)		/* B = 0		   */
+#define	DIS_CACHEMMU	(0x0000)		/* I=0,R=0,S=0,C=0,A=0,M=0 */
+#define	DIS_CACHEONLY	(0x0001)		/* I=0,R=0,S=0,C=0,A=0,M=1 */
+#define	ENB_CACHEMMU	(0x1007)		/* I=1,R=0,S=0,C=1,A=1,M=1 */
+#define	ENB_MMUONLY	(0x0003)		/* I=0,R=0,S=0,C=0,A=1,M=1 */
+#endif
+
 /*
  * references registers under monitor control
  *       references the value of registers at the time of monitor entry.
@@ -94,3 +125,13 @@ IMPORT UW getCurPCX( void );	/* PC register (raw value) */
 IMPORT UW getCurCPSR( void );	/* CPSR register */
 
 #endif /* __MONITOR_ARM_CPUDEPEND_H__ */
+
+
+/*----------------------------------------------------------------------
+#|History of "cpudepend.h"
+#|========================
+#|* 2016/03/02	[rpi_bcm283x]用に、｢CPU_CORTEX_A7｣への対応。
+#|* 2016/04/13	[app_rzt1]用に、｢CPU_CORTEX_R4｣への対応。
+#|* 2016/08/24	[rpi_bcm283x]用に、｢CPU_CORTEX_A53｣への対応。
+#|
+*/

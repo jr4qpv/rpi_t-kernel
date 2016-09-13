@@ -11,6 +11,10 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/04.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2016/02/04.
+ *
+ *----------------------------------------------------------------------
  */
 /*
  * This software package is available for use, modification, 
@@ -45,7 +49,7 @@
  */
 
 /*
- *	@(#)appl_main.c
+ *	@(#)appl_main.c (t2ex) 2016/09/12
  *
  */
 #include <basic.h>
@@ -55,6 +59,13 @@
 #include <tk/tkernel.h>
 #include <tm/tmonitor.h>
 
+#include <misc/libmisc.h>
+
+#ifdef	USE_MISC_CPRINT
+#define	P			cprintf
+#define	Gets(buf, bufsz)	cgetstring(buf, bufsz)
+#else
+
 #ifdef	USE_T2EX_FS
 #define	P			printf
 #define	Gets(buf, bufsz)	fgets(buf, bufsz, stdin)
@@ -63,9 +74,15 @@
 #define	Gets(buf, bufsz)	tm_getline(buf)
 #endif
 
+#endif
+
 /* Command functions */
 IMPORT	INT	exec_cmd(B *cmd);
 IMPORT	void	init_calendar_date(void);
+#ifdef	USE_APP_SAMPLE
+IMPORT	void	sample_exec(void);
+#endif
+
 
 /*
  *	Application main entry
@@ -75,8 +92,20 @@ EXPORT	void	appl_main( void )
 	B	buf[256];
 	INT	fin, n;
 
+	/* initialize library */
+#ifdef APP_EXTCMD
+	init_libmisc();
+#endif
+
 	/* initialize calendar date */
+#ifdef	USE_T2EX_DT
 	init_calendar_date();
+#endif
+
+	/* sample task execute */
+#ifdef	USE_APP_SAMPLE
+	sample_exec();
+#endif
 
 	/* command processing */
 	for (fin = 0; fin == 0; ) {
@@ -104,3 +133,14 @@ EXPORT	void	appl_main( void )
 	}
 }
 
+
+/*----------------------------------------------------------------------
+#|History of "appl_main.c"
+#|========================
+#|* 2016/02/04	"USE_T2EX_FS"が未定義の時のダミー関数記述の追加。
+#|* 2016/09/12	"USE_T2EX_DT"未定義時は、init_calendar_date()関数は呼ばない
+#|* 2016/09/12	"USE_MISC_CPRINT"定義時には、cprintf()を使うようにした。
+#|  "#include <misc/libmisc.h>"の追加。
+#|* init_libmisc()呼び出し処理の追加。
+#|
+*/

@@ -10,10 +10,14 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2015/11/25.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
- *      @(#)str_align_common.h (sys)
+ *	@(#)str_align_common.h (sys) 2016/03/14
  *
  *	Bit alignment definitions for structure
  */
@@ -52,4 +56,25 @@
 #  include <sys/sysdepend/tef_em1d/str_align_depend.h>
 #endif
 
+#if RPI_BCM283x
+#  include <sys/sysdepend/rpi_bcm283x/str_align_depend.h>
+#endif
+#if APP_SH7760
+#  include <sys/sysdepend/app_sh7760/str_align_depend.h>
+#endif
+#if APP_RZT1
+#  include <sys/sysdepend/app_rzt1/str_align_depend.h>
+#endif
+
 #endif /* __SYS_STR_ALIGN_COMMON_H__ */
+
+
+/*----------------------------------------------------------------------*/
+#if 0
+#|History of "str_align_common.h"
+#|===============================
+#|* 2015/11/25	[app_sh7760]用に、APP_SH7760 処理の追加
+#|* 2016/03/01	[rpi_bcm283x]用に、RPI_BCM283x 処理の追加
+#|* 2016/03/14	[app_rzt1]用に、APP_RZT1 処理の追加
+#|
+#endif

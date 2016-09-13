@@ -10,6 +10,10 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2016/02/03.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
@@ -48,3 +52,13 @@ IMPORT	const HELP	helpG, helpS, helpN, helpBTR, helpLO;
 IMPORT	const HELP	helpRD, helpWD, helpID, helpBD;
 IMPORT	const HELP	helpKILL, helpWROM, helpFLLO;
 IMPORT	const HELP	helpH, helpEX;
+IMPORT	const HELP	helpSYSI;
+
+
+/*----------------------------------------------------------------------*/
+#if 0
+#|【help.h 改版履歴】
+#|□2015/12/17	[app_sh7760]用に、[tef_em1d]の"help.h"から作成。
+#|□2016/02/03	｢helpSYSI｣の定義に対応。
+#|
+#endif

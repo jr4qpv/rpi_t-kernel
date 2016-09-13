@@ -13,9 +13,13 @@
 #
 # ----------------------------------------------------------------------
 #
+#     Modified by T.Yokobayashi at 2015/12/17.
+#
+# ----------------------------------------------------------------------
+#
 
 #
-#	Makefile for gmake
+#	@(#)Makefile for gmake (tkernel) 2016/09/12
 #	sysmain (common description)
 #
 
@@ -24,6 +28,18 @@ DEPS = Dependencies
 DEPENDENCIES_OUTPUT := $(DEPS)
 
 MDIR = $(TETYPE)_$(MACHINE)
+
+# ----------------------------------------------------------------------------
+# T-Kernel boot message
+define VERSION_APP
+char const * const TitleAPP[] = {
+  "T-Kernel Version 2.02.00 for $(BOARDNAME) r$(APP_VER)",
+  0,
+  "@(#)$(shell LC_TIME=C date)",
+  "$(BOARDNAME)",
+  "$(APP_VER)"
+};
+endef
 
 # ----------------------------------------------------------------------------
 # kernel install path
@@ -91,10 +107,10 @@ LDSYSLIBS = -ltk -lsys -ltm -lsvc
 LDLIBS += $(LDUSRLIBS) $(LDSYSLIBS)
 
 # linker options
-LDFLAGS += -static -nostdlib -T $(LINKSCRIPT)
+LDFLAGS += -static -nostdlib -T ../$(MDIR)/$(LINKSCRIPT)
 
-LINKSCRIPT = kernel-ram$(_GCCVER).lnk
-$(TARGET_ROM): LINKSCRIPT = kernel-rom$(_GCCVER).lnk
+LINKSCRIPT = kernel-ram$(_GCCVER).lds
+$(TARGET_ROM): LINKSCRIPT = kernel-rom$(_GCCVER).lds
 
 # compiler options
 CFLAGS += $(CFLAGS_WARNING)
@@ -102,13 +118,14 @@ CPPFLAGS += -DTKERNEL_ONLY
 
 # suppress debug options for the system codes
 # (comment out to debug the whole kernel)
-DBGOPT := mode=
+##DBGOPT := mode=
 
 # ----------------------------------------------------------------------------
 ALL  = $(TARGET_RAM) $(TARGET_RAM:%.sys=%.map) $(TARGET_RAM:%.sys=%.mot)
 ALL += $(TARGET_ROM) $(TARGET_ROM:%.rom=%.map) $(TARGET_ROM:%.rom=%.mot)
 ALL += $(TARGET_RAM:%.sys=%.bin)
-EMU  = $(TARGET_EMU) $(TARGET_DBG_EMU)
+ALL += $(TARGET_ROM:%.rom=%.bin)		######
+###EMU  = $(TARGET_EMU) $(TARGET_DBG_EMU)
 REQ_MODULES = libraries tkernel sysmgr sysinit drivers
 
 # make targets
@@ -128,7 +145,7 @@ emu: all config monitor
 	$(MAKE) install_emu
 
 # objects for RAM
-$(TARGET_RAM): $(TARGET_RAMCRT0) $(OBJ) $(K_OBJ) $(I_OBJ)
+$(TARGET_RAM): $(TARGET_RAMCRT0) $(OBJ) $(K_OBJ) $(I_OBJ) version.o
 	$(CC) $(TARGET_ARCH) $(LDFLAGS) $^ $(LDLIBS) $(STDLIB) $(OUTPUT_OPTION)
 
 $(TARGET_RAM:%.sys=%.map): $(TARGET_RAM)
@@ -141,7 +158,7 @@ $(TARGET_RAM:%.sys=%.bin): $(TARGET_RAM)
 	$(OBJCOPY) -O binary $< $@
 
 # objects for ROM
-$(TARGET_ROM): $(TARGET_ROMCRT0) $(OBJ) $(K_OBJ) $(I_OBJ)
+$(TARGET_ROM): $(TARGET_ROMCRT0) $(OBJ) $(K_OBJ) $(I_OBJ) version.o
 	$(CC) $(TARGET_ARCH) $(LDFLAGS) $^ $(LDLIBS) $(STDLIB) $(OUTPUT_OPTION)
 
 $(TARGET_ROM:%.rom=%.map): $(TARGET_ROM)
@@ -149,6 +166,12 @@ $(TARGET_ROM:%.rom=%.map): $(TARGET_ROM)
 
 $(TARGET_ROM:%.rom=%.mot): $(TARGET_ROM)
 	$(OBJCOPY) $(OUTPUT_SREC) $< $@
+
+$(TARGET_ROM:%.rom=%.bin): $(TARGET_ROM)		#####
+	$(OBJCOPY) -O binary $< $@			#####
+
+version.c: Makefile $(OBJ)
+	echo "$$VERSION_APP" > version.c
 
 # objects for emulator rom images
 EMU_OBJ	= 	$(BLD_MONITOR_PATH)/tmonitor.mot \
@@ -235,3 +258,12 @@ $(addprefix $(EXE_INSTALLDIR)/, $(TARGET)): $(EXE_INSTALLDIR)/%: %
 $(DEPS): ; touch $(DEPS)
 -include $(DEPS)
 
+
+# ----------------------------------------------------------------------
+#|History of "Makefile"
+#|=====================
+#|* 2015/12/17	ﾘﾝｸｽｸﾘﾌﾟﾄの拡張子を｢.lnk｣→｢.lds｣に変更。
+#|* 2016/04/28	debugﾌｫﾙﾀﾞとmakefileとﾘﾝｸｽｸﾘﾌﾟﾄが共通にできるように、
+#|  ﾘﾝｸｽｸﾘﾌﾟﾄに"..\$(MDIR)\"のパス記述追加
+#|* 2016/09/12	version情報ファイル生成追加
+#|

@@ -11,10 +11,14 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2015/12/14.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
- *	cmdsvc.h
+ *	@(#)cmdsvc.h (monitor/cmdsrv) 2016/09/07
  *
  *       T-Monitor command / SVC common processing definitions
  */
@@ -25,6 +29,25 @@
 #if CPU_ARMv6
 #  include "armv6/cpudep.h"
 #endif
+#if CPU_ARMv7
+#  include "armv7/cpudep.h"
+#endif
+#if CPU_SH4
+#  include "sh4/cpudep.h"
+#endif
+
+
+#if defined(RPI_BCM283x)
+ #if (TYPE_RPI == 2)
+  #define LED_MONKEYIN_INV	0xfffd0002	/* ﾓﾆﾀｷｰ入力時、LED1の赤点滅 */
+ #else
+  #define LED_MONKEYIN_INV	0xfffe0001	/* ﾓﾆﾀｷｰ入力時、LED0の点滅 */
+ #endif
+#elif defined (APP_RZT1)
+  #define LED_MONKEYIN_INV	0xfffe0001	/* ﾓﾆﾀｷｰ入力時、LED0の点滅 */
+#endif
+
+
 
 /* ======================================================================== */
 /*
@@ -305,3 +328,13 @@ IMPORT W isKillValid( void );
 IMPORT W callExtProg( FP entry );
 
 /* ------------------------------------------------------------------------ */
+
+
+#if 0
+#|History of "cmdsvc.h"
+#|=====================
+#|* 2015/12/14	[tef_em1d]用の"cmdsvc.h"を参考に修正。
+#|* 2016/04/14	[rpi_bcm283x],[app_rzt1]用に、CPU_ARMv7 に対応。
+#|* 2016/04/14	LED_MONKEYIN_INV 定義の追加
+#|
+#endif

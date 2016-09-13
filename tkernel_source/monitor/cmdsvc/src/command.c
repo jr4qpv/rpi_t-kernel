@@ -11,10 +11,14 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2016/02/03.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
- *	command.c
+ *	@(#)command.c () 2016/08/29
  *
  *       command processing
  */
@@ -22,6 +26,8 @@
 #include "cmdsvc.h"
 #include "help.h"
 #include <tk/dbgspt.h>
+#include <sys/sysinfo.h>
+#include <sys/rominfo.h>
 
 #define	DEF_MEM_SIZE	64		// default memory dump size
 #define	DEF_DA_STEP	16		// default disassbmle size
@@ -67,7 +73,7 @@ LOCAL	UB	*lptr;			// line pointer
 #define	tOPDIV		0x15		// / operator
 #define	tOPIND		0x16		// & operator
 #define	tEOD		0x17		// end of data
-#define	tUP		0x18		// previous data
+#define	tUP			0x18		// previous data
 #define	tSYM		0x20		// symbol
 #define	tNUM		0x21		// numeric value
 #define	tSTR		0x22		// character string
@@ -325,6 +331,7 @@ LOCAL	W	isnotDLM(void)
 	if (isDLM()) return 0;
 	return_er(E_LESS);
 }
+
 /*
         obtain numeric parameter (with performing + - * / operations)
 
@@ -335,7 +342,7 @@ LOCAL	W	getNumber(W defbase, W *val)
 	W	op, v;
 	UB	*p;
 
-        // process leading + and -
+	// process leading + and -
 	if ((op = token) == tOPADD || op == tOPSUB) getToken(defbase);
 
 	for (*val = 0; ;) {
@@ -359,13 +366,13 @@ LOCAL	W	getNumber(W defbase, W *val)
 		else if (op == tOPDIV)	*val /= tokenVal;
 		else			*val = tokenVal;
 
-                // & operation
+		// & operation
 		while (getToken(defbase) == tOPIND) {
 			if (readMem(*val, &v, 4, 4) != 4) return_er(E_MACV);
 			*val = v;
 		}
 
-                // extract the next item: if the next item is among "+ - * /" then continue processing
+		// extract the next item: if the next item is among "+ - * /" then continue processing
 		if (token < tOPADD || token > tOPDIV) break;
 		op = token;
 		getToken(defbase);
@@ -373,6 +380,8 @@ LOCAL	W	getNumber(W defbase, W *val)
 	if (token > tDLM) return_er(E_LESS);
 	return 0;
 }
+
+
 /*
         obtain address range parameter
 
@@ -387,17 +396,17 @@ LOCAL	W	getAddrRange(W unit, W flg, W defsz)
 {
 	W	sizeflg;
 
-        // start address
+	// start address
 	if (token > tDLM) {
 		if (getNumber(0, &cAddr)) return E_LESS;
 	} else {
 		if (flg & 0x01) return_er(E_LESS);	// cannot be omitted
 	}
 
-        // align start address
+	// align start address
 	cAddr = ALIGN_L(cAddr, unit);
 
-        // end address
+	// end address
 	cLen = defsz;
 	if (token == tDLM) {
 		sizeflg = 0;
@@ -408,7 +417,7 @@ LOCAL	W	getAddrRange(W unit, W flg, W defsz)
 		if (getNumber(0, (UW*)&cLen)) return E_LESS;
 		if (sizeflg == 0) {	// end address: up to "+ size"
 			if ((UW)cLen >= cAddr || (UW)cLen >= IMPLICIT_SIZE)
-                                // truncate (using the size as unit)
+				// truncate (using the size as unit)
 				cLen = ((W)((UW)cLen - cAddr) + unit) / unit;
 		}
 		cLen *= unit;
@@ -416,7 +425,7 @@ LOCAL	W	getAddrRange(W unit, W flg, W defsz)
 		if (flg & 0x02) return_er(E_LESS);	// cannot be omitted
 	}
 
-        // validate address range
+	// validate address range
 	if (cLen <= 0 || cLen > MAX_RANGE)		return_er(E_RANGE);
 	if (((cLen + cAddr - 1) ^ cAddr) & 0x80000000) {
 		cLen = (0x80000000 - (cAddr & 0x7fffffff)) / unit;
@@ -424,6 +433,8 @@ LOCAL	W	getAddrRange(W unit, W flg, W defsz)
 	}
 	return 0;
 }
+
+
 /*
         extract set data address
 
@@ -438,7 +449,7 @@ LOCAL	W	getSetData(UB *buf, W unit)
 		if (token == tSTR) {	// character string
 			if (tokenLen == 0) return_er(E_EMPTY);
 
-                        // Fill with 0 using 'unit' as data unit.
+			// Fill with 0 using 'unit' as data unit.
 			k = ALIGN_U(tokenLen, unit);
 			if (n + k > SETDT_SZ) return_er(E_LIMIT);
 			memcpy(&buf[n], tokenStr, tokenLen);
@@ -462,6 +473,8 @@ LOCAL	W	getSetData(UB *buf, W unit)
 	if (n == 0) return_er(E_EMPTY);
 	return n;	// data length
 }
+
+
 /*
         memory read (with error message)
 */
@@ -473,6 +486,8 @@ LOCAL	W	reaMemory(UW addr, void *dt, W len, W unit)
 	DSP_F3(S,"ERR: Memory Read at H'", 08X,(addr+n), CH,'\n');
 	return -1;
 }
+
+
 /*
         memory write (with error message)
 */
@@ -484,6 +499,8 @@ LOCAL	W	wriMemory(UW addr, void *dt, W len, W unit)
 	DSP_F3(S,"ERR: Memory Write at H'", 08X,(addr+n), CH,'\n');
 	return -1;
 }
+
+
 /*
         display memory content
 */
@@ -495,6 +512,8 @@ LOCAL	void	dspMemory(void *p, W unit)
 	default:	DSP_F2(02X,*((UB*)p), CH,' ');
 	}
 }
+
+
 /*
         memroy dump command processing
 
@@ -508,17 +527,17 @@ LOCAL	void	cmdDump(W unit)
 	W	i, n, k;
 	UB	*cp, *ep;
 
-        // extract address range
+	// extract address range
 	cAddr = dAddr;
 	if (getAddrRange(unit, 0x00, DEF_MEM_SIZE) || isnotEOC()) return;
 
-        // dump memory content
+	// dump memory content
 	ep = cp = wrkBuf;
 	for (dAddr = cAddr, i = 0; i < cLen;) {
-                // display address
+		// display address
 		if ((i % 16) == 0) DSP_F2(08X,dAddr, S,": ");
 
-                // obtain memory content
+		// obtain memory content
 		if (cp >= ep) {
 			if ((n = cLen - i) > WRKBUF_SZ) n = WRKBUF_SZ;
 			k = readMem(dAddr, cp = wrkBuf, n, unit);
@@ -528,14 +547,14 @@ LOCAL	void	cmdDump(W unit)
 			}
 			ep = cp + k;
 		}
-                // display memory content
+		// display memory content
 		if (i < cLen) {
 			dspMemory(cp, unit);
 			cp += unit;
 			dAddr += unit;
 			i += unit;
 		}
-                // display character
+		// display character
 		if ((n = i % 16) == 0 || i >= cLen) {
 			k = 16 - n;
 			if (n) {	// move forward to where we start character dump
@@ -552,6 +571,8 @@ LOCAL	void	cmdDump(W unit)
 		if (checkAbort()) {DSP_LF; break;}
 	}
 }
+
+
 /*
         memory update command processing
 
@@ -568,15 +589,15 @@ LOCAL	void	cmdModify(W unit)
 	UB	*svlptr, svtoken;
 	UB	dt[SETDT_SZ];
 
-        // start address
+	// start address
 	cAddr = mAddr;
 	if (token > tDLM && getNumber(0, &cAddr)) return;
 
-        // align address
+	// align address
 	cAddr = ALIGN_L(cAddr, unit);
 
 	if (token <= tEOC) {		// interactive processing
-                // save command line
+		// save command line
 		memcpy(svbuf, lineBuf, L_LINE);
 		svlptr = lptr;
 		svtoken = token;
@@ -596,7 +617,7 @@ LOCAL	void	cmdModify(W unit)
 				cAddr += n;
 			}
 		}
-                // restore command line
+		// restore command line
 		memcpy(lineBuf, svbuf, L_LINE);
 		lptr = svlptr;
 		token = svtoken;
@@ -609,6 +630,8 @@ LOCAL	void	cmdModify(W unit)
 	}
 	mAddr = cAddr;
 }
+
+
 /*
         memory embedding command processing
 
@@ -622,10 +645,10 @@ LOCAL	void	cmdFill(W unit)
 	W	n;
 	UB	dt[SETDT_SZ];
 
-        // extract address range
+	// extract address range
 	if (getAddrRange(unit, 0x03, DEF_MEM_SIZE)) return;
 
-        // extract set data
+	// extract set data
 	if (token <= tEOC) {
 		*((UW*)&dt[0]) = 0;	// 0 by default
 		n = unit;
@@ -634,7 +657,7 @@ LOCAL	void	cmdFill(W unit)
 		if ((n = getSetData(dt, unit)) < 0) return;
 	}
 
-        // embed set data into memory
+	// embed set data into memory
 	if (n == unit) {	// fast processing
 		wriMemory(cAddr, dt, cLen, unit | 0x10);
 	} else {		// ordinary mode
@@ -644,6 +667,8 @@ LOCAL	void	cmdFill(W unit)
 		}
 	}
 }
+
+
 /*
         memory search command processing
 
@@ -658,15 +683,15 @@ LOCAL	void	cmdSearch(W unit)
 	UB	*cp, *ep;
 	UB	dt[SETDT_SZ];
 
-        // extract address range
+	// extract address range
 	if (getAddrRange(unit, 0x01, DEF_MEM_SIZE) || isnotDLM()) return;
 
-        // extract search data
+	// extract search data
 	if ((len = getSetData(dt, unit)) < 0) return;
 
 	ep = cp = wrkBuf;
 	for (ofs = cnt = 0; ; ) {
-                // obtain memory content
+		// obtain memory content
 		if (cp >= ep) {
 			if ((n = WRKBUF_SZ - ofs) > cLen) n = cLen;
 			if (ofs + n < len) break;	// end
@@ -675,14 +700,14 @@ LOCAL	void	cmdSearch(W unit)
 			cLen -= n;
 			ep = (cp = wrkBuf) + ofs + n;
 		}
-                // check if the leading byte matches
+		// check if the leading byte matches
 		for ( ; cp < ep && *cp != dt[0]; cp += unit);
 		if ((ofs = ep - cp) < len) {
                         // if enough data is not there, move to the beginning of buffer.
 			if (ofs > 0) memcpy(wrkBuf, ep = cp, ofs);
 			continue;
 		}
-                // check for the matching of whole data
+		// check for the matching of whole data
 		if (memcmp(cp, dt, len) == 0) {
 			if (++cnt > MAX_DSP_CNT) {
 				DSP_S("..More..\n");
@@ -696,6 +721,8 @@ LOCAL	void	cmdSearch(W unit)
 		if (checkAbort()) break;
 	}
 }
+
+
 /*
         memory comparison / move command processing
 
@@ -708,10 +735,10 @@ LOCAL	void	cmdCmpMov(W mov)
 	W	i, n, cnt;
 #define	BFSZ	(WRKBUF_SZ / 2)
 
-        // extract address range
+	// extract address range
 	if (getAddrRange(1, 0x01, DEF_MEM_SIZE) || isnotDLM()) return;
 
-        // transfer / compare target
+	// transfer / compare target
 	if (getNumber(0, &dst) || isnotEOC()) return;
 
 	if (mov) {	// memory transfer
@@ -744,6 +771,8 @@ LOCAL	void	cmdCmpMov(W mov)
 		}
 	}
 }
+
+
 /*
         I/O port input and output command processing
 
@@ -755,7 +784,7 @@ LOCAL	void	cmdIO(W unit)
 	UW	port, data;
 	UB	*dir;
 
-        // extract port number
+	// extract port number
 	if (getNumber(0, &port)) return;
 
 	if (unit & 0x10) {	// output command
@@ -768,7 +797,7 @@ LOCAL	void	cmdIO(W unit)
 		if (readIO(port, &data, unit) == 0) er_return(E_MACV);
 		dir = "-->";
 	}
-        // display result
+	// display result
 	DSP_F2(S,"Port ", 08X,port);
 	switch (unit) {
 	case 4:	DSP_F5(S,":W ", S,dir, CH,' ', 08X,(UW)data, CH,'\n');
@@ -779,6 +808,8 @@ LOCAL	void	cmdIO(W unit)
 		break;
 	}
 }
+
+
 /*
         disasseble command processing
 
@@ -788,6 +819,8 @@ LOCAL	void	cmdDisasm(void)
 {
 	er_return(E_NOSPT);
 }
+
+
 /*
         display / set register command processing
 
@@ -816,6 +849,9 @@ LOCAL	void	cmdRegister(void)
 
 	}
 }
+
+
+#if 0	/////////////////////////////////////////
 /*
         execute / trace command processing
 
@@ -908,6 +944,9 @@ LOCAL	void	cmdBrkClr(void)
 		isnotEOC();
 	}
 }
+#endif	//////////////////////////
+
+
 /*
         download command processing
 
@@ -954,6 +993,8 @@ LOCAL	const	struct {
         // execute loading
 	errcode = doLoading(par, addr, NULL);
 }
+
+
 /*
         backtrace command processing
 
@@ -963,6 +1004,8 @@ LOCAL	void	cmdBackTrace(void)
 {
 	er_return(E_NOSPT);
 }
+
+
 /*
         disk command processing
 
@@ -1021,6 +1064,8 @@ LOCAL	void	cmdDisk(W kind)
 		break;
 	}
 }
+
+
 /*
         exit command processing
 
@@ -1030,8 +1075,8 @@ LOCAL	void	cmdExit(void)
 {
 	W	par;
 
-        // extract parameters
-	if (token <= tDLM) par = 0;
+	// extract parameters
+	if (token <= tDLM) par = -1;			/* ﾃﾞﾌｫﾙﾄを 0 → -1 に変更 */
 	else if (getNumber(0, &par)) return;
 
 	DSP_S((par < 0) ? "** System Reset\n" : "** System Power Off\n");
@@ -1039,6 +1084,8 @@ LOCAL	void	cmdExit(void)
 
 	sysExit(par);		// system reset or power off (never returnes)
 }
+
+
 /*
         forcible kill process command processing
 
@@ -1052,6 +1099,8 @@ LOCAL	void	cmdKill(void)
 		errcode = CMD_FINISH;
 	}
 }
+
+
 /*
         FROM write command processing
 
@@ -1059,16 +1108,22 @@ LOCAL	void	cmdKill(void)
 */
 LOCAL	void	cmdWrom(void)
 {
+#if 0	////////// kari test /////////
+	errcode = writeFrom(0x30020000, 0x100, 1, 1);
+#else
 	UW	addr, data;
 	W	nsec;
 
-        // extract parameters
+	// extract parameters
 	if (getNumber(0, &addr)) return;
 	if (isnotDLM() || getNumber(0, &data)) return;
 	if (isnotDLM() || getNumber(0, &nsec)) return;
 	if (isnotEOC()) return;
 	errcode = writeFrom(addr, data, nsec, 1);
+#endif
 }
+
+
 /*
         FLASH ROM load command processing
 
@@ -1082,7 +1137,7 @@ LOCAL	void	cmdFlashLoad(void)
 	proto = P_TEXT | P_SFORM;
 	mode = 0;
 
-        // extract attributes
+	// extract attributes
 	if (token > tEOC) {
 		if (token != tSYM) er_return(E_PAR);
 		for (i = 0; i < L_SYMBOL; i++) {
@@ -1097,7 +1152,7 @@ LOCAL	void	cmdFlashLoad(void)
 		if (isnotEOC()) return;
 	}
 
-        // execute loading
+	// execute loading
 	setupFlashLoad(0, addr);
 	i = addr[1] - addr[0] + 1;
 	if (mode) {
@@ -1111,12 +1166,56 @@ LOCAL	void	cmdFlashLoad(void)
 	errcode = doLoading(proto, 0, addr);
 	if (errcode < 0) return;
 
-        // FLASH ROM write
+	// FLASH ROM write
 	setupFlashLoad(-1, addr);
+#if 1
+	DSP_F5(S,"Writing Flash ROM at ", 08X,addr[0],
+	       S," [", D,addr[2], S," blks] from ");
+	DSP_F2(08X,addr[1],S," ... wait\n");
+#else
 	DSP_F5(S,"Writing Flash ROM at ", 08X,addr[0],
 	       S," [", D,addr[2], S," blks] ... wait\n");
+#endif
 	errcode = writeFrom(addr[0], addr[1], addr[2], -1);
 }
+
+
+/*
+        SysInfo: Display system Information
+
+	SINF	[par]
+*/
+LOCAL	void	cmdSysInfo(void)
+{
+	DSP_F3(S,"Title:   ",S,Title[0],CH,'\n');		// ﾀｲﾄﾙ情報
+	DSP_F3(S,"Version: ",S,Version,CH,'\n');		// ﾊﾞｰｼﾞｮﾝ番号
+	DSP_F3(S,"DipSw:   ",02X,getDipSw(),S,"         ");	// Dipsw情報
+	DSP_F3(S,"ConPort:",D,ConPort,S,", ");			// ConPort番号(see sio.c)
+	DSP_F3(S,"ConPortBps:",D,ConPortBps,CH,'\n');	// ConPort通信速度(see sio.c)
+
+	DSP_F3(S,"ramtop:  ",08X,(UW)SCInfo.ramtop,S,"   ");
+	DSP_F3(S,"ramend:  ",08X,(UW)SCInfo.ramend,CH,'\n');
+
+	DSP_F3(S,"sysconf: ",08X,(UW)SCInfo.sysconf,S,"   ");
+	DSP_F3(S,"devconf: ",08X,(UW)SCInfo.devconf,CH,'\n');
+
+#ifdef CPU_SH4
+	DSP_F3(S,"Ick:",D,SCInfo.Ick,S,"[MHz]  ");
+	DSP_F3(S,"Pck:",D,SCInfo.Pck,S,"[1/100MHz]  ");
+	DSP_F3(S,"Bck:",D,SCInfo.Bck,S,"[1/100MHz]  ");
+	DSP_F3(S,"dck:",D,SCInfo.Bck,S,"[1/100MHz]\n");
+#endif
+
+	DSP_F3(S,"loop64us:",D,SCInfo.loop64us,CH,'\n');
+
+	DSP_F3(S,"kernel:  ",08X,(UW)ROMInfo->kernel,CH,'\n');
+	DSP_F3(S,"rd_type: ",D,(UW)ROMInfo->rd_type,S,"  ");
+	DSP_F3(S,"rd_blksz:",D,(UW)ROMInfo->rd_blksz,S,"  ");
+	DSP_F3(S,"rd_saddr:",08X,(UW)ROMInfo->rd_saddr,S,"  ");
+	DSP_F3(S,"rd_eaddr:",08X,(UW)ROMInfo->rd_eaddr,CH,'\n');
+}
+
+
 /*
         command table
 */
@@ -1159,11 +1258,11 @@ LOCAL	const	CMDTAB	cmdTab[] = {
 	{"OUTPUTWORD  ","OW  ",	cmdIO,		0x14,		&helpOW	  },
 	{"DISASSEMBLE ","DA  ",	cmdDisasm,	0,		&helpDA	  },
 	{"REGISTER    ","R   ",	cmdRegister,	0,		&helpR	  },
-	{"BREAKPOINT  ","B   ",	cmdBreak,	0,		&helpB	  },
-	{"BREAKCLEAR  ","BC  ",	cmdBrkClr,	0,		&helpBC	  },
-	{"GO          ","G   ",	cmdGoTrace,	0 | IGN_TRACE,	&helpG	  },
-	{"STEP        ","S   ",	cmdGoTrace,	1 | IGN_TRACE,	&helpS	  },
-	{"NEXT        ","N   ",	cmdGoTrace,	2 | IGN_TRACE,	&helpN	  },
+///	{"BREAKPOINT  ","B   ",	cmdBreak,	0,		&helpB	  },
+///	{"BREAKCLEAR  ","BC  ",	cmdBrkClr,	0,		&helpBC	  },
+///	{"GO          ","G   ",	cmdGoTrace,	0 | IGN_TRACE,	&helpG	  },
+///	{"STEP        ","S   ",	cmdGoTrace,	1 | IGN_TRACE,	&helpS	  },
+///	{"NEXT        ","N   ",	cmdGoTrace,	2 | IGN_TRACE,	&helpN	  },
 	{"BACKTRACE   ","BTR ",	cmdBackTrace,	0,		&helpBTR  },
 	{"LOAD        ","LO  ",	cmdLoad,	0,		&helpLO	  },
 	{"READDISK    ","RD  ",	cmdDisk,	0,		&helpRD	  },
@@ -1173,6 +1272,7 @@ LOCAL	const	CMDTAB	cmdTab[] = {
 	{"KILL        ","KILL",	cmdKill,	0,		&helpKILL },
 	{"WRITEROM    ","WROM",	cmdWrom,	0,		&helpWROM },
 	{"FLASHLOAD   ","FLLO",	cmdFlashLoad,	0,		&helpFLLO },
+	{"SYSINFO     ","SYSI",	cmdSysInfo,	0,		&helpSYSI },
 	{"HELP        ","H   ",	cmdHelp,	0,		&helpH	  },
 	{"HELP        ","?   ",	cmdHelp,	0,		&helpH	  },
 	{"EXIT        ","EX  ",	cmdExit,	0,		&helpEX	  },
@@ -1195,6 +1295,8 @@ LOCAL	W	searchCommand(void)
 	}
 	return	E_CMD;
 }
+
+
 /*
         help command pcrocessing
 
@@ -1207,6 +1309,8 @@ LOCAL	void	cmdHelp(void)
 	i = searchCommand();
 	printHelp(( i < 0 )? &helpALL: cmdTab[i].help);
 }
+
+
 /*
         command interpreter
 
@@ -1214,11 +1318,13 @@ LOCAL	void	cmdHelp(void)
         fin : 0 = continue, 1 = finish (command execution)
               < 0 : trace command execution
 */
+
+
 EXPORT	void	procCommand(UB *cmd, W fin)
 {
 	W	i, par;
 
-        // initialize command input
+	// initialize command input
 	if (cmd) {
 		strcpy(lptr = lineBuf, cmd);
 		token = tEOC;
@@ -1227,29 +1333,29 @@ EXPORT	void	procCommand(UB *cmd, W fin)
 		fin = 0;
 	}
 
-        // set DA address to PC
+	// set DA address to PC
 	daAddr = getCurPC();
 
 	for (;;) {
-                // skip the remainder of the previous command
+		// skip the remainder of the previous command
 		while (token > tEOC) getToken(0);
 
-                // input a command line
+		// input a command line
 		if (token == tEOL) {
 			if (fin) break;		// end
 			if (getLine(PROMPT) <= 0) continue;
 		}
 
-                // skip comment
+		// skip comment
 		skipSpace();
 		if (*lptr == '*') {
 			getToken(0);
 			continue;
 		}
-                // extract command
+		// extract command
 		if (getToken(0) <= tEOC) continue;	// skip empty line
 
-                // searching command
+		// searching command
 		errcode = errinfo = 0;
 		if ((i = searchCommand()) < 0) {
 			errcode = E_CMD;
@@ -1257,18 +1363,28 @@ EXPORT	void	procCommand(UB *cmd, W fin)
 			if (checkAbort()) continue;
 			par = cmdTab[i].para;
 
-                        // if there is an initial command, the execution command is ignored
+			// if there is an initial command, the execution command is ignored
 			if (fin < 0 && (par & IGN_TRACE)) continue;
 
-                        // read-ahead of parameters
+			// read-ahead of parameters
 			getToken(0);
 
-                        // command execution
+			// command execution
 			(*(cmdTab[i].func))(par & 0xff);
 		}
 		if (errcode == CMD_FINISH) break;	// finish
 
-                // display error
+		// display error
 		if (errcode < 0) dspError();
 	}
 }
+
+
+/*----------------------------------------------------------------------
+#|History of "command.c"
+#|=======================
+#|* 2015/12/14	[tef_em1d]用の"command.c"を参考に作成。
+#|* 2015/12/17	SYSINFO(SYSI)ｺﾏﾝﾄﾞの追加。
+#|* 2016/01/26	cmdExit()の引数なしの時のparﾃﾞﾌｫﾙﾄ値を 0→-1に変更(ﾘｾｯﾄ動作)
+#|
+*/

@@ -10,16 +10,21 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2015/12/14.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
- *	helpmsg.c
+ *	@(#)helpmsg.c (monitor/cmdsvc) 2016/03/02
  *
  *       command help message
  */
 
 #include "cmdsvc.h"
 #include "help.h"
+
 
 /*
  * display help message
@@ -28,6 +33,7 @@ EXPORT void printHelp( const HELP *help )
 {
 	(*help->prfn)(help);
 }
+
 
 /*
  * display simple help message
@@ -182,6 +188,7 @@ LOCAL void prWRomHelp( const HELP *help )
 	       S," (1 block = ", D,(FROM_SECSZ / 1024), S,"KB)\n");
 }
 
+
 /* ------------------------------------------------------------------------ */
 
 EXPORT const HELP helpALL	= { prSimpleHelp,
@@ -194,6 +201,7 @@ EXPORT const HELP helpALL	= { prSimpleHelp,
  "BackTrace(BTR)  Kill(KILL)      Load(LO)"
  "\n"
  "BootDisk(BD)    ReadDisk(RD)    WriteDisk(WD)   InfoDisk(ID)\n"
+ "SysInfo(SYSI)\n"
  "WriteROM(WROM)  FlashLoad(FLLO) Exit(EX)        Help(H/?)\n"
 };
 
@@ -377,7 +385,16 @@ EXPORT const HELP helpFLLO	= { prSimpleHelp,
  "           Default : Overwrite original Flash ROM Image\n"
 };
 
+
+EXPORT const HELP helpSYSI	= { prSimpleHelp,
+ "SysInfo(SYSI) : Display System Information\n"
+};
+
+
+
+
 /* ======================================================================== */
+
 
 /*
  * display boot message
@@ -387,6 +404,16 @@ EXPORT void dispTitle( void )
 	const char **p;
 
 	DSP_S("\n\n");
-	for ( p = Title; *p != NULL; p++ ) DSP_S(*p);
+	for ( p = (const char **)Title; *p != NULL; p++ ) DSP_S(*p);
 	DSP_S("\n\n");
 }
+
+
+#if 0
+/*
+#|【helpmsg.c 改版履歴】
+#|□2015/12/14	[app_sh7760]用に、[tef_em1d]の"helpmsg.c"から作成。
+#|□2016/02/03	｢helpSYSI｣の定義。
+#|
+*/
+#endif
