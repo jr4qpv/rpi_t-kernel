@@ -139,7 +139,9 @@ cpu_in_cksum(struct mbuf *m, int len, int off, uint32_t initial_sum)
 		}
 		needs_swap = started_on_odd;
 		while (mlen >= 32) {
+#if (__GNUC__ >= 4)
 			__builtin_prefetch(data + 32);
+#endif
 			partial += *(uint16_t *)data;
 			partial += *(uint16_t *)(data + 2);
 			partial += *(uint16_t *)(data + 4);
@@ -295,8 +297,10 @@ cpu_in_cksum(struct mbuf *m, int len, int off, uint32_t initial_sum)
 			mlen -= 2;
 		}
 		while (mlen >= 64) {
+#if (__GNUC__ >= 4)
 			__builtin_prefetch(data + 32);
 			__builtin_prefetch(data + 64);
+#endif
 			partial += *(uint32_t *)data;
 			partial += *(uint32_t *)(data + 4);
 			partial += *(uint32_t *)(data + 8);
@@ -383,4 +387,13 @@ cpu_in_cksum(struct mbuf *m, int len, int off, uint32_t initial_sum)
 	final_acc = (final_acc >> 16) + (final_acc & 0xffff);
 	return ~final_acc & 0xffff;
 }
+#endif
+
+
+/* ------------------------------------------------------------------------ */
+#if 0
+#|【cpu_in_cksum.c 変更履歴】
+#|□2016/01/06	組み込み関数｢__builtin_prefetch()｣は、SH版Ver3.0.4ｺﾝﾊﾟｲﾗでは
+#|  エラーになるので、"__GNUC__"が4以上の時に有効になるようにした。
+#|
 #endif
