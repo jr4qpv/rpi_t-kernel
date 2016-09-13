@@ -10,10 +10,14 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2016/02/11.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
- *	svc.c
+ *	@(#)svc.c () 2016/08/30
  *
  *       service call
  */
@@ -74,13 +78,23 @@ LOCAL W procExtSVC( W fno, W p1, W p2, W p3 )
 		er = ConPortBps;
 		break;
 
-	  case TMEF_DIPSW:	/* DIPSW status */
+	  case TMEF_DIPSW:		/* DIPSW status */
 		er = getDipSw();
 		break;
 
-	  case TMEF_WROM:	/* Flash ROM write */
+	  case TMEF_WROM:		/* Flash ROM write */
 		er = writeFrom(p1, p2, p3, 0);
 		break;
+
+	  case TMEF_PORTNO:		/* debug serial port number */
+		er = ConPort;
+		break;
+
+	  case TMEF_LED:		/* LEDの点灯 */
+		cpuLED(p1);
+		er = 0;
+		break;
+
 
 	  default:
 		CALL_ESVC(sysExtSVC) ||
@@ -168,3 +182,17 @@ EXPORT W procSVC( W fno, W p1, W p2, W p3, W p4 )
 
 	return er;
 }
+
+
+/*----------------------------------------------------------------------
+#|History of "svc.c"
+#|==================
+#|* 2015/12/15	It's copied from "../tef_em1d/" and it's modified.
+#|* 2016/02/11	T-Monitor拡張サービスコール procExtSVC(TMFE_LED=0x11)の時に、
+#|  LED点灯する機能を追加。
+#|* 2016/08/30	T-Monitor拡張サービスコール procExtSVC(TMFE_PORTNO=0x04)の時に、
+#|  ｺﾝﾝｿｰﾙのﾎﾟｰﾄ番号を返す機能を追加。
+#|  T-Kernelの "driver/.../console/src/console_drv.c" で、初期化時に
+#|  このｻｰﾋﾞｽｺｰﾙを呼び出して戻った値のｼﾘｱﾙﾎﾟｰﾄ番号をｺﾝｿｰﾙに使っている。
+#|
+*/

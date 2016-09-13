@@ -12,10 +12,14 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2016/08/30.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
- *	@(#)tmonitor.h (tm)
+ *	@(#)tmonitor.h (tm) 2016/08/30
  *
  *	T-Monitor
  */
@@ -50,8 +54,12 @@ typedef struct BootInfo {
 #define TMEF_PORTBPS	0x00U	/* Debug port speed (bps) */
 #define TMEF_RDAINFO	0x01U	/* ROM disk information */
 #define TMEF_PCIINFO	0x02U	/* PCI device information */
-#define TMEF_DIPSW	0x10U	/* DIPSW state */
-#define TMEF_WROM	0x20U	/* Flash ROM write */
+
+#define TMEF_PORTNO		0x04U	/* Debug port number */
+
+#define TMEF_DIPSW		0x10U	/* DIPSW state */
+#define TMEF_LED		0x11U	/* LED control */
+#define TMEF_WROM		0x20U	/* Flash ROM write */
 
 /*
  *	ROM disk information
@@ -103,3 +111,12 @@ IMPORT int tm_printf( const char *format, ... );
 }
 #endif
 #endif /* __TM_TMONITOR_H__ */
+
+
+/*----------------------------------------------------------------------
+#|History of "tmonitor.h"
+#|=======================
+#|* 2016/08/30	It's made by making reference to "tmonitor.h" for [tef_em1d].
+#|* 2016/08/30	add TMEF_PORTNO,TMEF_LED define.
+#|
+*/
