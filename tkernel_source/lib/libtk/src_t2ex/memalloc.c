@@ -10,6 +10,10 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/04.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2016/02/03.
+ *
+ *----------------------------------------------------------------------
  */
 /*
  * This software package is available for use, modification, 
@@ -296,7 +300,11 @@ EXPORT void* _mem_calloc( size_t nmemb, size_t size, MACB *macb )
 	}
 
 	/* Memory clear */
+#if 1
+	return MEMSET(p, 0, sz);
+#else
 	return memset(p, 0, sz);
+#endif
 }
 
 /*
@@ -361,7 +369,11 @@ EXPORT void* _mem_realloc( void *ptr, size_t size, MACB *_macb )
 
 		if ( ptr != NULL ) {
 			/* Copy contents */
+#if 1
+			MEMCPY(newptr, ptr, oldsz);
+#else
 			memcpy(newptr, ptr, oldsz);
+#endif
 
 			/* Release old area */
 			_mem_free(ptr, macb);
@@ -417,3 +429,12 @@ EXPORT void  _mem_free( void *ptr, MACB *_macb )
 		appendFreeArea(aq, macb);
 	}
 }
+
+
+/*----------------------------------------------------------------------*/
+#if 0
+#|【memalloc.c 変更履歴】
+#|□2016/01/06	memset→MEMSETに修正。
+#|□2016/09/08	memcpy→MEMCPYに修正。
+#|
+#endif

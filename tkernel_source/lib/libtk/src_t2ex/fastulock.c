@@ -10,6 +10,10 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/04.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2016/02/04.
+ *
+ *----------------------------------------------------------------------
  */
 /*
  * This software package is available for use, modification, 
@@ -98,7 +102,11 @@ EXPORT ER CreateULock( FastULock *lock, CONST UB *name )
 	if ( name == NULL ) {
 		csem.exinf = NULL;
 	} else {
+#if 1
+		STRNCPY((char*)&csem.exinf, (char*)name, sizeof(csem.exinf));
+#else
 		strncpy((char*)&csem.exinf, (char*)name, sizeof(csem.exinf));
+#endif
 	}
 	csem.sematr  = TA_TPRI | TA_NODISWAI;
 #if USE_ATOMIC_INT
@@ -129,3 +137,11 @@ EXPORT void DeleteULock( FastULock *lock )
 	}
 	lock->id = 0;
 }
+
+
+/*----------------------------------------------------------------------*/
+#if 0
+#|【fastulock.c 変更履歴】
+#|□2016/01/06	strncpy→STRNCPYに修正。
+#|
+#endif
