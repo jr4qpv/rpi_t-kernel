@@ -7,30 +7,30 @@
  *----------------------------------------------------------------------
  *
  *    Released by T-Engine Forum(http://www.t-engine.org/) at 2011/05/17.
- *    Modified by T-Engine Forum at 2013/03/11.
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
+ *
+ *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2016/03/01.
  *
  *----------------------------------------------------------------------
  */
 
 /*
- *	kernel-ram.lnk (sysmain, EM1-D512)
- *	linker script (RAM)
+ *      kernel-rom.lnk (sysmain, EM1-D512)
+ *	linker script (ROM)
  */
 
 OUTPUT_FORMAT("elf32-larm-tkernel", "elf32-barm-tkernel", "elf32-larm-tkernel")
 OUTPUT_ARCH(arm)
 ENTRY(_start)
 
-SECTIONS
-{
-	.text 0x30006000 : {
+SECTIONS {
+	.text 0x70030000 : {
 		KEEP (*(.init))
 		*(.text)
 		*(.text.*)
 		*(.stub)
-		*(.glue_7t)
-		*(.glue_7)
 		KEEP (*(.fini))
 		PROVIDE (__etext = .);
 		PROVIDE (_etext = .);
@@ -38,10 +38,10 @@ SECTIONS
 		*(.rodata)
 		*(.rodata.*)
 		*(.rodata1)
-		. = ALIGN(0x1000);
-	} /*:text*/ =0
+		. = ALIGN(0x10);
+	} =0
 	__data_org = . ;
-	.data ALIGN(0x10) : {
+	.data 0x30006000 : AT(__data_org) {
 		__data_start = . ;
 		*(.data)
 		*(.data.*)
@@ -57,14 +57,13 @@ SECTIONS
 		KEEP (*(EXCLUDE_FILE (*crtend.o ) .dtors))
 		KEEP (*(SORT(.dtors.*)))
 		KEEP (*(.dtors))
-		*(.got.plt)
-		*(.got)
 		*(.sdata)
 		*(.sdata.*)
+		. = ALIGN(4);
 		_edata = .;
 		PROVIDE (edata = .);
-	} /*:data*/
-	.bss : {
+	}
+	.bss ALIGN(4) : {
 		__bss_start = .;
 		PROVIDE (__sbss_start = .);
 		PROVIDE (___sbss_start = .);
@@ -79,5 +78,13 @@ SECTIONS
 		. = ALIGN(4);
 		_end = .;
 		PROVIDE (end = .);
-	} /*:data*/
+	}
 }
+
+
+/*----------------------------------------------------------------------*/
+/*
+#|【kernel-rom.lds 変更履歴】
+#|□2016/03/01	拡張子は｢.lnk｣→｢.lds｣に変更｡(Windowsでは｢.lnk｣は特殊ﾌｧｲﾙの為)
+#|
+ */

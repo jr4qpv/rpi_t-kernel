@@ -12,6 +12,10 @@
 #
 # ----------------------------------------------------------------------
 #
+#    Modified by T.Yokobayashi at 2016/01/05.
+#
+# ----------------------------------------------------------------------
+#
 
 #
 # This software package is available for use, modification, 
@@ -46,7 +50,7 @@
 #
 
 #
-#	makerules
+#	@(#)makerules (module) 2016/02/26
 #		for GNU make
 #
 #	common rules for T2EX program modules
@@ -98,9 +102,9 @@ $(MODULE_INSTALLDIR)/%: %
 # ===== individual definitions ================================================
 
 ifeq ($(REL_TYP), q)
-  LDFLAGS2 = -static -q -Wl,-q -B $(COMMONLIB) -T $(BD)/lib/build_t2ex/$(TETYPE)_$(MACHINE)$(SUFFIX_LIB)/reloc.lnk
+  LDFLAGS2 = -static -q -Wl,-q -B $(COMMONLIB) -T $(BD)/lib/build_t2ex/$(TETYPE)_$(MACHINE)$(SUFFIX_LIB)/reloc.lds
 else
-  LDFLAGS2 = -static -r -B $(COMMONLIB) -T $(BD)/lib/build_t2ex/$(TETYPE)_$(MACHINE)$(SUFFIX_LIB)/reloc.lnk
+  LDFLAGS2 = -static -r -B $(COMMONLIB) -T $(BD)/lib/build_t2ex/$(TETYPE)_$(MACHINE)$(SUFFIX_LIB)/reloc.lds
 endif
 
 ifneq ($(MOD_TYP), s)
@@ -118,4 +122,9 @@ HEADER := $(BD)/include/t2ex $(HEADER)
 	$(NM) $(NMFLAGS) $< > $@
 #	$(NM) $(NMFLAGS) $< | $(BD)/module/etc/chkmain | $(BD)/etc/chkundef -arm > $@
 
-# ============================================================================
+
+# ----------------------------------------------------------------------
+#|History of "Makefile"
+#|=====================
+#|* 2015/01/05	ﾘﾝｸｽｸﾘﾌﾟﾄの拡張子を｢.lnk｣→｢.lds｣に変更。
+#|

@@ -91,9 +91,9 @@ LDFLAGS += -static -nostdlib -T $(LINKSCRIPT)
 
 ifneq ($(filter ram, $(options)), )
   # RAM version, for debug purpose
-  LINKSCRIPT = monitor-ram.lnk
+  LINKSCRIPT = monitor-ram.lds
 else
-  LINKSCRIPT = monitor.lnk
+  LINKSCRIPT = monitor.lds
 endif
 
 # ----------------------------------------------------------------------------

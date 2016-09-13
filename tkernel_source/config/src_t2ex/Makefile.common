@@ -12,6 +12,10 @@
 #
 # ----------------------------------------------------------------------
 #
+#    Modified by T.Yokobayashi at 2016/01/05.
+#
+# ----------------------------------------------------------------------
+#
 
 #
 # This software package is available for use, modification, 
@@ -46,7 +50,7 @@
 #
 
 #
-#	Makefile (common description)
+#	@(#)Makefile (common description) 2016/07/08
 #
 #	RomInfo / SYSCONF / DEVCONF
 #
@@ -81,21 +85,29 @@ endef
 
 .PHONY: all clean install
 
-ALL = rominfo_t2ex-rom.mot rominfo_t2ex-ram.mot
+ALL = rominfo_t2ex-rom.mot rominfo_t2ex-ram.mot \
+      rominfo_t2ex-rom.bin rominfo_t2ex-ram.bin
 
 all: $(ALL) install
+
+rominfo_t2ex-rom.bin: rominfo-rom 
+	$(OBJCOPY) -O binary $< $@
 
 rominfo_t2ex-rom.mot: rominfo-rom 
 	$(OBJCOPY) $(OUTPUT_SREC) $< $@
 
+rominfo_t2ex-ram.bin: rominfo-ram 
+	$(OBJCOPY) -O binary $< $@
+
 rominfo_t2ex-ram.mot: rominfo-ram
 	$(OBJCOPY) $(OUTPUT_SREC) $< $@
 
-rominfo-rom: rominfo_rom.o sysconf.o devconf.o
-	$(LINK.o) -nostdlib -T rominfo$(_GCCVER).lnk $^ $(OUTPUT_OPTION)
+##rominfo-rom: rominfo_rom.o sysconf.o devconf.o ##ICEで異常回避でlaunch.oﾀﾞﾐｰ追加
+rominfo-rom: rominfo_rom.o launch.o sysconf.o devconf.o
+	$(LINK.o) -nostdlib -T ../$(TETYPE)_$(MACHINE)/rominfo$(_GCCVER).lds $^ $(OUTPUT_OPTION)
 
 rominfo-ram: rominfo_ram.o launch.o sysconf.o devconf.o
-	$(LINK.o) -nostdlib -T rominfo$(_GCCVER).lnk $^ $(OUTPUT_OPTION)
+	$(LINK.o) -nostdlib -T ../$(TETYPE)_$(MACHINE)/rominfo$(_GCCVER).lds $^ $(OUTPUT_OPTION)
 
 sysconf.c: $(S)/SYSCONF;	@$(CONV_CONF) $< > $@
 devconf.c: $(S)/DEVCONF;	@$(CONV_CONF) $< > $@
@@ -110,3 +122,12 @@ install: $(addprefix $(EXE_INSTALLDIR)/, $(ALL))
 # generate dependencies
 $(DEPS): ; touch $(DEPS)
 -include $(DEPS)
+
+
+# ----------------------------------------------------------------------
+#|History of "Makefile"
+#|=====================
+#|* 2016/01/05	ﾘﾝｸｽｸﾘﾌﾟﾄの拡張子を｢.lnk｣→｢.lds｣に変更。
+#|* 2016/01/06	｢rominfo_t2ex-rom.bin｣を作るようにルール追加。
+#|* 2016/07/08	｢rominfo_t2ex-ram.bin｣を作るようにルール追加。
+#|

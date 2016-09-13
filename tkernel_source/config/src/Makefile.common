@@ -12,9 +12,13 @@
 #
 # ----------------------------------------------------------------------
 #
+#     Modified by T.Yokobayashi at 2015/12/17.
+#
+# ----------------------------------------------------------------------
+#
 
 #
-#	Makefile (common description)
+#	@(#)Makefile (common description) 2016/07/08
 #
 #	RomInfo / SYSCONF / DEVCONF
 #
@@ -49,18 +53,22 @@ endef
 
 .PHONY: all clean install
 
-ALL = rominfo-rom.mot rominfo-ram.mot
+ALL = rominfo-rom.mot rominfo-ram.mot \
+      rominfo-rom.bin rominfo-ram.bin
 
 all: $(ALL) install
+
+%.bin: %
+	$(OBJCOPY) -O binary $< $@
 
 %.mot: %
 	$(OBJCOPY) $(OUTPUT_SREC) $< $@
 
 rominfo-rom: rominfo_rom.o sysconf.o devconf.o
-	$(LINK.o) -nostdlib -T rominfo$(_GCCVER).lnk $^ $(OUTPUT_OPTION)
+	$(LINK.o) -nostdlib -T ../$(TETYPE)_$(MACHINE)/rominfo$(_GCCVER).lds $^ $(OUTPUT_OPTION)
 
 rominfo-ram: rominfo_ram.o launch.o sysconf.o devconf.o
-	$(LINK.o) -nostdlib -T rominfo$(_GCCVER).lnk $^ $(OUTPUT_OPTION)
+	$(LINK.o) -nostdlib -T ../$(TETYPE)_$(MACHINE)/rominfo$(_GCCVER).lds $^ $(OUTPUT_OPTION)
 
 sysconf.c: $(S)/SYSCONF;	@$(CONV_CONF) $< > $@
 devconf.c: $(S)/DEVCONF;	@$(CONV_CONF) $< > $@
@@ -75,3 +83,10 @@ install: $(addprefix $(EXE_INSTALLDIR)/, $(ALL))
 # generate dependencies
 $(DEPS): ; touch $(DEPS)
 -include $(DEPS)
+
+
+# ----------------------------------------------------------------------
+#|History of "Makefile"
+#|=====================
+#|* 2015/12/17	ﾘﾝｸｽｸﾘﾌﾟﾄの拡張子を｢.lnk｣→｢.lds｣に変更。
+#|
