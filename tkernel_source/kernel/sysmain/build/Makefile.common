@@ -242,6 +242,7 @@ clean:	clean_libraries clean_drivers
 	( cd $(BLD_SYSINIT_PATH) ; $(MAKE) $(DBGOPT) clean )
 	$(RM) $(OBJ) $(TARGET_RAMCRT0) $(TARGET_ROMCRT0) $(ALL) $(DEPS)
 	$(RM) $(TARGET_EMU) $(TARGET_DBG_EMU)
+	$(RM) version.[co]
 
 # clean all objects and source files of svc interface
 clean_all: clean clean_source
