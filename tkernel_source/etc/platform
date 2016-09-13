@@ -12,8 +12,12 @@
 #
 # ----------------------------------------------------------------------
 #
+#     Modified by T.Yokobayashi at 2016/03/16.
+#
+# ----------------------------------------------------------------------
+#
 
-#	platform
+#	@(#)platform () 2016/03/16
 #
 #	check cross platform
 #
@@ -22,6 +26,7 @@
 #	"Linux-i686"	: Linux x86
 #	"FreeBSD-i386"	: FreeBSDq x86
 #	"Cygwin-i686"	: Cygwin x86
+#	"mingw32-i686"	: MSYS2 mingw32 x86
 #	"unknown"	: unknown platform
 #
 usage='usage: platform'
@@ -34,10 +39,19 @@ case $os in
   SunOS)	platform=$os-`uname -p` ;;
   Linux)	platform=$os-`uname -m` ;;
   FreeBSD)	platform=$os-`uname -p` ;;
+  Darwin)	platform=$os-`uname -p` ;;
   CYGWIN*)	platform="Cygwin-`uname -m`" ;;
+  MINGW32*)	platform="mingw32-`uname -m`" ;;
   *)		platform=unknown ;;
 esac
 
 echo $platform
 
 exit 0
+
+# ----------------------------------------------------------------------
+#|History of "platform"
+#|================================
+#|* 2016/03/16	../tef_em1d/から、 [app_rzt1]用にコピーし修正
+#|* 2016/03/16	MSYS2 の"mingw32"環境に対応
+#|

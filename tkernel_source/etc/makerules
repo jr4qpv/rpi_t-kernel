@@ -12,6 +12,10 @@
 #
 # ----------------------------------------------------------------------
 #
+#     Modified by T.Yokobayashi at 2016/08/19.
+#
+# ----------------------------------------------------------------------
+#
 
 #
 #	makerules
@@ -86,6 +90,7 @@ EXE_INSTALLDIR = $(BD)/bin/$(TETYPE)_$(MACHINE)$(SUFFIX_INST)
 #		SunOS-i386	Solaris x86
 #		Linux-i686	Linux x86
 #		FreeBSD-i386	FreeBSD x86
+#               Darwin-i386     Mac OSX
 #		Cygwin-i686	Cygwin x86
 #		unknown		unknown platform
 #	CCS
@@ -97,14 +102,14 @@ CCS := $(shell test -d /usr/ccs && echo ccs/)
 TOOL_ORIGIN = "environment" "command line"
 
 ### others ###
-ETCBIN := $(GNU_BD)/etc
+ETCBIN := "$(GNU_BD)/etc"
 RM	= rm -f
 CP	= cp
 PERL	= perl
-MKBTF	= $(ETCBIN)/mkbtf
+MKBTF	= "$(ETCBIN)/mkbtf"
 
-ifneq ($(shell test -x $(GNU_BD)/bin/cpp && echo exist), )
-  CPP = $(GNU_BD)/bin/cpp
+ifneq ($(shell test -x "$(GNU_BD)/bin/cpp" && echo exist), )
+  CPP = "$(GNU_BD)/bin/cpp"
 else
   CPP =
 endif
