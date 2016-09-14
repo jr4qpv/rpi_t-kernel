@@ -72,7 +72,7 @@ LOCAL	void	vicvadInit(void)
 	UW	ad;
 
 	ad = (UW)&interrupt_entry_1;
-	vad = &VIC.VAD1;
+	vad = (_UW *)&VIC.VAD1;
 
 	for (i=1; i<256; i++) {
 		*vad = ad;
@@ -81,7 +81,7 @@ LOCAL	void	vicvadInit(void)
 		ad += (6*4);
 	}
 
-	vad = &VIC.VAD256;
+	vad = (_UW *)&VIC.VAD256;
 	for (i=256; i<=300; i++) {
 		*vad = ad;
 

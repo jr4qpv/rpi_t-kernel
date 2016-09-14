@@ -39,7 +39,9 @@ IMPORT void _tk_ret_int( void );	/* exclusively used to invoke tk_ret_int() */
 IMPORT void call_dbgspt( void );	/* calling debugger support */
 IMPORT void rettex_entry( void );	/* return from task exception */
 
+#ifndef CPU_CORTEX_R4
 	UW	r;
+#endif
 
 	/* Save monitor exception handler */
 	SaveMonHdr.default_hdr = SCArea->intvec[VECNO_DEFAULT];

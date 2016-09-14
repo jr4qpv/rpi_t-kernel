@@ -50,7 +50,7 @@
 #
 
 #
-#	@(#)Makefile for gmake (RZT1) 2016/07/07
+#	@(#)Makefile for gmake (RZT1) 2016/09/14
 #	sysmain (system-dependent description)
 #
 
@@ -59,9 +59,14 @@ MACHINE = rzt1
 TETYPE	= app
 
 # ----------------------------------------------------------------------------
-# App definitions
-CCP_APPL = yes
+# T-Kernel for RZT1 version
+APP_VER = 0.10
 
+# ----------------------------------------------------------------------------
+# App definitions
+MISC_CPRINT = yes
+APP_EXTCMD = yes
+APP_SAMPLE = yes
 
 # ----------------------------------------------------------------------------
 # T2EX definitions
@@ -100,31 +105,14 @@ include $(BD)/etc/makerules
 # source files
 SRC_SYS	= usermain_t2ex.c
 
-ifdef CCP_APPL	#======= CCP用定義 =======
 # source files for simple command interpreter
-SRC_SYS	+= ccp_main.c command.c
+SRC_SYS	+= appl_main.c command.c sample_task.c
 
 # user-level source files
 SRC_USR	=
-
-# user-level libraries
-CFLAGS += -DUSE_CCP_APPL
-CFLAGS += -DUSE_MISC_CPRINT
 
 # user-level libraries
 LDUSRLIBS = -lmisc
-
-else		#======= オリジナル定義 =======
-# source files for simple command interpreter
-SRC_SYS	+= appl_main.c command.c
-
-# user-level source files
-SRC_USR	=
-
-# user-level libraries
-LDUSRLIBS =
-
-endif		#================================
 
 # ----------------------------------------------------------------------------
 # device driver definitions
@@ -170,7 +158,7 @@ endif
 
 # ----------------------------------------------------------------------------
 # additional libraries
-LDUSRLIBS += -ldrvif -lstr -lmisc
+LDUSRLIBS += -ldrvif -lstr
 ifdef	T2EX
   # additional header file path for t2ex
   HEADER := $(BD)/include/t2ex $(HEADER)
@@ -195,4 +183,6 @@ include ../Makefile.common
 #|* 2016/03/14	../tef_em1d/から、 [app_rzt1]用にコピーし、
 #|  MACHINE, TETYPE を修正。
 #|* 2016/03/14	LDUSRLIBS に｢-lmisc｣指定の追加
+#|* 2016/09/08	APP_VERの追加
+#|* 2016/09/12	MISC_CPRINT,APP_EXTCMD,APP_SAMPLEの追加
 #|

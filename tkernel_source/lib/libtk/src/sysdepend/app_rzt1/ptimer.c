@@ -26,6 +26,7 @@
 /*
  * List of timers
  */
+#if 0	/////////////////
 LOCAL struct timerlist {
 	INT	base;		/* base address of timer registers  */
 	INTVEC	irq;		/* interrupt number */
@@ -33,9 +34,6 @@ LOCAL struct timerlist {
 	FP	hdr;		/* user-defined interrupt handler */
 	void*	exinf;		/* user-defined exntended information */
 } TimerList[] = {
-#if 1	//////////
-	{ 0x00000000,	0 }			/* kari dummy */
-#else	///////////
 	{ 0xc0000100,	IV_IRQ(55) },	/* TI1 */
 	{ 0xc0000200,	IV_IRQ(56) },	/* TI2 */
 	{ 0xc0000300,	IV_IRQ(57) },	/* TI3 */
@@ -49,10 +47,10 @@ LOCAL struct timerlist {
 	{ 0xc0001100,	IV_IRQ(59) },	/* TW1 */
 	{ 0xc0001200,	IV_IRQ(60) },	/* TW2 */
 	{ 0xc0001300,	IV_IRQ(61) }	/* TW3 */
-#endif	//////////
 };
 
 #define	N_TIMER		( sizeof(TimerList) / sizeof(TimerList[0]) )
+#endif	////////////////
 
 /*
  * Timer

@@ -18,7 +18,7 @@
 # ----------------------------------------------------------------------
 #
 
-#	@(#)T-Monitor : cmdsvc (RZT1) 2016/04/13
+#	@(#)T-Monitor : cmdsvc (RZT1) 2016/09/14
 
 MACHINE = rzt1
 TETYPE = app
@@ -44,7 +44,7 @@ TARGET2 = wrkbuf
 
 S = ../../src
 
-VPATH = $(S):$(S)/armv7
+VPATH = $(S):$(S)/arm
 HEADER += $(S)
 
 SRC = command.c helpmsg.c svc.c memory.c \
@@ -87,5 +87,5 @@ endif
 #|=====================
 #|* 2016/03/14	../tef_em1d/から、 [app_rzt1]用にコピーし、
 #|  MACHINE, TETYPE を修正。
-#|* 2016/04/14	VPATH指定をarmv6→armv7に変更。
+#|* 2016/09/14	VPATH指定をarmv6→armに変更。
 #|
