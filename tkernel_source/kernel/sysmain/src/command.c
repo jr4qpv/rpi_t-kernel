@@ -60,6 +60,7 @@
 #endif
 #include <string.h>
 #include <tk/tkernel.h>
+#include <tm/tmonitor.h>
 #include <t2ex/datetime.h>
 #include <t2ex/fs.h>
 #include <t2ex/load.h>
