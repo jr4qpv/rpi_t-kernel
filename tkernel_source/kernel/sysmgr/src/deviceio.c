@@ -12,6 +12,10 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2016/09/08.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
@@ -469,6 +473,9 @@ LOCAL ER close_device( OpnCB *opncb, UINT option )
 	devcb  = opncb->devcb;
 	unitno = opncb->unitno;
 	devid = DEVID(devcb, unitno);
+#if 1	/* Warning measure */
+	(void)devid;
+#endif
 
 	/* Multiple tasks can initiate open/close processing,
 	   so ensure processing only by one task at a time. */
@@ -1326,3 +1333,10 @@ EXPORT ER finishDevIO( void )
 	return E_OK;
 }
 
+
+/*----------------------------------------------------------------------
+#|History of "deviceio.c"
+#|=======================
+#|* 2016/09/08	(void)devid;行を追加して、警告を出さないようにした。
+#|
+*/

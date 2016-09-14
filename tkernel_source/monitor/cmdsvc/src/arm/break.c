@@ -10,6 +10,10 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2016/02/03.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
@@ -146,7 +150,12 @@ EXPORT	W	getBreakAtr(UB *name)
 
 	if (name[4] == ' ') {
 		for (i = 0; i < MAX_BPATR; i++) {
+#if 1	/* Warning measure */
+			const void *p1= brkAtr[i].name;
+			if (*((UW*)p1) == *((UW*)name))
+#else
 			if (*((UW*)brkAtr[i].name) == *((UW*)name))
+#endif
 				return brkAtr[i].atr;
 		}
 	}
@@ -282,8 +291,15 @@ EXPORT	void	initBreak(void)
 	traceMode = traceStep = stepFlg = 0;
 
         // SW break instruction (undefined instruction)
+#if 1	/* Warning measure */
+	void *p1 = &sbpCode.b[2];
+	*((UH*)p1) = BREAK_THUMB;
+	void *p2 = &sbpCode.b[4];
+	*((UW*)p2) = BREAK_ARM;
+#else
 	*((UH*)&sbpCode.b[2]) = BREAK_THUMB;
 	*((UW*)&sbpCode.b[4]) = BREAK_ARM;
+#endif
 }
 /*
         release breakpoint temporarily (monitor entry)
@@ -558,3 +574,12 @@ EXPORT	W	procBreak(W bpflg, UB **cmd)
 	*cmd = (bp && bp->cmd[0] != 0) ? bp->cmd : NULL;
 	return 1;	// wait for command
 }
+
+
+/*----------------------------------------------------------------------
+#|History of "break.c"
+#|=======================
+#|* 2016/02/13	[tef_em1d]用の"break.c"を参考に作成。
+#|* 2016/09/14	Warning measure <---警告を出さないように修正。
+#|
+*/

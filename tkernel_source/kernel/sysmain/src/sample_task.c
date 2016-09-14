@@ -11,12 +11,13 @@
  */
 
 /*
- *	@(#)sample_task.c (t2ex) 2016/09/12
+ *	@(#)sample_task.c (t2ex) 2016/09/14
  *
  */
 
 #include <basic.h>
 #include <stdio.h>
+#include <sys/stat.h>					/* for stat64 */
 #include <tk/tkernel.h>
 #include <tm/tmonitor.h>
 #include <t2ex/string.h>
