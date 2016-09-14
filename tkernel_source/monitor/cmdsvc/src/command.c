@@ -18,7 +18,7 @@
  */
 
 /*
- *	@(#)command.c () 2016/08/29
+ *	@(#)command.c () 2016/09/14
  *
  *       command processing
  */
@@ -631,7 +631,6 @@ LOCAL	void	cmdModify(W unit)
 	mAddr = cAddr;
 }
 
-
 /*
         memory embedding command processing
 
@@ -650,7 +649,13 @@ LOCAL	void	cmdFill(W unit)
 
 	// extract set data
 	if (token <= tEOC) {
+#if 1	/* Warning measure */
+		void *p;
+		p =&dt[0];
+		*((UW*)p) = 0;		// 0 by default
+#else
 		*((UW*)&dt[0]) = 0;	// 0 by default
+#endif
 		n = unit;
 	} else {
 		if (isnotDLM()) return;
@@ -972,7 +977,13 @@ LOCAL	const	struct {
 	par = 0;
 	if (tokenSym[2] == ' ')  {
 		for (i = 0; proto[i].par != 0; i++) {
+#if 1	/* Warning measure */
+			void *p1= tokenSym;
+			const void *p2 = proto[i].nm;
+			if (*((UH*)p1) == *((UH*)p2)) {
+#else
 			if (*((UH*)tokenSym) == *((UH*)proto[i].nm)) {
+#endif
 				par = proto[i].par;
 				break;
 			}
@@ -1287,9 +1298,17 @@ LOCAL	W	searchCommand(void)
 
 	if (token == tSYM && tokenSym[12] == ' ') {
 		for (i = 0; cmdTab[i].func != NULL; i++) {
+#if 1	/* Warning measure */
+			const void *p1 = cmdTab[i].snm;
+			void *p2 = tokenSym;
+			if (memcmp(cmdTab[i].fnm, tokenSym, 12) == 0 ||
+				(tokenSym[4] == ' ' &&
+				*((UW*)p1) == *((UW*)p2)) )
+#else
 			if (memcmp(cmdTab[i].fnm, tokenSym, 12) == 0 ||
 				(tokenSym[4] == ' ' &&
 				*((UW*)cmdTab[i].snm) == *((UW*)tokenSym)) )
+#endif
 				return i;
 		}
 	}
@@ -1386,5 +1405,6 @@ EXPORT	void	procCommand(UB *cmd, W fin)
 #|* 2015/12/14	[tef_em1d]用の"command.c"を参考に作成。
 #|* 2015/12/17	SYSINFO(SYSI)ｺﾏﾝﾄﾞの追加。
 #|* 2016/01/26	cmdExit()の引数なしの時のparﾃﾞﾌｫﾙﾄ値を 0→-1に変更(ﾘｾｯﾄ動作)
+#|* 2016/09/14	Warning measure <---警告を出さないように修正。
 #|
 */

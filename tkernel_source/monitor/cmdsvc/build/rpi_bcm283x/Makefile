@@ -18,7 +18,7 @@
 # ----------------------------------------------------------------------
 #
 
-#	@(#)T-Monitor : cmdsvc (bcm283x) 2016/08/20
+#	@(#)T-Monitor : cmdsvc (bcm283x) 2016/09/14
 
 MACHINE = bcm283x
 TETYPE = rpi
@@ -44,11 +44,7 @@ TARGET2 = wrkbuf
 
 S = ../../src
 
-ifeq ($(TYPE_RPI),1)
-VPATH = $(S):$(S)/armv6
-else
-VPATH = $(S):$(S)/armv7
-endif
+VPATH = $(S):$(S)/arm
 HEADER += $(S)
 
 SRC = command.c helpmsg.c svc.c memory.c \
@@ -91,6 +87,6 @@ endif
 #|=====================
 #|* 2016/03/02	../tef_em1d/から、 [rpi_bcm283x]用にコピーし、
 #|  MACHINE, TETYPE を修正。
-#|* 2016/03/02	VPATH指定をarmv6→armv7に変更。
 #|* 2016/08/20	TYPE_RPI で、VPATH指定の切り換え対応
+#|* 2016/09/14	VPATH指定をarmv6→armに変更(rpi1～3共通ソースとする)
 #|
