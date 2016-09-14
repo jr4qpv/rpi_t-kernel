@@ -1,0 +1,31 @@
+#!/bin/sh
+#	@(#)gccsh 09-01-09
+#	Copyright (C) 2002-2009 by Personal Media Corporation
+
+: ${BD:=/usr/local/te}
+: ${GNU_BD:=$BD/tool/`$BD/etc/platform`}
+: ${GNUsh:=${GNU_BD}/sh-unknown-tkernel}
+
+if test -n "$gcc_sh"; then
+: ${LIBVER:=.e$gcc_sh}
+fi
+
+libdir=${GNU_BD}/lib/gcc-lib
+
+for i
+do
+	case "$i" in
+	  -D_SH7727_)		libdir=$BD/lib/sh3l$LIBVER$SUFFIX_LIB	    ; break ;;
+	  -D_SH7751_)		libdir=$BD/lib/sh7751$LIBVER$SUFFIX_LIB	    ; break ;;
+	  -D_SH7760_)		libdir=$BD/lib/sh7760$LIBVER$SUFFIX_LIB	    ; break ;;
+	esac
+done
+
+: ${COMMONLIB:=$libdir}
+
+exec ${GNUsh}/bin/gcc \
+	-B ${COMMONLIB}/ \
+	-B ${GNU_BD}/lib/gcc-lib/ \
+	-B ${GNUsh}/bin/ \
+	-B ${GNUsh}/ \
+	"$@"
