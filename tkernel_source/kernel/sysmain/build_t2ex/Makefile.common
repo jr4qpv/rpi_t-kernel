@@ -50,7 +50,7 @@
 #
 
 #
-#	@(#)Makefile for gmake (tkernel) 2016/09/12
+#	@(#)Makefile for gmake (tkernel) 2016/09/14
 #	sysmain (common description)
 #
 
@@ -155,6 +155,19 @@ K_OBJ	+=	$(BLD_TKERNEL_PATH)/tkernel.o \
 		$(BLD_SYSMGR_PATH)/sysmgr.o \
 		$(BLD_SYSINIT_PATH)/sysinit.o
 
+# ----------------------------------------------------------------------------
+# App definitions
+ifdef MISC_CPRINT
+  CFLAGS += -DUSE_MISC_CPRINT
+endif
+ifdef APP_EXTCMD
+  CFLAGS += -DUSE_APP_EXTCMD
+endif
+ifdef APP_SAMPLE
+  CFLAGS += -DUSE_APP_SAMPLE
+endif
+
+# ----------------------------------------------------------------------------
 # T2EX function objects
 ifdef  T2EX
 
@@ -400,4 +413,4 @@ $(DEPS): ; touch $(DEPS)
 #|* 2016/07/07	debugﾌｫﾙﾀﾞとmakefileとﾘﾝｸｽｸﾘﾌﾟﾄが共通にできるように、
 #|  ﾘﾝｸｽｸﾘﾌﾟﾄに"..\$(MDIR)\"のパス記述追加
 #|* 2016/09/12	version情報ファイル生成追加
-#|
+#|* 2016/09/14	｢App definitions」関連処理の追加

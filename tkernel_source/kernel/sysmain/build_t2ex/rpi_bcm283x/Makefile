@@ -130,18 +130,6 @@ SRC_USR	=
 LDUSRLIBS = -lmisc
 
 # ----------------------------------------------------------------------------
-# App definitions
-ifdef MISC_CPRINT
-  CFLAGS += -DUSE_MISC_CPRINT
-endif
-ifdef APP_EXTCMD
-  CFLAGS += -DUSE_APP_EXTCMD
-endif
-ifdef APP_SAMPLE
-  CFLAGS += -DUSE_APP_SAMPLE
-endif
-
-# ----------------------------------------------------------------------------
 # device driver definitions
 DRV_CONSOLE = yes
 ##DRV_CLOCK   = yes
