@@ -23,14 +23,4 @@ app_rzt1/
 app_rzt1.*/
 rzt1/
 rzt1.h
-app_sh7760/
-app_sh7760.*/
-sh7760/
-sh4/
-setup-sh4.c
-reset-sh4.c
-sh_scif.c
-scifa.c
-sh7760.h
-gccsh
 ff/
