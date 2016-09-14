@@ -1,0 +1,322 @@
+#
+# ----------------------------------------------------------------------
+#    T2EX Software Package
+#
+#    Copyright 2012 by Ken Sakamura.
+#    This software is distributed under the latest version of T-License 2.x.
+# ----------------------------------------------------------------------
+#
+#    Released by T-Engine Forum(http://www.t-engine.org/) at 2012/12/12.
+#    Modified by T-Engine Forum at 2013/01/16.
+#    Modified by TRON Forum(http://www.tron.org/) at 2015/06/04.
+#
+# ----------------------------------------------------------------------
+#
+#     Modified by T.Yokobayashi at 2016/03/14.
+#
+# ----------------------------------------------------------------------
+#
+
+#
+# This software package is available for use, modification, 
+# and redistribution in accordance with the terms of the attached 
+# T-License 2.x.
+# If you want to redistribute the source code, you need to attach 
+# the T-License 2.x document.
+# There's no obligation to publish the content, and no obligation 
+# to disclose it to the TRON Forum if you have modified the 
+# software package.
+# You can also distribute the modified source code. In this case, 
+# please register the modification to T-Kernel traceability service.
+# People can know the history of modifications by the service, 
+# and can be sure that the version you have inherited some 
+# modification of a particular version or not.
+#
+#    http://trace.tron.org/tk/?lang=en
+#    http://trace.tron.org/tk/?lang=ja
+#
+# As per the provisions of the T-License 2.x, TRON Forum ensures that 
+# the portion of the software that is copyrighted by Ken Sakamura or 
+# the TRON Forum does not infringe the copyrights of a third party.
+# However, it does not make any warranty other than this.
+# DISCLAIMER: TRON Forum and Ken Sakamura shall not be held
+# responsible for any consequences or damages caused directly or
+# indirectly by the use of this software package.
+#
+# The source codes in bsd_source.tar.gz in this software package are 
+# derived from NetBSD or OpenBSD and not covered under T-License 2.x.
+# They need to be changed or redistributed according to the 
+# representation of each source header.
+#
+
+#
+#	@(#)makerules.sysdepend (sys/RZT1) 2016/08/31
+#		for GNU make
+#
+#	default rules - system-dependent (RZT1)
+#
+#	MACHINE	target CPU
+#		rzt1	: Renesas RZ/T1
+#
+#	TETYPE	target T-Engine type
+#		app	: Appliance
+#
+#	GNU_BD          GNU development tool for ARM path
+#	_GNU_CONFIG     GNU compiler prefix (default=arm-none-eabi-)
+#
+#
+
+# check environmental variables
+ifndef GNU_BD
+  $(error 'GNU_BD' is not defined)
+endif
+ifndef _GNU_CONFIG
+  # _GNU_CONFIG指定がない時のデフォルト
+  _GNU_CONFIG = arm-none-eabi-
+endif
+
+# command path
+PATH = .
+##ifneq ($(filter "$(origin GNUARM_2)", $(TOOL_ORIGIN)), )
+##  PATH := $(PATH):$(GNUARM_2)/bin
+##endif
+ifneq ($(filter "$(origin GNUs)", $(TOOL_ORIGIN)), )
+  PATH := $(PATH):$(GNUs)/bin
+endif
+ifneq ($(filter Linux-%, $(CROSS_ARCH)), )
+  PATH := $(PATH):/usr/local/bin:/bin:/usr/bin
+endif
+ifneq ($(filter Cygwin-%, $(CROSS_ARCH)), )
+  PATH := $(PATH):/usr/local/bin:/bin:/usr/bin
+endif
+ifneq ($(filter mingw32-%, $(CROSS_ARCH)), )
+  PATH := $(PATH):/mingw32/bin:/usr/bin
+endif
+
+# ----- Renesas RZ/T1 Appliance Board (RZT1) ----------------------------
+
+# GCC environment
+TARGET_ARCH =
+
+# target type
+_CPUTYPE_FLAGS    = -mcpu=cortex-r4f -msoft-float -mfpu=vfp
+_CPUTYPE_FLAGS_AS = -mcpu=cortex-r4f -mfpu=softvfp
+_TE_SYSTEM_NAME_ = _APP_RZT1_
+
+# code set
+_CODESET_FLAGS = -mthumb-interwork
+
+### build option ###
+CFLAGS +=
+CPPFLAGS +=
+ASFLAGS +=
+LDFLAGS +=
+
+### C  ###
+CC := $(BD)/etc/gcc4arm
+OUTPUT_OPTION = -o $@
+ifeq ($(mode), debug)
+###  CFLAGS += -g
+###  CPPFLAGS += $(HEADER:%=-I%) -D$(_TE_SYSTEM_NAME_) -DDEBUG
+  CFLAGS += -g -g2
+  CPPFLAGS += $(HEADER:%=-I%) -D$(_TE_SYSTEM_NAME_) -D__DEBUG_BUILD__
+else
+  CFLAGS += -O2
+  CPPFLAGS += $(HEADER:%=-I%) -D$(_TE_SYSTEM_NAME_)
+endif
+
+ifneq ($(filter ram, $(options)), )
+  # RAM version, for debug purpose
+  CPPFLAGS += -DRAM_BOOT
+else
+###  CPPFLAGS += -DNOR_BOOT
+endif
+
+CFLAGS += $(_CPUTYPE_FLAGS) $(_CODESET_FLAGS) -mstructure-size-boundary=8 -ffreestanding
+
+CFLAGS_WARNING      = -Wall -Wno-pointer-sign
+CFLAGS_WARNING_FULL = -pedantic -W -Wall
+
+COMPILE.c = $(CC) $(TARGET_ARCH) $(CFLAGS) $(CPPFLAGS) -c
+LINK.c = $(CC) $(TARGET_ARCH) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS)
+
+%.o: %.c
+	$(COMPILE.c) $< $(OUTPUT_OPTION)
+
+%.uo: %.c
+	$(COMPILE.c) $< $(OUTPUT_OPTION) -MT $@
+
+%.s: %.c
+	$(CC) $(TARGET_ARCH) $(CFLAGS) $(CPPFLAGS) -S $<
+
+%.i: %.c
+	$(CC) $(TARGET_ARCH) $(CFLAGS) $(CPPFLAGS) -E $< $(OUTPUT_OPTION)
+
+### C++ ###
+CXX := $(BD)/etc/gcc4arm
+CXXFLAGS = $(CFLAGS)
+
+COMPILE.cc = $(CXX) $(TARGET_ARCH) $(CXXFLAGS) $(CPPFLAGS) -c
+LINK.cc = $(CXX) $(TARGET_ARCH) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS)
+
+%.o: %.cc
+	$(COMPILE.cc) $< $(OUTPUT_OPTION)
+
+%.uo: %.cc
+	$(COMPILE.cc) $< $(OUTPUT_OPTION) -MT $@
+
+%.s: %.cc
+	$(CXX) $(TARGET_ARCH) $(CXXFLAGS) $(CPPFLAGS) -S $<
+
+%.i: %.cc
+	$(CXX) $(TARGET_ARCH) $(CXXFLAGS) $(CPPFLAGS) -E $< $(OUTPUT_OPTION)
+
+### asm ###
+AS = "$(GNU_BD)/bin/$(_GNU_CONFIG)as"
+ifeq ($(mode), debug)
+  ASFLAGS += -g -g2
+else
+  ASFLAGS +=
+endif
+
+ASFLAGS += $(_CPUTYPE_FLAGS) $(_CODESET_FLAGS)
+ASFLAGS.s = $(_CPUTYPE_FLAGS_AS) $(_CODESET_FLAGS)
+
+COMPILE.S = $(CC) $(TARGET_ARCH) $(ASFLAGS) $(CPPFLAGS) -c
+COMPILE.s = $(AS) $(ASFLAGS.s)
+
+%.o: %.S
+	$(COMPILE.S) $< $(OUTPUT_OPTION)
+
+%.uo: %.S
+	$(COMPILE.S) $< $(OUTPUT_OPTION) -MT $@
+
+%.o: %.s
+	$(COMPILE.s) $< $(OUTPUT_OPTION)
+
+%.uo: %.s
+	$(COMPILE.S) $< $(OUTPUT_OPTION)
+
+%.i: %.S
+	$(CC) $(TARGET_ARCH) $(ASFLAGS) $(CPPFLAGS) -E $< $(OUTPUT_OPTION)
+
+### linker ###
+LD = "$(GNU_BD)/bin/$(_GNU_CONFIG)ld"
+ifeq ($(mode), debug)
+  LDFLAGS += $(LIBDIR:%=-L%)
+else
+  LDFLAGS += $(LIBDIR:%=-L%)
+endif
+
+LDFLAGS += $(_CPUTYPE_FLAGS) $(_CODESET_FLAGS)
+
+LIBDIR = $(COMMONLIB)
+LOADLIBES =
+LDOBJS =
+LDLIBS =
+
+# additional linker option
+ifneq ($(filter sl, $(options)), )
+  LDFLAGS2 = -static
+else
+  # no effect
+  LDFLAGS2 = -static
+endif
+LDFLAGS3 = -static -T $(COMMONLIB)/static.lnk
+START_ADR =
+
+# create executable
+LINK.o = $(CC) $(TARGET_ARCH) $(LDFLAGS) $(LDFLAGS2) $(START_ADR)
+
+# link objects
+LINK_R.o = $(CC) $(TARGET_ARCH) $(LDFLAGS) -r -nostdlib
+
+# link objects and libraries
+LINK_A.o = $(CC) $(TARGET_ARCH) $(LDFLAGS) -r
+
+# create executable (location only)
+LOCATE.o = $(CC) $(TARGET_ARCH) $(LDFLAGS) -nostdlib $(LDFLAGS3) $(START_ADR)
+
+%: %.o
+	$(LINK.o) $(LDOBJS) $^ $(LOADLIBES) $(LDLIBS) $(OUTPUT_OPTION)
+
+%.out: %.o
+	$(LINK.o) $(LDOBJS) $^ $(LOADLIBES) $(LDLIBS) $(OUTPUT_OPTION)
+
+%.abs: %.o
+	$(LINK_A.o) $(LDOBJS) $^ $(LOADLIBES) $(LDLIBS) -o _$@
+	$(LOCATE.o) _$@ $(OUTPUT_OPTION)
+	$(RM) _$@
+
+### library ###
+AR = "$(GNU_BD)/bin/$(_GNU_CONFIG)ar"
+ARFLAGS = rv
+RANLIB = "$(GNU_BD)/bin/$(_GNU_CONFIG)ranlib"
+
+(%): %
+	$(AR) $(ARFLAGS) $@ $%
+
+### create name list ###
+NM = "$(GNU_BD)/bin/$(_GNU_CONFIG)nm"
+NMFLAGS = -n
+
+%.map: %
+	$(NM) $(NMFLAGS) $< > $@
+
+%.map: %.out
+	$(NM) $(NMFLAGS) $< > $@
+
+%.map: %.abs
+	$(NM) $(NMFLAGS) $< > $@
+
+%.map: %.dll
+	$(NM) $(NMFLAGS) $< > $@
+
+### data box ###
+DBCPPFLAGS = -D$(_TE_SYSTEM_NAME_)
+DB_CPP = $(CPP) -nostdinc -traditional -P $(DATABOX_HEADER:%=-I%) $(DBCPPFLAGS)
+DB = $(ETCBIN)/databox
+DBFLAGS =
+DBSRCFLAGS = -s
+DATABOX = $(DB) $(DBFLAGS)
+
+%.dbx: %.d
+	$(DB_CPP) $< $@.tmp
+	$(DATABOX) $@.tmp $@
+	$(RM) $@.tmp
+
+%.fsn: %.f
+	$(DB_CPP) $< $@.tmp
+	$(DATABOX) -n $@.tmp $@
+	$(RM) $@.tmp
+
+%.c: %.d
+	$(DB_CPP) $< $@.tmp
+	$(DATABOX) -n $(DBSRCFLAGS) $@.tmp $@
+	$(RM) $@.tmp
+
+### other ###
+ifndef CPP
+  CPP = "$(GNU_BD)/bin/$(_GNU_CONFIG)cpp"
+endif
+STRIP = "$(GNU_BD)/bin/$(_GNU_CONFIG)strip --strip-unneeded"
+
+OBJCOPY = "$(GNU_BD)/bin/$(_GNU_CONFIG)objcopy"
+OUTPUT_SREC = -O srec --srec-forceS3 --srec-len 32
+
+
+# ----------------------------------------------------------------------
+#|History of "makerules.sysdepend"
+#|================================
+#|* 2016/03/14	../tef_em1d/から、 [app_rzt1]用にコピーし修正
+#|* 2016/03/14	_TE_SYSTEM_NAME_ は _TEF_EM1D_ → _APP_RZT1_ に変更
+#|* 2016/03/16	MSYS2 の"mingw32"環境に対応したPATHを設定
+#|* 2016/03/16	OBJCOPY,CPPのパスを｢_GNU_CONFIG｣変数を使った指定に変更
+#|* 2016/03/17	-mcpu指定を"arm1176jzf-s"→"cortex-r4f"に変更
+#|* 2016/04/01	GDB用に｢-g｣→｢-g2｣に変更
+#|* 2016/04/12	.ramのﾌｫﾙﾀﾞの時は｢RAM_BOOT｣定義を追加
+#|* 2016/08/19	gcc4armの所在を"$(BD)/etc/"に移動
+#|* 2016/08/19	｢_GNU_CONFIG｣のprefix指定は、最後の"-"まで含めるように変更
+#|* 2016/08/20	｢GNUARM_2｣変数は使わないように変更
+#|* 2016/08/31	｢_GNU_CONFIG｣が未指定の時はﾃﾞﾌｫﾙﾄで"arm-none-eabi-"をセット
+#|
