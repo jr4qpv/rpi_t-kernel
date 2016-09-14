@@ -11,6 +11,10 @@
  *    Modified by TRON Forum(http://www.tron.org/) at 2015/06/01.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2016/09/08.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
@@ -335,6 +339,9 @@ SYSCALL void _tk_ext_tsk( void )
 #ifdef DORMANT_STACK_SIZE
 	/* for WARNING */
 	_dummy[0] = 0;
+  #if 1	/* Warning measure */
+	(void)_dummy;
+  #endif
 #endif
 }
 
@@ -954,3 +961,11 @@ SYSCALL ER _td_inf_tsk_u( ID tskid, TD_ITSK_U *pk_itsk, BOOL clr )
 }
 
 #endif /* USE_DBGSPT */
+
+
+/*----------------------------------------------------------------------
+#|History of "task_manage.c"
+#|==========================
+#|* 2016/09/08	(void)_dummy;行を追加して、警告を出さないようにした。
+#|
+*/
