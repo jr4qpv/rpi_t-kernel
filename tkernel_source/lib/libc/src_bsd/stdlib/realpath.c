@@ -194,6 +194,8 @@ realpath2_eno(const char *path1, const char *path, char *resolved, int *eno)
 				}
 			}
 			left_len = strlcpy(left, symlink, sizeof(left));}
+#else	/* Warning measure */
+		(void)symlinks;
 #endif
 	}
 
@@ -210,3 +212,11 @@ err:
 		free(resolved);
 	e1: if (eno) *eno = serrno; return NULL;
 } char *realpath2(const char *path1, const char *path2, char *resolved){return realpath2_eno(path1, path2, resolved, NULL);} char *realpath_eno(const char *path, char *resolved, int *eno){return realpath2_eno(NULL, path, resolved, eno);} char *realpath(const char *path, char *resolved){return realpath_eno(path, resolved, NULL);}
+
+
+/*----------------------------------------------------------------------
+#|History of "realpath.c"
+#|=======================
+#|* 2016/09/08	Warning measure <---警告を出さないように修正。
+#|
+*/

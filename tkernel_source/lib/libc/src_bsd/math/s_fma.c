@@ -92,7 +92,9 @@ fma(double x, double y, double z)
 	 * modes other than FE_TONEAREST are painful.
 	 */
 	if (spread > DBL_MANT_DIG * 2) {
+#if 0	/* Warning measure */
 		fenv_t env;
+#endif
 		/*feraiseexcept(FE_INEXACT)*/;
 		switch(oround) {
 		case FE_TONEAREST:
@@ -216,3 +218,11 @@ long double fmal(long double, long double, long double);
 __weak_alias(fmal, fma);
 #endif	/* lint */
 #endif	/* LDBL_MANT_DIG == 53 */
+
+
+/*----------------------------------------------------------------------
+#|History of "s_fma.c"
+#|===================
+#|* 2016/09/14	Warning measure <---Œx‚ðo‚³‚È‚¢‚æ‚¤‚ÉC³B
+#|
+*/

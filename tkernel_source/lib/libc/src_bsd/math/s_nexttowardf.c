@@ -68,7 +68,18 @@ nexttowardf(float x, long double y)
 	}
 	if(hy<0x00800000) {
 	    volatile float u = x*x;		/* underflow */
+#if 1	/* Warning measure */
+		(void)u;
+#endif
 	}
 	SET_FLOAT_WORD(x,hx);
 	return x;
 }
+
+
+/*----------------------------------------------------------------------
+#|History of "s_nexttowardf.c"
+#|============================
+#|* 2016/09/14	Warning measure <---警告を出さないように修正。
+#|
+*/

@@ -12,6 +12,10 @@
 #
 # ----------------------------------------------------------------------
 #
+#    Modified by T.Yokobayashi at 2016/09/14.
+#
+# ----------------------------------------------------------------------
+#
 
 #
 # This software package is available for use, modification, 
@@ -49,6 +53,9 @@
 #	@(#)Makefile.src_bsd
 #
 #
+
+CFLAGS_WARNING += -Wno-maybe-uninitialized -Wno-parentheses
+
 
 VPATH += $(S_BSD)/arpa_inet
 SRC_BSD +=	\
@@ -415,3 +422,10 @@ SRC +=	\
 	strftime.c	\
 	strptime.c	\
 
+
+# ----------------------------------------------------------------------
+#|History of "Makefile"
+#|=====================
+#|* 2016/09/14	警告表示しないように CFLAGS_WARNING に下記オプション追加
+#|  -Wno-maybe-uninitialized -Wno-parentheses
+#|

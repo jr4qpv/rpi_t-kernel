@@ -39,6 +39,10 @@
 #include <errno.h>
 #include "local.h"
 
+#if 1	/* Warning measure */
+  #include <unistd.h>
+#endif
+
 #define	POS_ERR	(-(fpos_t)1)
 
 /*
@@ -259,3 +263,11 @@ fseek(FILE *fp, long offset, int whence)
 }
 #endif
 __weak_alias(fseek64, fseeko);
+
+
+/*----------------------------------------------------------------------
+#|History of "fseek.c"
+#|===================
+#|* 2016/09/08	Warning measure <---警告を出さないように修正。
+#|
+*/
