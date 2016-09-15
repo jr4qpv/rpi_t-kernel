@@ -1,0 +1,193 @@
+10:47:56 **** プロジェクト tkernel_source に対する構成 rzt1_t2ex_debug の クリーンのみのビルド ****
+make clean 
+touch Dependencies
+( cd /C/work/t-kernel/tkernel_source/lib/build_t2ex/app_rzt1 ; /usr/bin/make  clean )
+make[1]: Entering directory '/C/work/t-kernel/tkernel_source/lib/build_t2ex/app_rzt1'
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/lib/libtm/build/app_rzt1'
+touch Dependencies
+rm -f tm_monitor.o tm_getchar.o tm_putchar.o tm_getline.o tm_putstring.o tm_command.o tm_readdisk.o tm_writedisk.o tm_infodisk.o tm_exit.o tm_extsvc.o _getchar.o _getstring.o _putchar.o _putstring.o tm_printf.o libtm.a Dependencies
+rm -f /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/libtm.a
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/lib/libtm/build/app_rzt1'
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/lib/libc/build/app_rzt1'
+touch Dependencies
+rm -f stdio_fs.uo stdio_init.uo abort.uo malloc.uo stdlib_fs.uo strercd_r.uo strerror_r.uo closedir.uo opendir.uo readdir_r.uo rewinddir.uo seekdir.uo telldir.uo ctime_r.uo mktime_r.uo time.uo flt_rounds.uo asctime.uo difftime.uo strftime.uo strptime.uo htonl.uo htons.uo ntohl.uo ntohs.uo inet_addr.uo inet_ntop.uo inet_pton.uo isctype.uo ctype_.uo toupper_.uo tolower_.uo s_cabs.uo s_cabsf.uo s_cacos.uo s_cacosf.uo s_cacosh.uo s_cacoshf.uo s_carg.uo s_cargf.uo s_casin.uo s_casinf.uo s_casinh.uo s_casinhf.uo s_catan.uo s_catanf.uo s_catanh.uo s_catanhf.uo s_ccos.uo s_ccosf.uo s_ccosh.uo s_ccoshf.uo s_cexp.uo s_cexpf.uo s_cimag.uo s_cimagf.uo s_clog.uo s_clogf.uo s_conj.uo s_conjf.uo s_cpow.uo s_cpowf.uo s_cproj.uo s_cprojf.uo s_creal.uo s_crealf.uo s_csin.uo s_csinf.uo s_csinh.uo s_csinhf.uo s_csqrt.uo s_csqrtf.uo s_ctan.uo s_ctanf.uo s_ctanh.uo s_ctanhf.uo imaxabs.uo imaxdiv.uo strtoimax.uo strtoumax.uo e_acos.uo e_acosf.uo e_acosh.uo e_acoshf.uo e_asin.uo e_asinf.uo s_asinh.uo s_asinhf.uo s_atan.uo s_atanf.uo e_atan2.uo e_atan2f.uo e_atanh.uo e_atanhf.uo s_cbrt.uo s_cbrtf.uo s_ceil.uo s_ceilf.uo s_copysign.uo s_copysignf.uo s_cos.uo s_cosf.uo e_cosh.uo e_coshf.uo s_erf.uo s_erff.uo e_exp.uo e_expf.uo s_exp2.uo s_exp2f.uo s_expm1.uo s_expm1f.uo s_fabs.uo s_fabsf.uo s_fdim.uo s_floor.uo s_floorf.uo s_fma.uo s_fmaf.uo s_fmax.uo s_fmaxf.uo s_fmin.uo s_fminf.uo e_fmod.uo e_fmodf.uo frexp.uo s_frexpf.uo e_hypot.uo e_hypotf.uo s_ilogb.uo s_ilogbf.uo e_j0.uo e_j1.uo e_jn.uo ldexp.uo s_llrint.uo s_llrintf.uo s_llround.uo s_llroundf.uo e_log.uo e_logf.uo e_log10.uo e_log10f.uo s_log1p.uo s_log1pf.uo e_log2.uo e_log2f.uo s_logb.uo s_logbf.uo s_lrint.uo s_lrintf.uo s_lround.uo s_lroundf.uo modf.uo s_modff.uo s_nan.uo s_nearbyint.uo s_nextafter.uo s_nextafterf.uo s_nexttowardf.uo e_pow.uo e_powf.uo e_remainder.uo e_remainderf.uo s_remquo.uo s_remquof.uo s_rint.uo s_rintf.uo s_round.uo s_roundf.uo s_scalbln.uo s_scalbn.uo s_scalbnf.uo s_sin.uo s_sinf.uo e_sinh.uo e_sinhf.uo e_sqrt.uo e_sqrtf.uo s_tan.uo s_tanf.uo s_tanh.uo s_tanhf.uo b_tgamma.uo s_trunc.uo s_truncf.uo e_lgamma_r.uo e_lgammaf_r.uo e_scalb.uo b_exp__D.uo b_log__D.uo e_rem_pio2.uo e_rem_pio2f.uo fpclassify.uo isfinite.uo isinf.uo isnan.uo isnormal.uo k_cos.uo k_cosf.uo k_rem_pio2.uo k_rem_pio2f.uo k_sin.uo k_sinf.uo k_tan.uo k_tanf.uo signbit.uo hcreate.uo insque.uo remque.uo lsearch.uo tfind.uo tsearch.uo hash_func.uo clrerr.uo fclose.uo fdopen.uo feof.uo ferror.uo ferror.uo fflush.uo fgetc.uo fgetpos.uo fgets.uo fileno.uo findfp.uo flags.uo fopen.uo fprintf.uo fputc.uo fputs.uo fread.uo freopen.uo fscanf.uo fseek.uo fsetpos.uo ftell.uo fvwrite.uo fwalk.uo fwrite.uo getc.uo getchar.uo makebuf.uo printf.uo putc.uo putchar.uo puts.uo refill.uo rewind.uo rget.uo scanf.uo setbuf.uo setvbuf.uo snprintf.uo sprintf.uo sscanf.uo stdio.uo ungetc.uo vfprintf.uo vfscanf.uo vprintf.uo vscanf.uo vsnprintf.uo vsprintf.uo vsscanf.uo wbuf.uo wsetup.uo assert.uo abs.uo labs.uo llabs.uo atof.uo atoi.uo atol.uo atoll.uo bsearch.uo div.uo ldiv.uo lldiv.uo qsort.uo rand.uo drand48.uo lrand48.uo mrand48.uo srand48.uo seed48.uo lcong48.uo erand48.uo _rand48.uo realpath.uo strtod.uo strtof.uo strtold.uo strtol.uo strtoll.uo strtoul.uo strtoull.uo dmisc.uo dtoa.uo gdtoa.uo gethex.uo gmisc.uo hd_init.uo hdtoa.uo hexnan.uo ldtoa.uo locks.uo misc.uo smisc.uo strtodg.uo strtord.uo sum.uo ulp.uo memccpy.uo memccpy.uo memchr.uo memcmp.uo memset.uo strcat.uo strcmp.uo strcoll.uo strcpy.uo strcspn.uo strdup.uo strlen.uo strncat.uo strncmp.uo strncpy.uo strpbrk.uo strspn.uo strstr.uo strtok.uo strxfrm.uo strlcpy.uo strlcat.uo bcmp.uo bcopy.uo bzero.uo ffs.uo index.uo rindex.uo strcasecmp.uo libc.a Dependencies
+rm -f /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/libc.a
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/lib/libc/build/app_rzt1'
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/lib/libusermod/build/app_rzt1'
+touch Dependencies
+rm -f main.o  libusermod.a Dependencies
+rm -f /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/libusermod.a
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/lib/libusermod/build/app_rzt1'
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/lib/crt/crt0/build/app_rzt1'
+touch Dependencies
+rm -f crt0.o crt1f.o crt1s.o crti.o crtir.o crtn.o Dependencies
+rm -f /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/crt0.o /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/crt1f.o /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/crt1s.o /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/crti.o /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/crtir.o /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/crtn.o
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/lib/crt/crt0/build/app_rzt1'
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/lib/crt/crttk/build/app_rzt1'
+touch Dependencies
+rm -f pstartup.o asmstartup.o crttk.o Dependencies
+rm -f /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/crttk.o
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/lib/crt/crttk/build/app_rzt1'
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/lib/libsvc/build/app_rzt1'
+touch Dependencies
+rm -f Dependencies_src
+/C/work/t-kernel/tkernel_source/etc/mktksvc -deps rzt1 /C/work/t-kernel/tkernel_source/include/tk/syscall.h >> Dependencies_src
+/C/work/t-kernel/tkernel_source/etc/mktdsvc -deps rzt1 /C/work/t-kernel/tkernel_source/include/tk/dbgspt.h >> Dependencies_src
+for iflib_src in tk/devmgr.h tk/sysmgr.h sys/consio.h sys/segment.h  ; do \
+  /C/work/t-kernel/tkernel_source/etc/mkiflib -deps rzt1 /C/work/t-kernel/tkernel_source/include/$iflib_src >> Dependencies_src ; \
+done
+rm -f *.o libsvc.a
+rm -f Dependencies Dependencies_src
+rm -f /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/libsvc.a
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/lib/libsvc/build/app_rzt1'
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/lib/libstr/build/app_rzt1'
+touch Dependencies
+rm -f string.o libstr.a Dependencies
+rm -f /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/libstr.a
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/lib/libstr/build/app_rzt1'
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/lib/libsys/build/app_rzt1'
+touch Dependencies
+rm -f bitclr.o bitnot.o bitsclr.o bitsearch0.o bitsearch1.o bitset.o bitsset.o bittest.o quesearch.o quesearchge.o quesearchgeu.o quesearchgt.o quesearchgtub.o quesearchh.o quesearchne.o quesearchneh.o quesearchrevltu.o syslog.o setlogmask.o logmask.o libsys.a Dependencies
+rm -f /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/libsys.a
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/lib/libsys/build/app_rzt1'
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/lib/libdrvif/build/app_rzt1'
+touch Dependencies
+rm -f *.o libdrvif.a
+rm -f Dependencies
+rm -f /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/libdrvif.a
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/lib/libdrvif/build/app_rzt1'
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/lib/libmisc/build/app_rzt1'
+touch Dependencies
+rm -f init_libmisc.o conio.o errio.o cprintf.o cursor.o keyin.o remote.o atohex.o disp_mem.o filebios.o lowlevel.o filedir.o file.o load.o libmisc.a Dependencies
+rm -f /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/libmisc.a
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/lib/libmisc/build/app_rzt1'
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/lib/libtk/build_t2ex/app_rzt1'
+touch Dependencies
+rm -f startup_elf.o setspc.o waitusec.o waitnsec.o disint.o int.o ptimer.o chkppl.o libinit.o knlinit.o _commarea.o liblock.o fastlock.o fastmlock.o chkspc.o chkspc2.o chkspc3.o memalloc.o memcheck.o tkminit.o kmalloc.o kmcheck.o vmalloc.o vmcheck.o dbgmode.o fsrcvmode.o getdembf.o prreg.o _exit.o fastulock.uo fastumlock.uo malloc.uo smalloc.uo smcheck.uo  libtk.a Dependencies
+rm -f /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/libtk.a
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/lib/libtk/build_t2ex/app_rzt1'
+make[1]: Leaving directory '/C/work/t-kernel/tkernel_source/lib/build_t2ex/app_rzt1'
+( cd /C/work/t-kernel/tkernel_source/driver/app_rzt1/build_t2ex ; /usr/bin/make  clean )
+make[1]: Entering directory '/C/work/t-kernel/tkernel_source/driver/app_rzt1/build_t2ex'
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/driver/app_rzt1/clk/build'
+touch Dependencies
+rm -f Dependencies_src
+for iflib_src in  ; do \
+  /C/work/t-kernel/tkernel_source/etc/mkdrvsvc -deps rzt1 /C/work/t-kernel/tkernel_source/include/$iflib_src >> Dependencies_src ; \
+done
+rm -f Dependencies_src
+for iflib_src in  ; do \
+  /C/work/t-kernel/tkernel_source/etc/mkdrvsvc -deps rzt1 /C/work/t-kernel/tkernel_source/include/$iflib_src >> Dependencies_src ; \
+done
+rm -f main.o rtc.o   clkdrv.o libem1diic.a Dependencies Dependencies_src
+rm -f /C/work/t-kernel/tkernel_source/driver/app_rzt1/build/clkdrv.o
+rm -f /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/libem1diic.a
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/driver/app_rzt1/clk/build'
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/driver/app_rzt1/console/build'
+touch Dependencies
+rm -f Dependencies_src
+for iflib_src in device/serialio.h ; do \
+  /C/work/t-kernel/tkernel_source/etc/mkdrvsvc -deps rzt1 /C/work/t-kernel/tkernel_source/include/$iflib_src >> Dependencies_src ; \
+done
+rm -f main.o consmlock.o console_drv.o line_drv.o scifa.o serial_in.o serial_out.o serial_ctl.o console.o libconsolesvc.a Dependencies Dependencies_src
+rm -f /C/work/t-kernel/tkernel_source/driver/app_rzt1/build/console.o
+rm -f /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/libconsolesvc.a
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/driver/app_rzt1/console/build'
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/driver/app_rzt1/sysdsk/build'
+touch Dependencies
+rm -f main.o accept.o common.o inthdr.o pccard.o ata.o atacmd.o ataio.o mem.o sysdsk.o Dependencies
+rm -f /C/work/t-kernel/tkernel_source/driver/app_rzt1/build/sysdsk.o
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/driver/app_rzt1/sysdsk/build'
+make[1]: Leaving directory '/C/work/t-kernel/tkernel_source/driver/app_rzt1/build_t2ex'
+( cd /C/work/t-kernel/tkernel_source/kernel/tkernel/build/app_rzt1 ; /usr/bin/make  clean )
+make[1]: Entering directory '/C/work/t-kernel/tkernel_source/kernel/tkernel/build/app_rzt1'
+touch Dependencies
+rm -f tkstart.o timer.o wait.o task.o klock.o task_manage.o task_sync.o semaphore.o mutex.o eventflag.o mailbox.o messagebuf.o rendezvous.o mempool.o mempfix.o time_calls.o misc_calls.o subsystem.o objname.o tkdev_init.o cpu_calls.o cpu_init.o cpu_support.o version.o tkernel.o Dependencies
+make[1]: Leaving directory '/C/work/t-kernel/tkernel_source/kernel/tkernel/build/app_rzt1'
+( cd /C/work/t-kernel/tkernel_source/kernel/sysmgr/build/app_rzt1 ; /usr/bin/make  clean )
+make[1]: Entering directory '/C/work/t-kernel/tkernel_source/kernel/sysmgr/build/app_rzt1'
+touch Dependencies
+rm -f chkplv.o power.o cache.o memmgr.o segmgr.o smmain.o system.o imalloc.o syslog.o device.o deviceio.o sysmgr.o Dependencies
+make[1]: Leaving directory '/C/work/t-kernel/tkernel_source/kernel/sysmgr/build/app_rzt1'
+( cd /C/work/t-kernel/tkernel_source/kernel/sysinit/build/app_rzt1 ; /usr/bin/make  clean )
+make[1]: Entering directory '/C/work/t-kernel/tkernel_source/kernel/sysinit/build/app_rzt1'
+touch Dependencies
+rm -f devinit.o cntwus.o subsystem.o sysinit_main.o sysstartup.o gdevcnf.o gsyscnf.o patch.o inittask_def.o sysinit.o  Dependencies
+make[1]: Leaving directory '/C/work/t-kernel/tkernel_source/kernel/sysinit/build/app_rzt1'
+( cd /C/work/t-kernel/tkernel_source/t2ex/load/build/app_rzt1 ; /usr/bin/make  clean clean_install )
+make[1]: Entering directory '/C/work/t-kernel/tkernel_source/t2ex/load/build/app_rzt1'
+touch Dependencies
+rm -f Dependencies_src
+for if_src in t2ex/load.h ; do \
+  /C/work/t-kernel/tkernel_source/etc/mkt2exsvc -deps rzt1 /C/work/t-kernel/tkernel_source/include/t2ex/$if_src >> Dependencies_src ;\
+done
+rm -f service.o pminfo.o progload.o ldr_elf.o src_file.o src_mem.o startup.o pm_load.o pm_loadspg.o pm_status.o pm_unload.o load.o libload.a Dependencies Dependencies_src
+rm -f /C/work/t-kernel/tkernel_source/t2ex/build/app_rzt1/load.o
+rm -f /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/libload.a
+make[1]: Leaving directory '/C/work/t-kernel/tkernel_source/t2ex/load/build/app_rzt1'
+( cd /C/work/t-kernel/tkernel_source/t2ex/datetime/build/app_rzt1 ; /usr/bin/make  clean clean_install )
+make[1]: Entering directory '/C/work/t-kernel/tkernel_source/t2ex/datetime/build/app_rzt1'
+touch Dependencies
+rm -f Dependencies_src
+for if_src in t2ex/datetime.h ; do \
+  /C/work/t-kernel/tkernel_source/etc/mkt2exsvc -deps rzt1 /C/work/t-kernel/tkernel_source/include/t2ex/$if_src >> Dependencies_src ;\
+done
+rm -f service.o gmtime.o internal.o localtime.o mktime.o strftime.o strptime.o tzset.o dt_setsystz.o dt_getsystz.o datetime.o libdatetime.a Dependencies Dependencies_src
+rm -f /C/work/t-kernel/tkernel_source/t2ex/build/app_rzt1/datetime.o
+rm -f /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/libdatetime.a
+make[1]: Leaving directory '/C/work/t-kernel/tkernel_source/t2ex/datetime/build/app_rzt1'
+( cd /C/work/t-kernel/tkernel_source/t2ex/fs/build/app_rzt1 ; /usr/bin/make  clean clean_install )
+make[1]: Entering directory '/C/work/t-kernel/tkernel_source/t2ex/fs/build/app_rzt1'
+( cd ../../fs_if/build/app_rzt1 ; /usr/bin/make clean )
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/t2ex/fs/fs_if/build/app_rzt1'
+touch Dependencies
+rm -f Dependencies_src
+for if_src in t2ex/fs.h ; do \
+  /C/work/t-kernel/tkernel_source/etc/mkt2exsvc -deps rzt1 /C/work/t-kernel/tkernel_source/include/t2ex/$if_src >> Dependencies_src ;\
+done
+rm -f fs_creat.o fs_fcntl.o fs_ioctl.o fs_lseek.o fs_open.o fs_regist.o fs_unregist.o fs_attach.o fs_detach.o fs_break.o fs_chdir.o fs_fchdir.o fs_getcwd.o fs_chmod.o fs_fchmod.o fs_fsync.o fs_fdatasync.o fs_sync.o fs_mkdir.o fs_rmdir.o fs_getdents.o fs_read.o fs_write.o fs_close.o fs_rename.o fs_unlink.o fs_stat.o fs_stat_us.o fs_stat_ms.o fs_stat64.o fs_stat64_us.o fs_stat64_ms.o fs_fstat.o fs_fstat_us.o fs_fstat_ms.o fs_fstat64.o fs_fstat64_us.o fs_fstat64_ms.o fs_truncate.o fs_truncate64.o fs_ftruncate.o fs_ftruncate64.o fs_utimes.o fs_utimes_us.o fs_utimes_ms.o fs_statvfs.o fs_fstatvfs.o _fs_open.o _fs_lseek.o _fs_lseek64.o _fs_ioctl.o _fs_fcntl.o libfs.a Dependencies Dependencies_src
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/t2ex/fs/fs_if/build/app_rzt1'
+( cd ../../fs/build/app_rzt1 ; /usr/bin/make clean )
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/t2ex/fs/fs/build/app_rzt1'
+touch Dependencies
+rm -f fs_tk.o fs_attach.o fs_break.o fs_chdir.o fs_close.o fs_con.o fs_ctx.o fs_desc.o fs_detach.o fs_ioctl.o fs_fchdr.o fs_fcntl.o fs_file.o fs_fstatvfs.o fs_fsync.o fs_getcd.o fs_init.o fs_lseek.o fs_main.o fs_mkdir.o fs_open.o fs_parse.o fs_fimp.o fs_read.o fs_getdents.o fs_regist.o fs_renam.o fs_rmdir.o fs_root.o fs_stat.o fs_statvfs.o fs_sync.o fs_trunc.o fs_ulink.o fs_unregist.o fs_utimes.o fs_write.o fs_chmod.o fs_fchmd.o fs.o Dependencies
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/t2ex/fs/fs/build/app_rzt1'
+( cd ../../fimp/build/app_rzt1 ; /usr/bin/make clean )
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/t2ex/fs/fimp/build/app_rzt1'
+touch Dependencies
+rm -f fimp_console.o fimp_fat.o fimp_fat_enc.o fimp_fat_cp932.o fimp.o Dependencies
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/t2ex/fs/fimp/build/app_rzt1'
+( cd ../../fs_if/build/app_rzt1 ; /usr/bin/make clean_install )
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/t2ex/fs/fs_if/build/app_rzt1'
+touch Dependencies
+rm -f Dependencies_src
+for if_src in t2ex/fs.h ; do \
+  /C/work/t-kernel/tkernel_source/etc/mkt2exsvc -deps rzt1 /C/work/t-kernel/tkernel_source/include/t2ex/$if_src >> Dependencies_src ;\
+done
+rm -f /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/libfs.a
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/t2ex/fs/fs_if/build/app_rzt1'
+( cd ../../fs/build/app_rzt1 ; /usr/bin/make clean_install )
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/t2ex/fs/fs/build/app_rzt1'
+touch Dependencies
+rm -f /C/work/t-kernel/tkernel_source/t2ex/build/app_rzt1/fs.o
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/t2ex/fs/fs/build/app_rzt1'
+( cd ../../fimp/build/app_rzt1 ; /usr/bin/make clean_install )
+make[2]: Entering directory '/C/work/t-kernel/tkernel_source/t2ex/fs/fimp/build/app_rzt1'
+touch Dependencies
+rm -f /C/work/t-kernel/tkernel_source/t2ex/build/app_rzt1/fimp.o
+make[2]: Leaving directory '/C/work/t-kernel/tkernel_source/t2ex/fs/fimp/build/app_rzt1'
+make[1]: Leaving directory '/C/work/t-kernel/tkernel_source/t2ex/fs/build/app_rzt1'
+( cd /C/work/t-kernel/tkernel_source/t2ex/network/build/app_rzt1 ; /usr/bin/make  clean clean_install )
+make[1]: Entering directory '/C/work/t-kernel/tkernel_source/t2ex/network/build/app_rzt1'
+touch Dependencies
+rm -f Dependencies_src
+for if_src in t2ex/socket.h ; do \
+  /C/work/t-kernel/tkernel_source/etc/mkt2exsvc -deps rzt1 /C/work/t-kernel/tkernel_source/include/t2ex/$if_src >> Dependencies_src ;\
+done
+rm -f main.o tknif.o tkn_malloc.o tkn_init.o tkn_subr.o tkn_time.o tkn_log.o param.o if_tkn.o tkn_taskutil.o tkn_spl.o tkn_intr.o tkn_clock.o tkn_mutex.o tkn_condvar.o tkn_atomic.o tkn_kmem.o tkn_resctl.o tkn_syscall.o tkn_bpf.o tkn_tun.o tkn_netdmn.o tkn_services.o if.o if_ethersubr.o if_loop.o if_media.o radix.o route.o rtsock.o link_proto.o in.o in4_cksum.o in_cksum.o in_pcb.o if_arp.o in_proto.o in_offload.o ip_input.o ip_output.o ip_icmp.o igmp.o ip_flow.o raw_ip.o raw_usrreq.o raw_cb.o tcp_debug.o tcp_subr.o tcp_timer.o tcp_usrreq.o udp_usrreq.o tcp_input.o tcp_output.o tcp_congctl.o tcp_sack.o ip_encap.o cpu_in_cksum.o kern_descrip.o kern_rate.o kern_softint.o kern_stub.o kern_synch.o kern_timeout.o kern_uidinfo.o subr_evcnt.o subr_hash.o subr_pool.o subr_prf2.o subr_time.o sys_descrip.o sys_generic.o sys_select.o sys_socket.o uipc_domain.o uipc_mbuf.o uipc_mbuf2.o uipc_socket.o uipc_socket2.o uipc_syscalls.o uipc_syscalls_40.o uipc_syscalls_43.o sleepq.o percpu.o copy.o random.o arc4random.o intoa.o __assert.o bswap16.o bswap32.o bpf_filter.o bpf.o if_tun.o sockatmark.o getaddrinfo.o getnameinfo.o getservbyname_r.o getservent_r.o getservbyport_r.o nsdispatch.o gethnamaddr.o ev_timers.o ev_streams.o res_data.o res_state.o res_query.o res_send.o res_comp.o res_mkquery.o res_init.o h_errno.o herror.o ns_netint.o ns_name.o ns_samedomain.o getifaddrs.o if_indextoname.o if_nametoindex.o so_fcntl.o so_ioctl.o so_accept.o so_bind.o so_close.o so_connect.o so_getpeername.o so_getsockname.o so_getsockopt.o so_setsockopt.o so_listen.o so_read.o so_recv.o so_recvfrom.o so_recvmsg.o so_select_us.o so_select_ms.o so_select.o so_write.o so_send.o so_sendto.o so_sendmsg.o so_shutdown.o so_socket.o so_gethostname.o so_sethostname.o so_getaddrinfo_us.o so_getaddrinfo_ms.o so_getaddrinfo.o so_getnameinfo_us.o so_getnameinfo_ms.o so_getnameinfo.o so_sockatmark.o so_break.o so_ifattach.o so_ifdetach.o so_rtlist.o so_resctl.o so_getifaddrs.o so_ifindextoname.o so_ifnametoindex.o so_bpfopen.o so_tunopen.o _so_fcntl.o _so_ioctl.o network.o libnetwork.a Dependencies Dependencies_src
+rm -f /C/work/t-kernel/tkernel_source/t2ex/build/app_rzt1/network.o
+rm -f /C/work/t-kernel/tkernel_source/lib/build/app_rzt1/libnetwork.a
+make[1]: Leaving directory '/C/work/t-kernel/tkernel_source/t2ex/network/build/app_rzt1'
+rm -f usermain_t2ex.o appl_main.o command.o sample_task.o inittask_main.o  icrt0_ram.o icrt0.o kernel_t2ex-rom.rom kernel_t2ex-rom.map kernel_t2ex-rom.mot kernel_t2ex-ram.sys kernel_t2ex-ram.map kernel_t2ex-ram.mot kernel_t2ex-ram.bin kernel_t2ex-rom.bin		 Dependencies
+rm -f rom_t2ex.bin rom_t2ex-dbg.bin
+rm -f version.[co]

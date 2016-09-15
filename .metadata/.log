@@ -1,0 +1,134 @@
+!SESSION 2016-09-15 10:07:52.967 -----------------------------------------------
+eclipse.buildId=v5.1.0.022
+java.version=1.8.0_65
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=ja_JP
+Command-line arguments:  -os win32 -ws win32 -arch x86
+
+!ENTRY org.eclipse.core.resources 4 77 2016-09-15 10:09:15.149
+!MESSAGE プロジェクト記述が無効です。
+!SUBENTRY 1 unknown 0 0 2016-09-15 10:09:15.149
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2016-09-15 10:09:15.149
+!MESSAGE 'C:\work\t-kernel\tkernel_source' が他プロジェクトの位置 'tkernel_source' にオーバーラップします。
+!SESSION 2016-09-15 10:09:44.987 -----------------------------------------------
+eclipse.buildId=v5.1.0.022
+java.version=1.8.0_65
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=ja_JP
+Command-line arguments:  -os win32 -ws win32 -arch x86 -data C:\work\t-kernel
+
+!ENTRY org.eclipse.cdt.core 4 0 2016-09-15 10:12:40.717
+!MESSAGE Error: 実行できません
+!STACK 0
+java.io.IOException: 実行できません
+	at org.eclipse.cdt.utils.spawner.Spawner.exec(Spawner.java:349)
+	at org.eclipse.cdt.utils.spawner.Spawner.<init>(Spawner.java:91)
+	at org.eclipse.cdt.utils.spawner.ProcessFactory.exec(ProcessFactory.java:91)
+	at org.eclipse.cdt.core.CommandLauncher.execute(CommandLauncher.java:194)
+	at org.eclipse.cdt.internal.core.BuildRunnerHelper.build(BuildRunnerHelper.java:281)
+	at org.eclipse.cdt.managedbuilder.language.settings.providers.AbstractBuiltinSpecsDetector.runProgramForLanguage(AbstractBuiltinSpecsDetector.java:791)
+	at org.eclipse.cdt.managedbuilder.language.settings.providers.AbstractBuiltinSpecsDetector.runForLanguage(AbstractBuiltinSpecsDetector.java:721)
+	at org.eclipse.cdt.managedbuilder.language.settings.providers.AbstractBuiltinSpecsDetector.runForEachLanguage(AbstractBuiltinSpecsDetector.java:594)
+	at org.eclipse.cdt.managedbuilder.language.settings.providers.AbstractBuiltinSpecsDetector$1.runInWorkspace(AbstractBuiltinSpecsDetector.java:528)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:39)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.eclipse.cdt.core 4 0 2016-09-15 10:12:40.764
+!MESSAGE Error: 実行できません
+!STACK 0
+java.io.IOException: 実行できません
+	at org.eclipse.cdt.utils.spawner.Spawner.exec(Spawner.java:349)
+	at org.eclipse.cdt.utils.spawner.Spawner.<init>(Spawner.java:91)
+	at org.eclipse.cdt.utils.spawner.ProcessFactory.exec(ProcessFactory.java:91)
+	at org.eclipse.cdt.core.CommandLauncher.execute(CommandLauncher.java:194)
+	at org.eclipse.cdt.internal.core.BuildRunnerHelper.build(BuildRunnerHelper.java:281)
+	at org.eclipse.cdt.managedbuilder.language.settings.providers.AbstractBuiltinSpecsDetector.runProgramForLanguage(AbstractBuiltinSpecsDetector.java:791)
+	at org.eclipse.cdt.managedbuilder.language.settings.providers.AbstractBuiltinSpecsDetector.runForLanguage(AbstractBuiltinSpecsDetector.java:721)
+	at org.eclipse.cdt.managedbuilder.language.settings.providers.AbstractBuiltinSpecsDetector.runForEachLanguage(AbstractBuiltinSpecsDetector.java:594)
+	at org.eclipse.cdt.managedbuilder.language.settings.providers.AbstractBuiltinSpecsDetector$1.runInWorkspace(AbstractBuiltinSpecsDetector.java:528)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:39)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-09-15 10:13:02.427
+!MESSAGE 'tkernel_source' がインデックス化されました (1,005 ソースファイル, 627 ヘッダ) 18.8 秒以内: 111,644 個の宣言; 311,479 個の参照; 187 個の未解決インクルード; 913 個の文法エラー; 9,888 個の未解決名 (2.3%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-09-15 10:19:10.261
+!MESSAGE 'tkernel_source' がインデックス化されました (1,005 ソースファイル, 630 ヘッダ) 11 秒以内: 111,131 個の宣言; 309,484 個の参照; 185 個の未解決インクルード; 562 個の文法エラー; 11,837 個の未解決名 (2.7%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-09-15 10:26:12.611
+!MESSAGE 'tkernel_source' がインデックス化されました (1,005 ソースファイル, 630 ヘッダ) 11.3 秒以内: 111,131 個の宣言; 309,484 個の参照; 185 個の未解決インクルード; 562 個の文法エラー; 11,837 個の未解決名 (2.7%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-09-15 10:28:41.850
+!MESSAGE 'tkernel_source' がインデックス化されました (1,005 ソースファイル, 630 ヘッダ) 10.9 秒以内: 111,131 個の宣言; 309,484 個の参照; 185 個の未解決インクルード; 562 個の文法エラー; 11,837 個の未解決名 (2.7%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-09-15 10:29:39.135
+!MESSAGE 'tkernel_source' がインデックス化されました (1,005 ソースファイル, 630 ヘッダ) 11.3 秒以内: 111,131 個の宣言; 309,484 個の参照; 185 個の未解決インクルード; 562 個の文法エラー; 11,837 個の未解決名 (2.7%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-09-15 10:29:52.463
+!MESSAGE 'tkernel_source' がインデックス化されました (1,005 ソースファイル, 630 ヘッダ) 10.9 秒以内: 111,131 個の宣言; 309,484 個の参照; 185 個の未解決インクルード; 562 個の文法エラー; 11,837 個の未解決名 (2.7%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-09-15 10:31:29.506
+!MESSAGE 'tkernel_source' がインデックス化されました (1,005 ソースファイル, 630 ヘッダ) 10.9 秒以内: 111,131 個の宣言; 309,484 個の参照; 185 個の未解決インクルード; 562 個の文法エラー; 11,837 個の未解決名 (2.7%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-09-15 10:35:01.499
+!MESSAGE 'tkernel_source' がインデックス化されました (1,005 ソースファイル, 630 ヘッダ) 11.1 秒以内: 111,131 個の宣言; 309,484 個の参照; 185 個の未解決インクルード; 562 個の文法エラー; 11,837 個の未解決名 (2.7%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-09-15 10:38:49.146
+!MESSAGE 'tkernel_source' がインデックス化されました (1,005 ソースファイル, 630 ヘッダ) 11.2 秒以内: 111,131 個の宣言; 309,484 個の参照; 185 個の未解決インクルード; 562 個の文法エラー; 11,837 個の未解決名 (2.7%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-09-15 10:41:44.270
+!MESSAGE 'tkernel_source' がインデックス化されました (1,005 ソースファイル, 630 ヘッダ) 11.1 秒以内: 111,131 個の宣言; 309,484 個の参照; 185 個の未解決インクルード; 562 個の文法エラー; 11,837 個の未解決名 (2.7%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-09-15 10:44:30.927
+!MESSAGE 'tkernel_source' がインデックス化されました (1,005 ソースファイル, 630 ヘッダ) 11.3 秒以内: 111,131 個の宣言; 309,484 個の参照; 185 個の未解決インクルード; 562 個の文法エラー; 11,837 個の未解決名 (2.7%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-09-15 10:47:23.167
+!MESSAGE 'tkernel_source' がインデックス化されました (1,005 ソースファイル, 630 ヘッダ) 11.3 秒以内: 111,131 個の宣言; 309,484 個の参照; 185 個の未解決インクルード; 562 個の文法エラー; 11,837 個の未解決名 (2.7%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-09-15 10:48:38.882
+!MESSAGE 'tkernel_source' がインデックス化されました (1,005 ソースファイル, 630 ヘッダ) 10.8 秒以内: 111,131 個の宣言; 309,484 個の参照; 185 個の未解決インクルード; 562 個の文法エラー; 11,837 個の未解決名 (2.7%)
+!SESSION 2016-09-15 11:13:57.804 -----------------------------------------------
+eclipse.buildId=v5.1.0.022
+java.version=1.8.0_65
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=ja_JP
+Command-line arguments:  -os win32 -ws win32 -arch x86
+
+!ENTRY org.eclipse.equinox.p2.updatechecker 4 0 2016-09-15 11:14:09.283
+!MESSAGE Exception in update check thread
+!STACK 0
+org.eclipse.core.runtime.OperationCanceledException
+	at org.eclipse.equinox.internal.p2.transport.ecf.RepositoryTransport.download(RepositoryTransport.java:125)
+	at org.eclipse.equinox.internal.p2.transport.ecf.RepositoryTransport.download(RepositoryTransport.java:156)
+	at org.eclipse.equinox.internal.p2.repository.helpers.AbstractRepositoryManager.loadIndexFile(AbstractRepositoryManager.java:735)
+	at org.eclipse.equinox.internal.p2.repository.helpers.AbstractRepositoryManager.loadRepository(AbstractRepositoryManager.java:657)
+	at org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager.loadRepository(MetadataRepositoryManager.java:96)
+	at org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager.loadRepository(MetadataRepositoryManager.java:92)
+	at org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository.addChild(CompositeMetadataRepository.java:166)
+	at org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository.<init>(CompositeMetadataRepository.java:106)
+	at org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepositoryFactory.load(CompositeMetadataRepositoryFactory.java:122)
+	at org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager.factoryLoad(MetadataRepositoryManager.java:57)
+	at org.eclipse.equinox.internal.p2.repository.helpers.AbstractRepositoryManager.loadRepository(AbstractRepositoryManager.java:768)
+	at org.eclipse.equinox.internal.p2.repository.helpers.AbstractRepositoryManager.loadRepository(AbstractRepositoryManager.java:668)
+	at org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager.loadRepository(MetadataRepositoryManager.java:96)
+	at org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager.loadRepository(MetadataRepositoryManager.java:92)
+	at org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository.addChild(CompositeMetadataRepository.java:166)
+	at org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository.<init>(CompositeMetadataRepository.java:106)
+	at org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepositoryFactory.load(CompositeMetadataRepositoryFactory.java:122)
+	at org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager.factoryLoad(MetadataRepositoryManager.java:57)
+	at org.eclipse.equinox.internal.p2.repository.helpers.AbstractRepositoryManager.loadRepository(AbstractRepositoryManager.java:768)
+	at org.eclipse.equinox.internal.p2.repository.helpers.AbstractRepositoryManager.loadRepository(AbstractRepositoryManager.java:668)
+	at org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager.loadRepository(MetadataRepositoryManager.java:96)
+	at org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager.loadRepository(MetadataRepositoryManager.java:92)
+	at org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository.addChild(CompositeMetadataRepository.java:166)
+	at org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository.<init>(CompositeMetadataRepository.java:106)
+	at org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepositoryFactory.load(CompositeMetadataRepositoryFactory.java:122)
+	at org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager.factoryLoad(MetadataRepositoryManager.java:57)
+	at org.eclipse.equinox.internal.p2.repository.helpers.AbstractRepositoryManager.loadRepository(AbstractRepositoryManager.java:768)
+	at org.eclipse.equinox.internal.p2.repository.helpers.AbstractRepositoryManager.loadRepository(AbstractRepositoryManager.java:668)
+	at org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager.loadRepository(MetadataRepositoryManager.java:96)
+	at org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager.loadRepository(MetadataRepositoryManager.java:92)
+	at org.eclipse.equinox.internal.p2.updatechecker.UpdateChecker.getAvailableRepositories(UpdateChecker.java:151)
+	at org.eclipse.equinox.internal.p2.updatechecker.UpdateChecker.checkForUpdates(UpdateChecker.java:129)
+	at org.eclipse.equinox.internal.p2.updatechecker.UpdateChecker$UpdateCheckThread.run(UpdateChecker.java:73)
