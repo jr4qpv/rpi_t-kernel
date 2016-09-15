@@ -7795,20 +7795,12 @@
 						<entry kind="macro" name="__DEBUG_BUILD__" value=""/>
 					</resource>
 					<resource project-relative-path="kernel/tkernel/src/version.c">
-						<entry kind="includePath" name="/C/work/t-kernel/tkernel_source/include/t2ex"/>
 						<entry kind="includePath" name="/C/work/t-kernel/tkernel_source/include"/>
-						<entry kind="includePath" name="/${ProjName}/kernel/src">
-							<flag value="VALUE_WORKSPACE_PATH"/>
-						</entry>
-						<entry kind="includePath" name="/C/work/t-kernel/tkernel_source/kernel/sysdepend/cpu/bcm283x"/>
-						<entry kind="includePath" name="/C/work/t-kernel/tkernel_source/kernel/sysdepend/device/rpi_bcm283x"/>
-						<entry kind="includePath" name="/C/work/t-kernel/tkernel_source/kernel/tkernel/src"/>
-						<entry kind="macro" name="DRV_CONSOLE" value=""/>
-						<entry kind="macro" name="TKERNEL_ONLY" value=""/>
+						<entry kind="includePath" name="C:/C/work/t-kernel/tkernel_source/kernel/tkernel/src"/>
+						<entry kind="includePath" name="C:/C/work/t-kernel/tkernel_source/kernel/sysdepend/cpu/bcm283x"/>
+						<entry kind="includePath" name="C:/C/work/t-kernel/tkernel_source/kernel/sysdepend/device/rpi_bcm283x"/>
+						<entry kind="macro" name="TKERNEL_CHECK_CONST" value=""/>
 						<entry kind="macro" name="TYPE_RPI" value="2"/>
-						<entry kind="macro" name="USE_APP_EXTCMD" value=""/>
-						<entry kind="macro" name="USE_APP_SAMPLE" value=""/>
-						<entry kind="macro" name="USE_MISC_CPRINT" value=""/>
 						<entry kind="macro" name="_RPI_BCM283x_" value=""/>
 						<entry kind="macro" name="__DEBUG_BUILD__" value=""/>
 					</resource>

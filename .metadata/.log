@@ -132,3 +132,142 @@ org.eclipse.core.runtime.OperationCanceledException
 	at org.eclipse.equinox.internal.p2.updatechecker.UpdateChecker.getAvailableRepositories(UpdateChecker.java:151)
 	at org.eclipse.equinox.internal.p2.updatechecker.UpdateChecker.checkForUpdates(UpdateChecker.java:129)
 	at org.eclipse.equinox.internal.p2.updatechecker.UpdateChecker$UpdateCheckThread.run(UpdateChecker.java:73)
+!SESSION 2016-09-15 11:41:23.156 -----------------------------------------------
+eclipse.buildId=v5.1.0.022
+java.version=1.8.0_65
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=ja_JP
+Command-line arguments:  -os win32 -ws win32 -arch x86
+
+!ENTRY org.eclipse.jface 2 0 2016-09-15 11:42:56.611
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2016-09-15 11:42:56.611
+!MESSAGE A conflict occurred for SHIFT+F7:
+Binding(SHIFT+F7,
+	ParameterizedCommand(Command(org.eclipse.ui.project.buildAll,すべてビルド,
+		すべてのプロジェクトをビルドします,
+		Category(org.eclipse.ui.category.project,プロジェクト,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@160c196,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.cdt.debug.ui.debugging,,,system)
+Binding(SHIFT+F7,
+	ParameterizedCommand(Command(org.eclipse.cdt.debug.ui.command.uncall,Uncall,
+		Perform Uncall,
+		Category(org.eclipse.cdt.debug.ui.category.reverseDebugging,Reverse Debugging Commands,Set of commands for Reverse Debugging,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1ee779c,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.cdt.debug.ui.debugging,,,system)
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:42:56.892
+!MESSAGE Creating new Model for gdb[0].proc[1].threadGroup[i1]
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:42:56.893
+!MESSAGE Loading Io Map: C:\Renesas\e2_studio\internal\IoFiles\RZ\R7S910118.sfrx
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:43:03.891
+!MESSAGE Saving model state for session 0
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:43:03.907
+!MESSAGE Removing model for session 0
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:43:45.171
+!MESSAGE Creating new Model for gdb[1].proc[1].threadGroup[i1]
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:43:45.172
+!MESSAGE Loading Io Map: C:\Renesas\e2_studio\internal\IoFiles\RZ\R7S910118.sfrx
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:43:45.352
+!MESSAGE Saving model state for session 1
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:43:45.360
+!MESSAGE Removing model for session 1
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 5012 2016-09-15 11:43:45.362
+!MESSAGE Error in final launch sequence
+!STACK 1
+org.eclipse.core.runtime.CoreException: Failed to execute MI command:
+load C:\\work\\t-kernel\\tkernel_source\\monitor\\tmmain\\build\\rpi_bcm283x.rpi2.debug\\tmonitor 
+Error message from debugger back end:
+Load failed
+	at org.eclipse.cdt.dsf.concurrent.Query.get(Query.java:111)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugSession(GdbLaunchDelegate.java:235)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugger(GdbLaunchDelegate.java:109)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launch(GdbLaunchDelegate.java:97)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:885)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:739)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1039)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$8.run(DebugUIPlugin.java:1256)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+Contains: Failed to execute MI command:
+load C:\\work\\t-kernel\\tkernel_source\\monitor\\tmmain\\build\\rpi_bcm283x.rpi2.debug\\tmonitor 
+Error message from debugger back end:
+Load failed
+java.lang.Exception: Load failed
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:927)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:756)
+!SUBENTRY 1 org.eclipse.cdt.dsf 4 10004 2016-09-15 11:43:45.363
+!MESSAGE Failed to execute MI command:
+load C:\\work\\t-kernel\\tkernel_source\\monitor\\tmmain\\build\\rpi_bcm283x.rpi2.debug\\tmonitor 
+Error message from debugger back end:
+Load failed
+!SUBENTRY 2 org.eclipse.cdt.dsf.gdb 4 10004 2016-09-15 11:43:45.363
+!MESSAGE Failed to execute MI command:
+load C:\\work\\t-kernel\\tkernel_source\\monitor\\tmmain\\build\\rpi_bcm283x.rpi2.debug\\tmonitor 
+Error message from debugger back end:
+Load failed
+!STACK 0
+java.lang.Exception: Load failed
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.processMIOutput(AbstractMIControl.java:927)
+	at org.eclipse.cdt.dsf.mi.service.command.AbstractMIControl$RxThread.run(AbstractMIControl.java:756)
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:44:05.211
+!MESSAGE Creating new Model for gdb[2].proc[1].threadGroup[i1]
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:44:05.212
+!MESSAGE Loading Io Map: C:\Renesas\e2_studio\internal\IoFiles\RZ\R7S910118.sfrx
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:44:33.753
+!MESSAGE Saving model state for session 2
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:44:33.753
+!MESSAGE Removing model for session 2
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-09-15 11:46:09.104
+!MESSAGE 'tkernel_source' がインデックス化されました (1,006 ソースファイル, 630 ヘッダ) 12.3 秒以内: 111,125 個の宣言; 309,466 個の参照; 185 個の未解決インクルード; 562 個の文法エラー; 11,837 個の未解決名 (2.7%)
+
+!ENTRY com.renesas.cdt.debug.adm 4 0 2016-09-15 11:46:14.973
+!MESSAGE Failed, getting target status, ADM timed out
+!STACK 0
+com.renesas.cdt.debug.adm.TargetTimeoutException: target time out on message:'$qrenesas.ITarget:getTargetStatus#a5'
+	at com.renesas.cdt.debug.adm.messages.Message.waitForResponse(Message.java:630)
+	at com.renesas.cdt.debug.adm.messages.Message.send(Message.java:175)
+	at com.renesas.cdt.debug.adm.Target.getStatus(Target.java:18)
+	at com.renesas.cdt.debug.adm.Target.pollTarget(Target.java:48)
+	at com.renesas.cdt.debug.adm.Target$MonitorTargetThread.run(Target.java:118)
+	at java.lang.Thread.run(Thread.java:745)
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:48:12.284
+!MESSAGE Creating new Model for gdb[3].proc[1].threadGroup[i1]
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:48:12.284
+!MESSAGE Loading Io Map: C:\Renesas\e2_studio\internal\IoFiles\RZ\R7S910018.sfrx
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:48:21.117
+!MESSAGE Saving model state for session 3
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:48:21.117
+!MESSAGE Removing model for session 3
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:50:27.259
+!MESSAGE Creating new Model for gdb[4].proc[1].threadGroup[i1]
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:50:27.259
+!MESSAGE Loading Io Map: C:\Renesas\e2_studio\internal\IoFiles\RZ\R7S910018.sfrx
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:50:47.609
+!MESSAGE Saving model state for session 4
+
+!ENTRY com.renesas.cdt.debug.ioview.dsf 1 0 2016-09-15 11:50:47.616
+!MESSAGE Removing model for session 4
