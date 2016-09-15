@@ -11,6 +11,10 @@ version.c
 tmonitor
 tmonitor.map
 tmonitor.mot
+.metadata/
+.settings/
+.cproject
+.project
 *.jlink
 *.launch
 devconf.c
