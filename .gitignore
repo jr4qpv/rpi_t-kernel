@@ -19,3 +19,4 @@ rominfo-ram
 rominfo-rom
 *.a
 *.uo
+rpi_tk-dist-ucode.png
