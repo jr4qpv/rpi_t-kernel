@@ -19,7 +19,7 @@
 # ----------------------------------------------------------------------
 #
 
-#	T-Monitor : tmmain (RZT1) 2016/04/28
+#	T-Monitor : tmmain (RZT1) 2016/09/28
 
 MACHINE = rzt1
 TETYPE = app
@@ -55,6 +55,9 @@ HEADER = $(BD)/include $(BD)/monitor/include
 # version
 VER := 2.01.00
 
+# vsersion for rzt1
+VER_RZT1 := 0.10
+
 # board name
 BOARDNAME := RSK-RZT1
 
@@ -62,10 +65,11 @@ BOARDNAME := RSK-RZT1
 define VERSION
 char const Version[] = "$(VER)";
 char const * const Title[] = {
-  "$(BOARDNAME) T-Monitor/$(TETYPE)_$(MACHINE) Version $(VER)",
+  "T-Monitor/$(TETYPE)_$(MACHINE) Version $(VER) for $(BOARDNAME) r$(VER_RZT1)",
   0,
   "@(#)$(shell LC_TIME=C date)",
-  "$(BOARDNAME)"
+  "$(BOARDNAME)",
+  "$(VER_RZT1)"
 };
 endef
 
