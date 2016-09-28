@@ -13,6 +13,7 @@ tmonitor.map
 tmonitor.mot
 *.jlink
 *.launch
+*.log
 devconf.c
 sysconf.c
 rominfo-ram
@@ -20,3 +21,5 @@ rominfo-rom
 *.a
 *.uo
 rpi_tk-dist-ucode.png
+.history/
+*.snap
