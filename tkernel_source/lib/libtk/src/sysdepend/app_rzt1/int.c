@@ -33,9 +33,9 @@
 #include <misc/renesas/rzt1.h>
 
 
-#define	BITNO(intvec)	( (intvec) % 32 )		/* bit number */
-#define	AVICNO(intvec)	( (intvec) / 32 )			/* INT0～INT255 reg offset */
-#define	BVICNO(intvec)	( ((intvec)-256) / 32 )		/* INT256～ reg offset */
+#define	BITNO(intvec)	( ((intvec) - IV_IRQ(0)) % 32 )		/* bit number */
+#define	AVICNO(intvec)	( ((intvec) - IV_IRQ(0)) / 32 )		/* INT0～INT255 reg offset */
+#define	BVICNO(intvec)	( ((intvec) - IV_IRQ(0)-256) / 32 )	/* INT256～ reg offset */
 
 
 
@@ -105,7 +105,7 @@ EXPORT void SetIntMode( INTVEC intvec, UINT mode )
 	UW	m, n;
 	_UW	*p;
 
-	if ((intvec < 1) || (intvec > 300))
+	if ((intvec < IV_IRQ(1)) || (intvec > IV_IRQ(300)))
 		return;							// ベクタ番号が不正の時は無視
 
 	/* エッジ割り込みモードの設定（IM_LEVEL/IM_EDGE） */
@@ -175,7 +175,7 @@ EXPORT void EnableInt( INTVEC intvec, INT level )
 	UW	m, n;
 	_UW	*p;
 
-	if ((intvec < 1) || (intvec > 300))
+	if ((intvec < IV_IRQ(1)) || (intvec > IV_IRQ(300)))
 		return;							// ベクタ番号が不正の時は無視
 
 	level = level & 0x0f;				// 下位4bitのみ有効
@@ -208,7 +208,7 @@ EXPORT void DisableInt( INTVEC intvec )
 	UW	m, n;
 	_UW	*p;
 
-	if ((intvec < 1) || (intvec > 300))
+	if ((intvec < IV_IRQ(1)) || (intvec > IV_IRQ(300)))
 		return;							// ベクタ番号が不正の時は無視
 
 	m = 1 << BITNO(intvec);				// ビット位置
@@ -235,7 +235,7 @@ EXPORT void ClearInt( INTVEC intvec )
 	UW	m, n;
 	_UW	*p;
 
-	if ((intvec < 1) || (intvec > 300))
+	if ((intvec < IV_IRQ(1)) || (intvec > IV_IRQ(300)))
 		return;							// ベクタ番号が不正の時は無視
 
 	m = 1 << BITNO(intvec);				// ビット位置

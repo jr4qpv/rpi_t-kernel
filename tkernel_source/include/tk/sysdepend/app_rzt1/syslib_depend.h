@@ -53,17 +53,22 @@ typedef UINT	INTVEC;
 #define	DINTNO(intvec)	(intvec)	/* convert to interrupt definition number */
 
 /*
+ * value of interrupt vectors
+ */
+#define	IV_IRQ(n)	(  32 + (n) )	/* IRQ interrupt	0-300 */
+
+/*
  * Interrupt vector(INTVEC) : Typical exception code
  *	Only these typical exception codes can be used with
  *	an VIC operation functions.
  */
-#define IV_CMI0		21		/* CMT Unit0 */
-#define IV_CMI1		22		/* CMT Unit0 */
+#define IV_CMI0		IV_IRQ(21)		/* CMT Unit0 */
+#define IV_CMI1		IV_IRQ(22)		/* CMT Unit0 */
 
-#define IV_BRIF2	109		/* SCIFA Unit2 */
-#define IV_RXIF2	110		/* SCIFA Unit2 */
-#define IV_TXIF2	111		/* SCIFA Unit2 */
-#define IV_DRIF2	112		/* SCIFA Unit2 */
+#define IV_BRIF2	IV_IRQ(109)		/* SCIFA Unit2 */
+#define IV_RXIF2	IV_IRQ(110)		/* SCIFA Unit2 */
+#define IV_TXIF2	IV_IRQ(111)		/* SCIFA Unit2 */
+#define IV_DRIF2	IV_IRQ(112)		/* SCIFA Unit2 */
 
 
 /*

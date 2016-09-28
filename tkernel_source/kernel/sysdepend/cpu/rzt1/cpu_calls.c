@@ -93,7 +93,7 @@ SYSCALL ER _tk_def_int( UINT dintno, CONST T_DINT *pk_dint )
 			hll_inthdr[dintno] = inthdr;
 			inthdr = ( dintno == EIT_DEFAULT )? defaulthdr_startup:
 				 ( dintno <  EIT_FIQ     )? exchdr_startup:
-				 ( dintno <= EIT_GPIO(127) )? inthdr_startup:
+				 ( dintno <= EIT_IRQ(300) )? inthdr_startup:
 				                            exchdr_startup;
 		}
 		define_inthdr(dintno, inthdr);

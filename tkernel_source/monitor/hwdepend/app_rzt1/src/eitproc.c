@@ -88,8 +88,8 @@ LOCAL const VECINFO VecInfoTable[] = {
 
   { EIT_FIQ,               "Undefined FIQ",		vf_msg  },
   { EIT_IRQ(0),            "Undefined IRQ",		vf_msg  },
-  { EIT_GPIO(0),           "Undefined GPIO-INT",	vf_msg  },
-  { EIT_GPIO(127)+1,"\020" "Undefined SWI",		vf_msg  },
+///  { EIT_GPIO(0),           "Undefined GPIO-INT",	vf_msg  },
+///  { EIT_GPIO(127)+1,"\020" "Undefined SWI",		vf_msg  },
 
   { N_INTVEC, NULL, vf_msg }	/* terminating mark (the last vector number + 1) */
 };

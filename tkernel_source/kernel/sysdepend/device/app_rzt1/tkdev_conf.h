@@ -17,7 +17,7 @@
  */
 
 /*
- *	@(#)tkdev_conf.h (RZT1) 2016/07/14
+ *	@(#)tkdev_conf.h (RZT1) 2016/09/28
  *	Target System Configuration
  */
 
@@ -36,7 +36,7 @@
  */
 #define	TIMER_INTLIB_USE	0	/* 割り込みﾊﾝﾄﾞﾗでﾗｲﾌﾞﾗﾘ利用(=0でｵｰﾊﾞヘッド軽減) */
 
-#define	VECNO_TIMER			21		/* interrupt vector number(CMI0) */
+#define	VECNO_TIMER			IV_CMI0	/* interrupt vector number(CMI0) */
 #define TIMER_INTLEVEL		0x8		/* CMI0 interrupt level(中間レベルにしておく) */
 
 

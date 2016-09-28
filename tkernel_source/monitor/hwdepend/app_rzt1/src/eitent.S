@@ -17,7 +17,7 @@
  */
 
 /*
- *	@(#)eitent.S (monitor/hwdepend) 2016/07/22
+ *	@(#)eitent.S (monitor/hwdepend) 2016/09/28
  *
  *      RZT1 (Cortex-R4F) exception branch handling
  */
@@ -105,7 +105,8 @@ irq_entry:
 
 	ldr	ip, =EITVEC(EIT_IRQ(95))
 #else	//////////
-	ldr	ip, =EIT_VECTBL
+irq_common_entry:
+	ldr	ip, =EITVEC(EIT_IRQ(0))
 #endif	//////////////
 
   l_irq_br:
@@ -116,6 +117,8 @@ irq_entry:
 	bxne	lr
 	b	default_entry
 
+
+#if 0 ////////////////////////////
 /*
  * GPIO interrupt
  *      Interrupt obtained by means of input port interrupt maskable status register (GIO_MST)
@@ -193,6 +196,7 @@ Csym(_gio7Hdr):	gio_o	GIO_MST(GIO_HHH), EITVEC(EIT_GPIO(127))
 	cmp	lr, #0
 	bxne	lr
 	b	default_entry
+#endif	//////////////////////////////////
 
 /*
  * undefined instruction
@@ -327,28 +331,26 @@ default_entry:
  *
  *  ※RZ/T1の割り込みは、要因別の独立したアドレスへジャンプする仕様で、
  *    要因別の割り込みから、割り込み情報をR3レジスタに格納して、
- *    0x18番地に分岐する処理を、以下に定義。
+ *    irq_common_entryに分岐する処理を、以下に定義。
+ *  ※下記のマクロ処理の命令数が変わったら、system.cの初期化処理を修正
  *
  */
- .macro INT_ENTRY0 intno		// 6word(24byte)
+ .macro INT_ENTRY0 intno		// 5word(20byte)
 	sub	lr, lr, #4		// return address adjustment
 	srsdb	sp!, #PSR_IRQ		// save registers
 	stmfd	sp!, {r3, ip}
 
 	mov	r3, #\intno
-	mov	ip, #0x18		/* interrupt */
-	bx	ip
+	b	irq_common_entry
  .endm
 
- .macro INT_ENTRY1 intno
-	.arm
+ .macro INT_ENTRY1 intno		// 6work(24byte)
 	sub	lr, lr, #4		// return address adjustment
 	srsdb	sp!, #PSR_IRQ		// save registers
 	stmfd	sp!, {r3, ip}
 
 	ldr	r3, 1f
-	mov	ip, #0x18		/* interrupt */
-	bx	ip
+	b	irq_common_entry
 1:	.word	\intno
  .endm
 

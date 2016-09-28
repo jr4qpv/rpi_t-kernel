@@ -102,6 +102,10 @@ T2EX_MM_USE_DEFAULT_FAULT_HANDLER = 1
 include $(BD)/etc/makerules
 
 # ----------------------------------------------------------------------------
+# rpi board name
+BOARDNAME := RSK-RZT1
+
+# ----------------------------------------------------------------------------
 # source files
 SRC_SYS	= usermain_t2ex.c
 
