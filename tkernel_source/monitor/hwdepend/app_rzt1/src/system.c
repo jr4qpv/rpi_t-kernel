@@ -86,7 +86,7 @@ LOCAL	void	vicvadInit(void)
 		*vad = ad;
 
 		vad++;
-		ad += (6*4);
+		ad += (5*4);
 	}
 
 	return;
