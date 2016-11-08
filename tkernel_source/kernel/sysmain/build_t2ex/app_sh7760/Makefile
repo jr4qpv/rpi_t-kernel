@@ -50,7 +50,7 @@
 #
 
 #
-#	Makefile for gmake
+#	@(#)Makefile for gmake (SH7760) 2016/11/08
 #	sysmain (system-dependent description)
 #
 
@@ -59,9 +59,14 @@ MACHINE = sh7760
 TETYPE	= app
 
 # ----------------------------------------------------------------------------
-# App definitions
-CCP_APPL = yes
+# T-Kernel for RZT1 version
+APP_VER = 0.10
 
+# ----------------------------------------------------------------------------
+# App definitions
+MISC_CPRINT = yes
+APP_EXTCMD = yes
+APP_SAMPLE = yes
 
 # ----------------------------------------------------------------------------
 # T2EX definitions
@@ -97,34 +102,21 @@ T2EX_MM_USE_DEFAULT_FAULT_HANDLER = 1
 include $(BD)/etc/makerules
 
 # ----------------------------------------------------------------------------
+# rpi board name
+BOARDNAME := IOP5
+
+# ----------------------------------------------------------------------------
 # source files
 SRC_SYS	= usermain_t2ex.c
 
-ifdef CCP_APPL	#======= CCP用定義 =======
 # source files for simple command interpreter
-SRC_SYS	+= ccp_main.c command.c
+SRC_SYS	+= appl_main.c command.c sample_task.c
 
 # user-level source files
 SRC_USR	=
-
-# user-level libraries
-CFLAGS += -DUSE_CCP_APPL
-CFLAGS += -DUSE_MISC_CPRINT
 
 # user-level libraries
 LDUSRLIBS = -lmisc
-
-else		#======= オリジナル定義 =======
-# source files for simple command interpreter
-SRC_SYS	+= appl_main.c command.c
-
-# user-level source files
-SRC_USR	=
-
-# user-level libraries
-LDUSRLIBS =
-
-endif		#================================
 
 # ----------------------------------------------------------------------------
 # device driver definitions
@@ -194,7 +186,7 @@ include ../Makefile.common
 #|=====================
 #|* 2016/03/14	../tef_em1d/から、 [app_sh7760]用にコピーし、
 #|  MACHINE, TETYPE を修正。
-#|* 2016/02/06	DRV_CONSOLE機能のみ、不要な機能は削減しコンパクト化。
-#|* 2016/02/09	｢CCP_APPL｣を導入し、CCP用の設定を記述できるようにした。
-#|* 2016/02/09	リンク指定に"-lmisc"を追加。
-#| 
+#|* 2016/03/14	LDUSRLIBS に｢-lmisc｣指定の追加
+#|* 2016/09/08	APP_VERの追加
+#|* 2016/09/12	MISC_CPRINT,APP_EXTCMD,APP_SAMPLEの追加
+#|

@@ -38,7 +38,7 @@ typedef struct {
 
 /* ----------------------------------------------------------------------- */
 #elif _APP_SH7760_
-#  include <misc/sh7760.h>
+#  include <misc/renesas/sh7760.h>
    LOCAL const DEFSIO	DefSIO[3] = {
 			{ (UW)&SCIF0 },
 			{ (UW)&SCIF1 },

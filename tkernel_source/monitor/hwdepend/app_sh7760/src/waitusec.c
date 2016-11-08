@@ -29,7 +29,7 @@
  */
  
 #include "sysdepend.h"
-#include <misc/sh7760.h>
+#include <misc/renesas/sh7760.h>
 
 #define	TMU_CLK	(Pck_CLK * 10)			/* [1/1000 MHz] */
 

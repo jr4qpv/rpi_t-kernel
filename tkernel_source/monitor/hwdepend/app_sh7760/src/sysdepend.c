@@ -19,7 +19,7 @@
  */
 
 #include "sysdepend.h"
-#include <misc/sh7760.h>
+#include <misc/renesas/sh7760.h>
 
 ////#include <tmonitor.h>		////////////
 ///#include <tm/tmonitor.h>	///////////
