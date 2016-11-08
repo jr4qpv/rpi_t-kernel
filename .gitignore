@@ -14,7 +14,6 @@ tmonitor.mot
 *.jlink
 *.launch
 *.log
-.log
 devconf.c
 sysconf.c
 rominfo-ram
