@@ -10,6 +10,10 @@
  *    Released by T-Engine Forum(http://www.t-engine.org) at 2008/02/29.
  *
  *----------------------------------------------------------------------
+ *
+ *    Modified by T.Yokobayashi at 2016/11/09.
+ *
+ *----------------------------------------------------------------------
  */
 
 /*
@@ -25,10 +29,10 @@
 /*
  * Wait loop
  */
-LOCAL void WaitLoop( UW count )
+LOCAL volatile void WaitLoop( UW count )
 {
-	Asm("	_loop:	tst	%0, %0	\n"
-	"		bf/s	_loop	\n"
+	Asm("	10:	tst	%0, %0	\n"
+	"		bf/s	10b	\n"
 	"		add	#-1, %0	"
 		: "=r"(count)
 		: "0"(count)
@@ -82,3 +86,12 @@ EXPORT void CountWaitUsec( void )
 	 */
 	SCInfo.loop64us = SCInfo.Pck * 1000 / cnt;
 }
+
+
+/*----------------------------------------------------------------------
+#|History of "cntwus.c"
+#|======================
+#|* 2016/11/09	WaitLoop()の_loopﾗﾍﾞﾙがｲﾝﾗｲﾝ展開されてしまい重複ｴﾗｰとなるので、
+#|  ﾃﾝﾎﾟﾗﾘﾗﾍﾞﾙに変更した。
+#|
+*/
