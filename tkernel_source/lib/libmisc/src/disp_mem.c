@@ -7,13 +7,12 @@
  */
 
 /*
- *	@(#)disp_mem.c (libmisc) 2016/02/19
+ *	@(#)disp_mem.c (libmisc) 2016/11/09
  *  DISP_MEM関係ﾗｲﾌﾞﾗﾘｰ
  */
 #include <basic.h>
 #include <t2ex/ctype.h>				/* for isprint() */
 #include <t2ex/errno.h>				/* for t2ex/string.h */
-#include <t2ex/string.h>			/* for strchr() */
 #include <misc/libmisc.h>
 
 typedef	unsigned char	uchar;
@@ -134,6 +133,7 @@ uint32_t mem_dump(uint32_t addr, long count, int size)
 uint32_t mem_set(uint32_t addr, int size)
 {
 	char buff[15], *p;					/* ｷｰ入力ﾊﾞｯﾌｧ */
+	int len;
 
 	switch (size) {
 	case 1:
@@ -166,7 +166,8 @@ uint32_t mem_set(uint32_t addr, int size)
 		buff[0] = 10;
 		p = cgets(buff);					/* 一行入力 */
 ///		disp_nl(1);
-		if (buff[1] == 0) {
+		len = buff[1];
+		if (len == 0) {
 			addr += size;
 			continue;						/* 入力文字がなければ次へ */
 		}
@@ -196,7 +197,8 @@ uint32_t mem_set(uint32_t addr, int size)
 			break;
 		}
 
-		if (strchr(p, ',') == NULL)			/* ','を含む時はｱﾄﾞﾚｽを進めない */
+		/* 最後の文字が','の時はｱﾄﾞﾚｽを進めない */
+		if (p[len - 1] != ',')
 			addr += size;
 	}
 }
@@ -207,5 +209,6 @@ uint32_t mem_set(uint32_t addr, int size)
 #|=======================
 #|* 2016/02/11	新規作成(by T.Yokobayashi)
 #|  "sh_std/lib/disp_mem.c"を流用
+#|* 2016/11/09	mem_set()で','文字ﾁｪｯｸで、strchr()を使わないように変更。
 #|
 */

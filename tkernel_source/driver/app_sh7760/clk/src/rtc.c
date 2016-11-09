@@ -24,7 +24,7 @@
  */
 
 #include "clkdrv.h"
-#include <stdlib.h>
+//#include <stdlib.h>
 //#include <device/em1d512_iic.h>
 
 /* RX-4581NB RTC definitions */
@@ -199,7 +199,7 @@ EXPORT	ER	cdFinishHardware(void)
 
 /*----------------------------------------------------------------------
 #|History of "rtc.c"
-#|=============================
+#|==================
 #|* 2016/06/01	[app_sh7760]用に、[tef_em1d]の"rtc.c"を参考に作成。
 #|
 */
