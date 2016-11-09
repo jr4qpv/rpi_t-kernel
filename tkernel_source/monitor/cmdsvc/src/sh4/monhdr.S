@@ -325,8 +325,8 @@ Csym(_defaultHdr):			// RB=1, BL=1, IM=15
 	mov	#0x09, r4
 
 	.balign 4
-	.globl	_fatal_trap_led
-9001:	.long	_fatal_trap_led
+	.globl	Csym(_fatal_trap_led)
+9001:	.long	Csym(_fatal_trap_led)
 #else	///////////////////////////////
 	stmfd	sp!, {r1, ip}		// sp -> lr_svc, ip
 	mov	ip, r2			// restore ip

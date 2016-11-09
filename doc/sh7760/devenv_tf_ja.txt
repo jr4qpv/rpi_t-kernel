@@ -1,0 +1,114 @@
+﻿/**********************************************************
+ T-Kernel 開発環境構築(Cygwin) 説明          2016年02月26日
+ **********************************************************/
+
+■tef_em1d(ARM),SH7760開発環境の概要
+  ARM版は、Tronフォーラム配布の、T-Kernel Ver2.0に同梱のGCC環境環境の説明書、
+  SH7760版は、ﾊﾟｰｿﾅﾙﾒﾃﾞｨｱ社のSH7760開発キットの説明に従って、インストール
+  すればよい。
+  以下は、基本的には上記と同じ構成であるが、ARM及びSH7760をフォルダ分けして
+  共通なファイルは集約して、"/usr/local/tool"のフォルダに集める。
+
+
+■Gygwin環境のインストール
+1)Cygwin_setup_3rd.zip内の、｢Cygwin_setup｣フォルダを任意の場所に解凍。
+  その中の｢setup-x86.exe｣をダブルクリックしてインストーラを起動。
+
+  ・｢Install from Local Directory｣を選択して｢次へ(N)｣
+  ・インストール先はデフォルトの「C:\cygwin｣でＯＫ
+  ・インストールパッケージの選択画面では、｢All(Default)｣の｢Default｣を
+    クリックし、｢Install｣の状態にしてから｢次へ(N)｣を押して開始する
+  ・デスクトップの｢Cygwin Terminal｣アイコンをクリックしてCygwinを起動する。
+
+2)Cygwinインストール後の設定
+  /usr/local/bin/perlでperlが起動します。/usr/local/binから/usr/bin/perlに
+  シンボリックリンクを張る。
+  $ cd /usr/local/bin
+  $ ln -s /usr/bin/perl
+
+
+■開発環境パッケージのインストール手順
+
+1)te.Cygwin-i686.common.17.tar.gz の展開
+  ※ﾊﾟｰｿﾅﾙﾒﾃﾞｨｱのT-Kernel Ver2ﾘﾌｧﾚﾝｽｷｯﾄに同梱のﾌｧｲﾙを利用(共通で全て入ってる)
+  $ cd /usr/local
+  $ tar xvf /cygdrive/c/temp/te.Cygwin-i686.common.17.tar.gz
+
+  $ cd tool/Cygwin-i686
+  $ mv etc ..
+  ※etcのﾌｧｲﾙはgtermなど格納されており、共通なのでtool直下に移動。
+  ※tool/buildには、gtermなどのｿｰｽﾌｧｲﾙが入っており必要に応じてｺﾝﾊﾟｲﾙ出来る。
+
+2)SH用GNUｺﾝﾊﾟｲﾗ te.Cygwin-i686.sh.08.tar.gz の展開
+  ※ﾊﾟｰｿﾅﾙﾒﾃﾞｨｱのSH7760開発ｷｯﾄに同梱のﾌｧｲﾙを利用
+  $ cd /usr/local
+  $ tar xvf /cygdrive/c/temp/te.Cygwin-i686.sh.08.tar.gz
+
+  $ cd tool
+  $ mv Cygwin-i686 sh-elf
+  ※/usr/local/toolの下に複数のｺﾝﾊﾟｲﾗを入れるため、ﾌｫﾙﾀﾞ名の変更
+
+3)ARM用GNUｺﾝﾊﾟｲﾗ te.Cygwin-i686.arm_2.1.0.3.tar.gz の展開
+  ※ﾊﾟｰｿﾅﾙﾒﾃﾞｨｱのSH7760開発ｷｯﾄに同梱のﾌｧｲﾙを利用
+  $ cd /usr/local
+  $ tar xvf /cygdrive/c/temp/te.Cygwin-i686.arm_2.1.0.3.tar.gz
+
+  $ cd tool
+  $ mv Cygwin-i686 arm_2-elf
+  ※/usr/local/toolの下に複数のｺﾝﾊﾟｲﾗを入れるため、ﾌｫﾙﾀﾞ名の変更
+
+4)tool/etcに、gccsh, gcc4arm のﾌｧｲﾙをｺﾋﾟｰ
+  ※gcc起動用のｽｸﾘﾌﾟﾄﾌｧｲﾙ。ﾊﾟｰｿﾅﾙﾒﾃﾞｨｱ社の TK2ﾘﾌｧﾚﾝｽｷｯﾄ及びSH7760開発ｷｯﾄの
+    te.Cygwin-i686.common.*.tar.gz に含まれているﾌｧｲﾙを tool/etcにｺﾋﾟｰ。
+
+☆-------------------------------------------------------------------
+☆上記1)～4)の作業が終わった後の｢tool｣フォルダを圧縮しておくので、
+☆そのファイル/usr/local/に解凍して利用すると、簡単に環境構築できる。
+☆
+☆  $ cd /usr/local
+☆  $ tar xvf /cygdrive/c/temp/Cygwin-i686.tool.01.tar.gz
+☆-------------------------------------------------------------------
+
+
+■環境変数の設定
+  bashの起動コマンドファイル"/home/ユーザ名/.bashrc"に、下記コマンドを追加。
+
+1)SH7760の場合
+・コンパイルとビルドを行う為の環境変数を設定する。
+  export GNUs=/usr
+  export GNU_BD=/usr/local/tool/sh-elf
+  export GNUsh=$GNU_BD/sh-unknown-tkernel
+  export GCC_EXEC_PREFIX=$GNU_BD/lib/gcc-lib/
+
+・T-Kernelの先頭ディレクトリを表す環境変数  BD
+  export BD=~/tkv2/tkernel_source
+
+2)ARMの場合
+・コンパイルとビルドを行う為の環境変数を設定する。
+  export GNUs=/usr
+  export GNU_BD=/usr/local/tool/arm_2-elf
+  export GNUARM_2=$GNU_BD/arm_2-unknown-tkernel
+
+・T-Kernelの先頭ディレクトリを表す環境変数  BD
+  export BD=~/tkv2/tkernel_source
+
+3)gtermが簡単に起動できるように、下記コマンドを追記。
+  alias gterm='/usr/local/tool/etc/gterm -l /dev/ttyS3 -b -x'
+
+  ※｢-l /dev/ttyS3｣の箇所は、接続されたCOMﾎﾟｰﾄにより変更する（COM1→ttyS0）
+
+
+【補足】
+  ・/usr/loca/toolフォルダを圧縮する時は下記コマンドで行う。
+    $ cd /usr/local
+    $ tar -cvzf Cygwin-i686.tool.01.tar.gz ./tool
+
+
+【参考文献・資料】
+  共通事項は readme_jp.txt を参照ください。
+
+
+History of "devenv.txt"
+=======================
+* 2015/11/19 新規作成(by T.Yokobayashi)
+* 2016/02/26 構築した開発環境ﾌｫﾙﾀﾞ｢/usr/local/tool｣を圧縮したﾌｧｲﾙを作成。
