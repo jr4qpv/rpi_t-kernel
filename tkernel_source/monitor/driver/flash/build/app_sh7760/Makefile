@@ -18,7 +18,7 @@
 # ----------------------------------------------------------------------
 #
 
-#	T-Monitor : flash (sh7760)
+#     @(#)T-Monitor : flash (sh7760) 2016/11/09
 
 MACHINE = sh7760
 TETYPE = app
@@ -57,25 +57,27 @@ OBJ_WR = $(addsuffix .o, $(basename $(SRC_WR)))
 CFLAGS += $(CFLAGS_WARNING)
 
 # adjust for flashwr object
-##REN_SECTION =	--rename-section .text=flashwr.text \
-##		--rename-section .rodata=flashwr.rodata
-KEEP_SYMBOL =	--keep-global-symbol=flashwr \
-		--keep-global-symbol=FROM_SECSZ
+REN_SECTION =	--rename-section .text=flashwr.text \
+		--rename-section .rodata=flashwr.rodata
+KEEP_SYMBOL =	--keep-global-symbol=_flashwr \
+		--keep-global-symbol=_FROM_SECSZ
+##KEEP_SYMBOL =	--keep-global-symbol=flashwr \
+##		--keep-global-symbol=FROM_SECSZ
 
 # ----------------------------------------------------------------------------
 
 .PHONY: all clean install
 
-ALL = $(TARGET).o flashwr.o
+ALL = $(TARGET).o
 
 all: $(ALL)
 
-$(TARGET).o: $(OBJ)
+$(TARGET).o: $(OBJ) flashwr.o
 	$(LINK_R.o) $^ $(OUTPUT_OPTION)
 
 flashwr.o: $(OBJ_WR)
 	$(LINK_R.o) $^ -lgcc $(OUTPUT_OPTION)
-	$(OBJCOPY) $(KEEP_SYMBOL) $@
+	$(OBJCOPY) $(REN_SECTION) $(KEEP_SYMBOL) $@
 
 clean:
 	$(RM) $(OBJ) $(OBJ_WR) flashwr.o $(ALL) $(DEPS)
@@ -100,4 +102,7 @@ endif
 #|□2016/01/13	SH版GCC3.0.4の、OBJCOPYは「--rename-section」オプションに対応
 #|  していないので、"flashwr.o"の.textと.rodataセクションをリンク側でRAMに
 #|  マッピングするように修正。
-#| 
+#|□2016/11/09	KPIT GCCでは、OBJCOPYは「--rename-section」利用に戻した。
+#|□2016/11/09	KPIT GCCに対応する為(Csym)、flashwr→_flashwr、
+#|  FROM_SECSZ→_FROM_SECSZに記述修正
+#|

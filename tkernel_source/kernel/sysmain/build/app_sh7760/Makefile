@@ -19,7 +19,7 @@
 #
 
 #
-#	Makefile for gmake
+#	@(#)Makefile for gmake (sysmail) 2016/11/09
 #	sysmain (system-dependent description)
 #
 
@@ -83,6 +83,7 @@ endif
 # ----------------------------------------------------------------------------
 # additional libraries
 LDUSRLIBS += -ldrvif -lstr
+LDUSRLIBS += -lgcc-Os-4-200
 
 # ----------------------------------------------------------------------------
 # include main makefile (common description)
@@ -94,4 +95,6 @@ include ../Makefile.common
 #|=====================
 #|* 2015/12/17	../tef_em1d/から、 [app_sh7760]用にコピーし、
 #|  MACHINE, TETYPE を修正。
+#|* 2016/11/09	KPIT GCCでは、LDLIBSに"-lgcc-Os-4-200"追加
+#|  (___udivsi3_i4i がundefined対策)
 #|

@@ -163,6 +163,7 @@ endif
 # ----------------------------------------------------------------------------
 # additional libraries
 LDUSRLIBS += -ldrvif -lstr
+LDUSRLIBS += -lgcc-Os-4-200
 ifdef	T2EX
   # additional header file path for t2ex
   HEADER := $(BD)/include/t2ex $(HEADER)
@@ -189,4 +190,6 @@ include ../Makefile.common
 #|* 2016/03/14	LDUSRLIBS に｢-lmisc｣指定の追加
 #|* 2016/09/08	APP_VERの追加
 #|* 2016/09/12	MISC_CPRINT,APP_EXTCMD,APP_SAMPLEの追加
+#|* 2016/11/09	KPIT GCCでは、LDLIBSに"-lgcc-Os-4-200"追加
+#|  (___udivsi3_i4i がundefined対策)
 #|

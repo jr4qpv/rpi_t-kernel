@@ -18,13 +18,15 @@
  */
 
 /*
- *	kernel-ram.lnk (sysmain, SH7760)
+ *	@(#)kernel-ram.lnk (sysmain, SH7760) 2016/11/09
  *	linker script (RAM)
  */
 
-OUTPUT_FORMAT("elf32-sh-tkernel", "elf32-sh-tkernel", "elf32-sh-tkernel")
+/* OUTPUT_FORMAT("elf32-sh-tkernel", "elf32-sh-tkernel", "elf32-sh-tkernel") */
+OUTPUT_FORMAT("elf32-sh", "elf32-sh", "elf32-sh")
 OUTPUT_ARCH(sh)
-ENTRY(_start)
+/* ENTRY(_start) */
+ENTRY(__start)
 
 SECTIONS
 {
@@ -46,8 +48,10 @@ SECTIONS
 	} /*:text*/ =0
 
 	__data_org = . ;
+	___data_org = __data_org;                 /* for Csym(1) */
 	.data ALIGN(0x10) : {
 		__data_start = . ;
+		___data_start = __data_start;     /* for Csym(1) */
 		*(.data)
 		*(.data.*)
 		SORT(CONSTRUCTORS)
@@ -67,11 +71,13 @@ SECTIONS
 		*(.sdata)
 		*(.sdata.*)
 		_edata = .;
+		__edata = _edata;                   /* for Csym(1) */
 		PROVIDE (edata = .);
 	} /*:data*/
 
 	.bss : {
 		__bss_start = .;
+		___bss_start = __bss_start;         /* for Csym(1) */
 		PROVIDE (__sbss_start = .);
 		PROVIDE (___sbss_start = .);
 		*(.sbss)
@@ -84,15 +90,19 @@ SECTIONS
 		*(COMMON)
 		. = ALIGN(4);
 		_end = .;
+		__end = _end;                        /* for Csym(1) */
 		PROVIDE (end = .);
 	} /*:data*/
 }
 
 
-/*----------------------------------------------------------------------*/
-/*
-#|【kernel-ram.lds 変更履歴】
-#|□2015/12/17	../tef_em1d/から、 [app_sh7760]用にコピーし、修正。
-#|□2015/12/17	拡張子は｢.lnk｣→｢.lds｣に変更｡(Windowsでは｢.lnk｣は特殊ﾌｧｲﾙの為)
+/*----------------------------------------------------------------------
+#|History of "kernel-ram.lds"
+#|===========================
+#|* 2015/12/17	../tef_em1d/から、 [app_sh7760]用にコピーし、修正。
+#|* 2015/12/17	拡張子は｢.lnk｣→｢.lds｣に変更｡(Windowsでは｢.lnk｣は特殊ﾌｧｲﾙの為)
+#|* 2016/11/09	KPIT GCCに対応の為、OUTPUT_FORMAT 指定を
+#|  "elf32-sh-tkernel"→"elf32-sh" に変更
+#|* 2016/11/09	KPIT GCCではC言語から参照するﾗﾍﾞﾙには`_`付加する対応 Csym(1)
 #|
- */
+*/

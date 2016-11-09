@@ -46,8 +46,8 @@
 #define ALLOCA_NOSPT		0
 
 #ifndef _Csym
-#define _Csym				0
-//#define _Csym				1		/* for KIPT GCC */
+//#define _Csym				0
+#define _Csym				1		/* for KIPT GCC */
 #endif
 
 

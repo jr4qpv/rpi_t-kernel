@@ -17,19 +17,21 @@
  */
 
 /*
- *	@(#)monitor.lds () 2016/03/16
+ *	@(#)monitor.lds (sh7760) 2016/11/09
  *
  *	linker script for monitor
  */
 
-OUTPUT_FORMAT("elf32-sh-tkernel", "elf32-sh-tkernel", "elf32-sh-tkernel")
-/* OUTPUT_FORMAT("elf32-sh", "elf32-sh", "elf32-sh") */
+/* OUTPUT_FORMAT("elf32-sh-tkernel", "elf32-sh-tkernel", "elf32-sh-tkernel") */
+OUTPUT_FORMAT("elf32-sh", "elf32-sh", "elf32-sh")
 OUTPUT_ARCH(sh)
 ENTRY(_start)
 
 SECTIONS {
 	__loadaddr = 0x80000000;
+	___loadaddr = __loadaddr;               /* for Csym(1) */
 	_start = 0x80000000;
+	__start = _start;                       /* for Csym(1) */
 
 	.eitbra _start : AT(__loadaddr) {
 /*		__eitbra_start = .;	/* ///bug?/// */
@@ -47,7 +49,7 @@ SECTIONS {
 	.text __text_org : {
 /*		_stext = .;		/* ///bug?/// */
 		KEEP (*(.init))
-		*(EXCLUDE_FILE(*/flashwr.o) .text)	/* flashwr.o以外 */
+		*(.text)
 		*(.text.*)
 		*(.stub)
 		*(.glue_7t)
@@ -56,7 +58,7 @@ SECTIONS {
 		PROVIDE (__etext = .);
 		PROVIDE (_etext = .);
 		PROVIDE (etext = .);
-		*(EXCLUDE_FILE(*/flashwr.o) .rodata)	/* flashwr.o以外 */
+		*(.rodata)
 		*(.rodata.*)
 		*(.rodata1)
 		. = ALIGN(0x10);
@@ -67,8 +69,7 @@ SECTIONS {
 	.data 0x8c000600 : AT(__data_org) {
 /*		__isp_bottom = .;	/* ///bug?/// */
 /*		__data_start = . ;	/* ///bug?/// */
-/*		*(flashwr.rodata)	/* /// */
-		*/flashwr.o(.rodata)
+		*(flashwr.rodata)
 		*(.data)
 		*(.data.*)
 		SORT(CONSTRUCTORS)
@@ -113,12 +114,13 @@ SECTIONS {
 	__bss_start = ADDR(.bss);	/* ///bug対策/// */
 
 	__flashwr_org = __data_org + SIZEOF(.data);
+	___flashwr_org = __flashwr_org;         /* for Csym(1) */
 	OVERLAY : AT(LOADADDR(.bss)) {	
 		.flashwr {
 /*			__flashwr_start = .;	/* ///bug?/// */
-/*			*(flashwr.text)		/* /// */
-			*/flashwr.o(.text)
+			*(flashwr.text)
 			__flashwr_end = .;
+			___flashwr_end = __flashwr_end;   /* for Csym(1) */
 		}
 
 		.wrkbuf {
@@ -126,17 +128,21 @@ SECTIONS {
 		}
 	}
 	__flashwr_start = ADDR(.flashwr);	/* ///bug対策/// */
+	___flashwr_start = __flashwr_start;     /* for Csym(1) */
 
-	.stack ALIGN(0x10) (NOLOAD) : {
+/*	.stack ALIGN(0x10) (NOLOAD) : AT(0x80010000) /* /// */
+	.stack 0x8c001400 : AT(0x8000b000)         /* /// */
+	{
 		__stack_top    = .;
 		__stack_bottom = 0x8c002000 - ABSOLUTE(.);
+		___stack_bottom = __stack_bottom;   /* for Csym(1) */
 	}
 }
 
 
-/*----------------------------------------------------------------------*/
-/*
+/*----------------------------------------------------------------------
 #|History of "monitor.lds"
+#|========================
 #|* 2015/11/25	../tef_em1d/から、 [app_sh7760]用にコピーし修正。
 #|* 2015/11/28	拡張子は｢.lnk｣→｢.lds｣に変更｡(Windowsでは｢.lnk｣は特殊ﾌｧｲﾙの為)
 #|* 2015/12/09	ｾｸｼｮﾝﾌﾞﾛｯｸ内最初の｢_stext = .;｣の記述がどうもおかしい(ﾊﾞｸﾞ?)、
@@ -146,5 +152,7 @@ SECTIONS {
 #|  RAMにマッピングするように修正。
 #|* 2016/03/16	KPIT GCCに対応の為、OUTPUT_FORMAT 指定を
 #|  "elf32-sh-tkernel"→"elf32-sh" に変更
+#|* 2016/11/09	KPIT GCCではC言語から参照するﾗﾍﾞﾙには`_`付加する対応 Csym(1)
+#|* 2016/11/09	KPIT GCCではOBJCOPYは「--rename-section」対応してるので戻した
 #|
  */

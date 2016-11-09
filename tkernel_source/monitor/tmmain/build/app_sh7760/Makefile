@@ -19,7 +19,7 @@
 # ----------------------------------------------------------------------
 #
 
-#	T-Monitor : tmmain (sh7760) 2016/03/17
+#     @(#)T-Monitor : tmmain (sh7760) 2016/03/17
 
 MACHINE = sh7760
 TETYPE = app
@@ -87,11 +87,10 @@ M_OBJ =	$(TMONITOR_INSTALLDIR)/hwdepend.o \
 	$(TMONITOR_INSTALLDIR)/wrkbuf.o \
 	$(TMONITOR_INSTALLDIR)/sio.o \
 	$(TMONITOR_INSTALLDIR)/flash.o \
-	$(TMONITOR_INSTALLDIR)/flashwr.o \
 	$(TMONITOR_INSTALLDIR)/memdisk.o
 
 LDLIBS = -lgcc
-##LDLIBS = -lgcc -lgcc-Os-4-200           ## for KPIT GCC
+LDLIBS += -lgcc-Os-4-200
 
 LDFLAGS += -static -nostdlib -T $(LINKSCRIPT)
 
@@ -116,7 +115,7 @@ $(TARGET).bin:	$(TARGET)
 $(TARGET).mot:	$(TARGET)
 	$(OBJCOPY) -O srec --srec-forceS3 --srec-len 32 $< $@
 
-$(TARGET): $(M_OBJ) $(OBJ) version.o
+$(TARGET): $(M_OBJ) $(OBJ) version.o monitor.lds
 	$(CC) $(TARGET_ARCH) $(LDFLAGS) $^ $(LDLIBS) $(OUTPUT_OPTION)
 
 version.c: Makefile $(OBJ) $(M_OBJ)
@@ -161,5 +160,6 @@ $(SRC.C):
 #|* 2015/11/25	ﾘﾝｸｽｸﾘﾌﾟﾄの拡張子は｢.lnk｣→｢.lds｣に変更｡
 #|  (Windowsでは｢.lnk｣は特殊ﾌｧｲﾙの為)
 #|* 2015/11/25	.binファイルを出力するようにルールの追加。
-#|* 2016/03/17	LDLIBSに"-lgcc-Os-4-200"追加(udivsi3_i4i がundefined対策)
+#|* 2016/03/17	KPIT GCCでは、LDLIBSに"-lgcc-Os-4-200"追加
+#|  (___udivsi3_i4i がundefined対策)
 #|

@@ -49,13 +49,15 @@
  */
 
 /*
- *      kernel_t2ex-rom.lnk (sysmain, SH7760)
+ *      @(#)kernel_t2ex-rom.lnk (sysmain, SH7760) 2016/11/09
  *	linker script (ROM, with T2EX memory protection)
  */
 
-OUTPUT_FORMAT("elf32-sh-tkernel", "elf32-sh-tkernel", "elf32-sh-tkernel")
+/* OUTPUT_FORMAT("elf32-sh-tkernel", "elf32-sh-tkernel", "elf32-sh-tkernel") */
+OUTPUT_FORMAT("elf32-sh", "elf32-sh", "elf32-sh")
 OUTPUT_ARCH(sh)
-ENTRY(_start)
+/* ENTRY(_start) */
+ENTRY(__start)
 
 SECTIONS {
 	.text 0x80020000 : {
@@ -107,8 +109,10 @@ SECTIONS {
 	} =0
 
 	__data_org = ALIGN(4);
+	___data_org = __data_org;                 /* for Csym(1) */
 	.data 0x8c002000 : AT(__data_org) {
 		__data_start = . ;
+		___data_start = __data_start;     /* for Csym(1) */
 		*(EXCLUDE_FILE (*.uo) .data)
 		*(EXCLUDE_FILE (*.uo) .data.*)
 		SORT(CONSTRUCTORS)
@@ -127,11 +131,13 @@ SECTIONS {
 		*(EXCLUDE_FILE (*.uo) .sdata.*)
 		. = ALIGN(4);
 		_edata = .;
+		__edata = _edata;                   /* for Csym(1) */
 		PROVIDE (edata = .);
 	}
 
 	.bss ALIGN(4) : {
 		__bss_start = .;
+		___bss_start = __bss_start;         /* for Csym(1) */
 		PROVIDE (__sbss_start = .);
 		PROVIDE (___sbss_start = .);
 		*(EXCLUDE_FILE (*.uo) .sbss)
@@ -144,6 +150,7 @@ SECTIONS {
 		*(EXCLUDE_FILE (*.uo) COMMON)
 		. = ALIGN(4);
 		_end = .;
+		__end = _end;                        /* for Csym(1) */
 		PROVIDE (end = .);
 	}
 
@@ -181,10 +188,13 @@ SECTIONS {
 }
 
 
-/*----------------------------------------------------------------------*/
-/*
-#|【kernel_t2ex-rom.lds 変更履歴】
-#|□2015/12/29	../tef_em1d/から、 [app_sh7760]用にコピーし、修正。
-#|□2015/12/29	拡張子は｢.lnk｣→｢.lds｣に変更｡(Windowsでは｢.lnk｣は特殊ﾌｧｲﾙの為)
+/*----------------------------------------------------------------------
+#|History of "kernel-ram.lds"
+#|===========================
+#|* 2015/12/29	../tef_em1d/から、 [app_sh7760]用にコピーし、修正。
+#|* 2015/12/29	拡張子は｢.lnk｣→｢.lds｣に変更｡(Windowsでは｢.lnk｣は特殊ﾌｧｲﾙの為)
+#|* 2016/11/09	KPIT GCCに対応の為、OUTPUT_FORMAT 指定を
+#|  "elf32-sh-tkernel"→"elf32-sh" に変更
+#|* 2016/11/09	KPIT GCCではC言語から参照するﾗﾍﾞﾙには`_`付加する対応 Csym(1)
 #|
- */
+*/
