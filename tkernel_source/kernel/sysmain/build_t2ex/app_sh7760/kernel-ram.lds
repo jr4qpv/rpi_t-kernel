@@ -53,7 +53,7 @@
  */
 
 /* OUTPUT_FORMAT("elf32-sh-tkernel", "elf32-sh-tkernel", "elf32-sh-tkernel") */
-OUTPUT_FORMAT("elf32-sh", "elf32-sh", "elf32-sh")
+OUTPUT_FORMAT("elf32-shl", "elf32-shl", "elf32-shl")
 OUTPUT_ARCH(sh)
 /* ENTRY(_start) */
 ENTRY(__start)
@@ -134,7 +134,7 @@ SECTIONS
 #|* 2015/12/29	拡張子は｢.lnk｣→｢.lds｣に変更｡(Windowsでは｢.lnk｣は特殊ﾌｧｲﾙの為)
 #|* 2016/01/26	SIZEOF_HEADERSの記述を削除。
 #|* 2016/11/09	KPIT GCCに対応の為、OUTPUT_FORMAT 指定を
-#|  "elf32-sh-tkernel"→"elf32-sh" に変更
+#|  "elf32-sh-tkernel"→"elf32-shl" に変更
 #|* 2016/11/09	KPIT GCCではC言語から参照するﾗﾍﾞﾙには`_`付加する対応 Csym(1)
 #|
  */

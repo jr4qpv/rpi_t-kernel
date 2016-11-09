@@ -74,7 +74,7 @@ TARGET_ARCH =
 
 # target type
 ##_CPUTYPE_FLAGS = -m4 -mno-implicit-fp
-_CPUTYPE_FLAGS = -m4-nofpu
+_CPUTYPE_FLAGS = -m4-nofpu -ml
 _TE_SYSTEM_NAME_ = _APP_SH7760_
 
 ### build option ###
@@ -279,4 +279,5 @@ OUTPUT_SREC = -O srec --srec-forceS3 --srec-len 32
 #|* 2016/03/16	OBJCOPY,CPPのパスを｢_GNU_CONFIG｣変数を使った指定に変更
 #|* 2016/03/16	"-m4 -mno-implicit-fp"→"-m4-nofpu"に変更
 #|* 2016/08/19	gccshの所在を"$(BD)/etc/"に移動
+#|* 2016/11/09	_CPUTYPE_FLAGSにﾘﾄﾙｴﾝﾃﾞｨｱﾝ"-ml"指定を追加
 #|

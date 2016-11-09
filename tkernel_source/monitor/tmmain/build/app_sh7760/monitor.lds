@@ -23,7 +23,7 @@
  */
 
 /* OUTPUT_FORMAT("elf32-sh-tkernel", "elf32-sh-tkernel", "elf32-sh-tkernel") */
-OUTPUT_FORMAT("elf32-sh", "elf32-sh", "elf32-sh")
+OUTPUT_FORMAT("elf32-shl", "elf32-shl", "elf32-shl")
 OUTPUT_ARCH(sh)
 ENTRY(_start)
 
@@ -150,8 +150,8 @@ SECTIONS {
 #|* 2016/01/14	SH版GCC3.0.4の、OBJCOPYは「--rename-section」オプションに対応
 #|  していないので、"flashwr.o"の.textと.rodataセクションをリンクスクリプトで
 #|  RAMにマッピングするように修正。
-#|* 2016/03/16	KPIT GCCに対応の為、OUTPUT_FORMAT 指定を
-#|  "elf32-sh-tkernel"→"elf32-sh" に変更
+#|* 2016/11/09	KPIT GCCに対応の為、OUTPUT_FORMAT 指定を
+#|  "elf32-sh-tkernel"→"elf32-shl" に変更
 #|* 2016/11/09	KPIT GCCではC言語から参照するﾗﾍﾞﾙには`_`付加する対応 Csym(1)
 #|* 2016/11/09	KPIT GCCではOBJCOPYは「--rename-section」対応してるので戻した
 #|
