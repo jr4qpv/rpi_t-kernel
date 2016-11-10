@@ -19,8 +19,8 @@ then
   export GCC_EXEC_PREFIX=$GNU_BD/lib/gcc-lib/
 elif test ${TC_KIND} = SH_GCC_KPIT
 then
-  echo "--- SH7760 GCC KPIT ---"
-  export GNU_BD=${C_DRV}/dev/KPIT/GNUSHv13.01-ELF/sh-elf
+  echo "--- SH7760 GCC KPIT(Renesas GNU Tool) ---"
+  export GNU_BD=${C_DRV}/Renesas/e2_studio/GNUSHv13.01-ELF/sh-elf
   export _GNU_CONFIG=sh-elf
   export GNUsh=${GNU_BD}/${_GNU_CONFIG}
   export GCC_EXEC_PREFIX=$GNU_BD/lib/gcc/
@@ -31,6 +31,13 @@ then
   export _GNU_CONFIG=sh-elf
   export GNUsh=${GNU_BD}/${_GNU_CONFIG}
   export GCC_EXEC_PREFIX=$GNU_BD/lib/gcc-lib/
+elif test ${TC_KIND} = SH_GCC_v402
+then
+  echo "--- SH7760 GCC v4.0.2 ---"
+  export GNU_BD=${C_DRV}/eSOL/eBinderSH/cl/gcc/sh/4.0.2
+  export _GNU_CONFIG=sh-elf
+  export GNUsh=${GNU_BD}/${_GNU_CONFIG}
+  export GCC_EXEC_PREFIX=$GNU_BD/lib/gcc/
 elif test ${TC_KIND} = ARM_GCC_TF
 then
   echo "--- ARM GCC TF ---"
