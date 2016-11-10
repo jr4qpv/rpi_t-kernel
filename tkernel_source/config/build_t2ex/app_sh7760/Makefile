@@ -50,7 +50,7 @@
 #
 
 #
-#	Makefile (config/SH7760)
+#	@(#)Makefile (config/SH7760) 2016/11/10
 #
 #	RomInfo / SYSCONF / DEVCONF
 #
@@ -67,7 +67,8 @@ include ../../src_t2ex/Makefile.common
 
 
 # ----------------------------------------------------------------------
-#|【Makefile 変更履歴】
-#|□2016/01/05	../tef_em1d/から、 [app_sh7760]用にコピーし、
+#|History of "Makefile"
+#|=====================
+#|* 2016/01/05	../tef_em1d/から、 [app_sh7760]用にコピーし、
 #|  MACHINE, TETYPE を修正。
 #|

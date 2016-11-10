@@ -18,7 +18,7 @@
  */
 
 /*
- *	launch.S
+ *	@(#)launch.S (sh7760) 2016/11/10
  *
  *	Start RAM-kernel by BD command of T-Monitor.
  *
@@ -33,9 +33,9 @@
 
 	.text
 	.balign	4
-	.globl	START
-	.type	START, %function
-START:
+	.globl	Csym(START)
+	.type	Csym(START), %function
+Csym(START):
 	mov.l	10f, r0
 	jmp	@r0			//(遅延分岐)
 	nop
@@ -44,9 +44,10 @@ START:
 10:	.long	0x8c002000		// RAM-kernel address
 
 
-/*----------------------------------------------------------------------*/
-#if 0
-#|【launch.S 変更履歴】
-#|□2015/12/17	[app_sh7760]用に、[tef_em1d]の"launch.S"を参考に作成。
+/*----------------------------------------------------------------------
+#|History of "launch.S"
+#|======================
+#|* 2015/12/17	[app_sh7760]用に、[tef_em1d]の"launch.S"を参考に作成。
+#|* 2016/11/10	KPIT GCCに対応の為、STARTﾗﾍﾞﾙにCsymを適用。
 #|
-#endif
+*/

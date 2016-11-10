@@ -18,11 +18,12 @@
  */
 
 /*
- *	rominfo.lnk (config, SH7760)
+ *	@(#)rominfo.lnk (config, SH7760) 2016/11/10
  *	ROM information linker script
  */
 
-OUTPUT_FORMAT("elf32-sh-tkernel", "elf32-sh-tkernel", "elf32-sh-tkernel")
+/* OUTPUT_FORMAT("elf32-sh-tkernel", "elf32-sh-tkernel", "elf32-sh-tkernel") */
+OUTPUT_FORMAT("elf32-shl", "elf32-shl", "elf32-shl")
 OUTPUT_ARCH(sh)
 
 PHDRS {
@@ -38,10 +39,12 @@ SECTIONS {
 }
 
 
-/*----------------------------------------------------------------------*/
-/*
-#|【moninfo.lds 変更履歴】
-#|□2015/12/17	../tef_em1d/から、 [app_sh7760]用にコピーし、修正。
-#|□2015/12/17	拡張子は｢.lnk｣→｢.lds｣に変更｡(Windowsでは｢.lnk｣は特殊ﾌｧｲﾙの為)
+/*----------------------------------------------------------------------
+#|History of "rominfo.lds"
+#|========================
+#|* 2015/12/17	../tef_em1d/から、 [app_sh7760]用にコピーし、修正。
+#|* 2015/12/17	拡張子は｢.lnk｣→｢.lds｣に変更｡(Windowsでは｢.lnk｣は特殊ﾌｧｲﾙの為)
+#|* 2016/11/10	KPIT GCCに対応の為、OUTPUT_FORMAT 指定を
+#|  "elf32-sh-tkernel"→"elf32-shl" に変更
 #|
- */
+*/

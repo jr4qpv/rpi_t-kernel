@@ -18,7 +18,7 @@
 #
 
 #
-#	Makefile (config/sh7760)
+#	@(#)Makefile (config/sh7760) 2016/11/10
 #
 #	RomInfo / SYSCONF / DEVCONF
 #
@@ -35,7 +35,10 @@ include ../../src/Makefile.common
 
 
 # ----------------------------------------------------------------------
-#|【Makefile 改版履歴】
-#|□2015/12/17	../tef_em1d/から、 [app_sh7760]用にコピーし、
+#|History of "Makefile"
+#|=====================
+#|* 2015/12/17	../tef_em1d/から、 [app_sh7760]用にコピーし、
 #|  MACHINE, TETYPE を修正。
+#|* 2016/11/10	KPIT GCCに対応の為、OUTPUT_FORMAT 指定を
+#|  "elf32-sh-tkernel"→"elf32-shl" に変更
 #|

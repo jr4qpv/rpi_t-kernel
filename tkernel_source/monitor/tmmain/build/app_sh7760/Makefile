@@ -55,13 +55,21 @@ HEADER = $(BD)/include $(BD)/monitor/include
 # version
 VER := 2.01.00
 
+# vsersion for sh
+VER_SH := 0.10
+
+# board name
+BOARDNAME := IOP5
+
 # T-Monitor boot message
 define VERSION
 char const Version[] = "$(VER)";
 char const * const Title[] = {
-  "T-Monitor/$(TETYPE)_$(MACHINE) 2015-2016 Version $(VER)",
+  "T-Monitor/$(TETYPE)_$(MACHINE) Version $(VER) for $(BOARDNAME) r$(VER_SH)",
   0,
-  "@(#)$(shell LC_TIME=C date)"
+  "@(#)$(shell LC_TIME=C date)",
+  "$(BOARDNAME)",
+  "$(VER_SH)"
 };
 endef
 
@@ -92,7 +100,7 @@ M_OBJ =	$(TMONITOR_INSTALLDIR)/hwdepend.o \
 LDLIBS = -lgcc
 LDLIBS += -lgcc-Os-4-200
 
-LDFLAGS += -static -nostdlib -T $(LINKSCRIPT)
+LDFLAGS += -static -nostdlib -T ../$(TETYPE)_$(MACHINE)/$(LINKSCRIPT)
 
 ifneq ($(filter ram, $(options)), )
   # RAM version, for debug purpose
@@ -115,7 +123,7 @@ $(TARGET).bin:	$(TARGET)
 $(TARGET).mot:	$(TARGET)
 	$(OBJCOPY) -O srec --srec-forceS3 --srec-len 32 $< $@
 
-$(TARGET): $(M_OBJ) $(OBJ) version.o monitor.lds
+$(TARGET): $(M_OBJ) $(OBJ) version.o
 	$(CC) $(TARGET_ARCH) $(LDFLAGS) $^ $(LDLIBS) $(OUTPUT_OPTION)
 
 version.c: Makefile $(OBJ) $(M_OBJ)
@@ -162,4 +170,5 @@ $(SRC.C):
 #|* 2015/11/25	.binファイルを出力するようにルールの追加。
 #|* 2016/03/17	KPIT GCCでは、LDLIBSに"-lgcc-Os-4-200"追加
 #|  (___udivsi3_i4i がundefined対策)
+#|* 2016/11/10	Title[0]にBOARDNAME文字列と、Title[3]にBOARDNAME文字列の追加
 #|

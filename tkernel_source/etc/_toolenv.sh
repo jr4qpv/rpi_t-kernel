@@ -1,6 +1,6 @@
 #!/bin/sh
 alias e='"${C_DRV}/Program Files/WZ EDITOR 9"/wzeditor'
-alias gterm='/usr/local/tool/etc/gterm -l /dev/ttyS3 -b -x'
+alias gterm='/usr/local/tool/etc/gterm -l /dev/ttyS0 -b -x'
 ##alias gterm='/usr/local/tool/etc/gterm -l /dev/ttyS4 -b -x'
 ##alias gterm='/usr/local/tool/etc/gterm -l /dev/ttyS3 -b -x -po'
 
