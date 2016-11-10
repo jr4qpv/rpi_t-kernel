@@ -134,7 +134,9 @@ SECTIONS {
 	.stack 0x8c001400 : AT(0x8000b000)         /* /// */
 	{
 		__stack_top    = .;
-		__stack_bottom = 0x8c002000 - ABSOLUTE(.);
+/*		__stack_bottom = 0x8c002000 - ABSOLUTE(.); */
+		_stack_bottom = 0x8c002000 - ABSOLUTE(.); */
+		__stack_bottom = _stack_bottom;     /* 中継しないとｾｯﾄされない??? */
 		___stack_bottom = __stack_bottom;   /* for Csym(1) */
 	}
 }
