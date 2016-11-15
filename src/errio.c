@@ -205,6 +205,8 @@ int egetstring(char *s, int n)
 			if (i > 0) {
 				i--;
 				eputchar(BS_CODE);		// BS エコーバック 
+				eputchar(' ');
+				eputchar(BS_CODE);
 			}
 			continue;
 		}
