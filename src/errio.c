@@ -91,7 +91,7 @@ int eputstring(const char *s)
 ;|  ［形式］#include <misc/libmisc.h>
 ;|          int _getSIO(long wait);
 ;|  ［引数］wait…タイムアウト指定[m秒], <0でタイムアウトしない
-;|  ［戻値］入力した文字
+;|  ［戻値］入力した文字（タイムアウト時はEOF）
 ;|  ［Note］・ｼﾘｱﾙI/Oﾄﾞﾗｲﾊﾞの｢serial_in｣をｺｰﾙしている。
 ;|          ・'\r'(CR)のｺｰﾄﾞ変換はしない。
 ;|          ・不正時はEOF(-1)を戻す。
