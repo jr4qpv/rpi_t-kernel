@@ -18,6 +18,7 @@
 
 #include <basic.h>
 #include <stdarg.h>				/* for va_list */
+#include <stdint.h>				/* for uintxx_t */
 ////kari////#include <t2ex/stdint.h>
 ////#include <stdtype.h>
 
@@ -106,10 +107,14 @@ extern int cprintf(const char *format, ...);
 extern int ceprintf(const char *format, ...);
 extern int cxprintf(char disp, const char *format, ...);
 
-#if 0	///////////////////////////////////
 /* ----- keyin.c ----- */
 extern int kbhit_esc(void);
+extern int kbhit_spc(void);
 
+/* ----- atohex.c ----- */
+extern char atochex(const char *s);
+extern short atoshex(const char *s);
+extern long atolhex(const char *s);
 
 /* ----- disp_mem.c ----- */
 extern uint32_t mem_dumpx(uint32_t addr, long count, int size, char disp);
@@ -122,11 +127,8 @@ extern void cursor_off(void);
 extern void cursor_on(void);
 extern void cls(void);
 
-/* ----- atohex.c ----- */
-extern char atochex(const char *s);
-extern short atoshex(const char *s);
-extern long atolhex(const char *s);
 
+#if 0	///////////////////////////////////
 /* ----- remote.c ----- */
 extern int _remote_init(void);
 extern int _remote_check(char mode);
