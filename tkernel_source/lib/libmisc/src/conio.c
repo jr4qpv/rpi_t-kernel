@@ -18,7 +18,7 @@
 
 
 #ifndef USE_ERRIO_SERIAL
-#include <libstr>						/* for strlen() *?
+#include <libstr>						/* for strlen() *? */
 ///#include <sys/consio.h>
 
 #ifdef STRLEN
