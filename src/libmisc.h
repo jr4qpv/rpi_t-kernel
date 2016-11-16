@@ -127,6 +127,16 @@ extern void cursor_off(void);
 extern void cursor_on(void);
 extern void cls(void);
 
+/* ----- doload.c ----- */
+extern  int doLoading( W proto, UW addr, UW range[3] );
+
+/* load option (LOAD commands, etc.) */
+#define	P_XMODEM	0x20		/* XMODEM */
+#define	P_TEXT		0x10		/* no protocol */
+#define	P_SFORM		0x02		/* S-Format */
+#define	P_MEMIMG	0x01		/* memory image */
+
+
 
 #if 0	///////////////////////////////////
 /* ----- remote.c ----- */
@@ -137,17 +147,6 @@ extern int _remote_tx(char mode);
 
 
 
-
-
-/* ----- load.c ----- */
-////extern  ER doLoading( W proto, UW addr, UW range[3] );
-extern  int doLoading( W proto, UW addr, UW range[3] );
-
-/* load option (LOAD commands, etc.) */
-#define	P_XMODEM	0x20		/* XMODEM */
-#define	P_TEXT		0x10		/* no protocol */
-#define	P_SFORM		0x02		/* S-Format */
-#define	P_MEMIMG	0x01		/* memory image */
 
 
 /* ----- file.c ----- */
