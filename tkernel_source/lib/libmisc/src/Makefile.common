@@ -1,0 +1,80 @@
+#
+# ----------------------------------------------------------------------
+#
+#     T-Kernel Software Library
+#
+# ----------------------------------------------------------------------
+#
+
+#
+#	@(#)Makefile for gmake (for TF open T-Kernel) 2016/11/16
+#	libmisc - T-Kernel misc library (common description)
+#
+
+# source file dependencies (generated automatically)
+DEPS = Dependencies
+DEPENDENCIES_OUTPUT := $(DEPS)
+
+# ----------------------------------------------------------------------------
+
+# target file
+TARGET = libmisc.a
+
+# source file path
+S = ../../src
+VPATH = $(S) $(S)/sysdepend/$(MACHINE)
+HEADER += $(S) $(S)/sysdepend/$(MACHINE)
+
+# source files
+SRC +=	init_libmisc.c conio.c errio.c cprintf.c keyin.c cursor.c \
+	atohex.c disp_mem.c doload.c
+
+##remote.c filebios.c lowlevel.c filedir.c file.c
+
+# ff(FatFs) source files
+##VPATH += $(S)/ff
+##SRC +=	ff.c diskio.c \
+##	fmemio.c
+
+
+OBJ	= $(addsuffix .o, $(basename $(notdir $(SRC))))
+
+# compiler options
+CFLAGS += $(CFLAGS_WARNING)
+
+# ----------------------------------------------------------------------------
+
+.PHONY: all clean install clean_install
+
+ALL = $(TARGET)
+
+all: $(ALL)
+
+$(TARGET): $(OBJ)
+	$(AR) $(ARFLAGS) $@ $?
+  ifdef RANLIB
+	$(RANLIB) $@
+  endif
+
+install: $(TARGET:%=$(LIB_INSTALLDIR)/%)
+
+clean:
+	$(RM) $(OBJ) $(ALL) $(DEPS)
+
+clean_install:
+	$(RM) $(TARGET:%=$(LIB_INSTALLDIR)/%)
+
+# generate dependencies
+ifdef DEPENDENCIES_OUTPUT
+  $(DEPS): ; touch $(DEPS)
+else
+  $(DEPS): $(SRC) ; $(MAKEDEPS) $@ $?
+endif
+-include $(DEPS)
+
+
+# ----------------------------------------------------------------------
+#|History of "Makefile.common"
+#|============================
+#|* 2016/02/05	New created.(By T.Yokobayashi)
+#| 

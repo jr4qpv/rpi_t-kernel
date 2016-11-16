@@ -17,17 +17,19 @@
  */
 
 /*
- *	@(#)doload.c (libmisc) 2016/02/22
+ *	@(#)doload.c (libmisc) 2016/11/16
  *
  *       doload processing
  */
 
 #include <basic.h>
-#include <string.h>
-//#include <t2ex/errno.h>						/* for t2ex/string.h */
-//#include <t2ex/string.h>					/* for memcpy() */
+#include <libstr.h>						/* for memcpy() */
 #include <tk/tkernel.h>
 #include <misc/libmisc.h>
+
+#ifdef MEMCPY							/* for libstr.h */
+#define	memcpy	MEMCPY
+#endif
 
 
         /* original error code */

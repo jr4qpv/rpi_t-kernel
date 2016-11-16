@@ -1,13 +1,13 @@
 /*
  *----------------------------------------------------------------------
+ *
  *    T-Kernel Software Library
  *
- *    Copyright(C) 2016 by T.Yokobayashi.
  *----------------------------------------------------------------------
  */
 
 /*
- *	@(#)libmisc.h (libmisc) 2016/09/12
+ *	@(#)libmisc.h (libmisc) 2016/11/14
  *
  *	Misc library for T-Kernel
  *
@@ -18,7 +18,8 @@
 
 #include <basic.h>
 #include <stdarg.h>				/* for va_list */
-#include <t2ex/stdint.h>
+#include <stdint.h>				/* for uintxx_t */
+////kari////#include <t2ex/stdint.h>
 ////#include <stdtype.h>
 
 #ifdef __cplusplus
@@ -36,10 +37,12 @@ typedef	unsigned long	ULONG;		/* unsinged 32bit integer */
 #endif	/* _MISC_TYPEDEF */
 
 
+#if 0	////////////////
 /********( 定数の定義 )********/
 #define	APA_ADDR	0x8c800000			// APAアドレス	///////////
 #define	FRB_ADDR	0x8c800400			// FRBアドレス	///////////
 #define	_tpa		0x8c800800			// TPAアドレス	///////////
+#endif	//////////////////
 
 
 /*------( ｷｰｺｰﾄﾞの定義 )------*/
@@ -50,9 +53,8 @@ typedef	unsigned long	ULONG;		/* unsinged 32bit integer */
 #define	ESC_CODE	0x1B
 #define	DEL_CODE	0x7F
 
-
-#ifndef  NULL
-#define  NULL           ((void *)0)
+#ifndef	NULL
+#define	NULL           ((void *)0)
 #endif	/* NULL */
 
 #ifndef	EOF
@@ -107,7 +109,12 @@ extern int cxprintf(char disp, const char *format, ...);
 
 /* ----- keyin.c ----- */
 extern int kbhit_esc(void);
+extern int kbhit_spc(void);
 
+/* ----- atohex.c ----- */
+extern char atochex(const char *s);
+extern short atoshex(const char *s);
+extern long atolhex(const char *s);
 
 /* ----- disp_mem.c ----- */
 extern uint32_t mem_dumpx(uint32_t addr, long count, int size, char disp);
@@ -120,11 +127,18 @@ extern void cursor_off(void);
 extern void cursor_on(void);
 extern void cls(void);
 
-/* ----- atohex.c ----- */
-extern char atochex(const char *s);
-extern short atoshex(const char *s);
-extern long atolhex(const char *s);
+/* ----- doload.c ----- */
+extern  int doLoading( W proto, UW addr, UW range[3] );
 
+/* load option (LOAD commands, etc.) */
+#define	P_XMODEM	0x20		/* XMODEM */
+#define	P_TEXT		0x10		/* no protocol */
+#define	P_SFORM		0x02		/* S-Format */
+#define	P_MEMIMG	0x01		/* memory image */
+
+
+
+#if 0	///////////////////////////////////
 /* ----- remote.c ----- */
 extern int _remote_init(void);
 extern int _remote_check(char mode);
@@ -135,21 +149,10 @@ extern int _remote_tx(char mode);
 
 
 
-/* ----- load.c ----- */
-////extern  ER doLoading( W proto, UW addr, UW range[3] );
-extern  int doLoading( W proto, UW addr, UW range[3] );
-
-/* load option (LOAD commands, etc.) */
-#define	P_XMODEM	0x20		/* XMODEM */
-#define	P_TEXT		0x10		/* no protocol */
-#define	P_SFORM		0x02		/* S-Format */
-#define	P_MEMIMG	0x01		/* memory image */
-
-
 /* ----- file.c ----- */
 extern long file_read(char *fname, void *addr, long limsz);
 
-
+#endif	//////////////////////
 
 
 #ifdef __cplusplus
@@ -161,6 +164,6 @@ extern long file_read(char *fname, void *addr, long limsz);
 /*----------------------------------------------------------------------
 #|History of "libmisc.h"
 #|======================
-#|* 2016/02/06	新規作成(By T.Yokobayashi)
+#|* 2016/02/06	New created.(By T.Yokobayashi)
 #|
 */

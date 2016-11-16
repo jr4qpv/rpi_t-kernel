@@ -257,7 +257,9 @@ void cmd_fload(INT argc, B *argv[])
 	}
 
 	P("Loading to %08X...", addr);
+#if 0	/////////////
 	rc = file_read(fn, (void *)addr, 0x40000);
+#endif	/////////////
 	P("...%d\n", rc);
 
 	return;
