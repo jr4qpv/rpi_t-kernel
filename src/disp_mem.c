@@ -7,16 +7,15 @@
  */
 
 /*
- *	@(#)disp_mem.c (libmisc) 2016/11/09
+ *	@(#)disp_mem.c (libmisc) 2016/11/16
  *  DISP_MEM関係ﾗｲﾌﾞﾗﾘｰ
  */
 #include <basic.h>
-#ifdef __ARMCC_VERSION
-#include <ctype.h>					/* for isprint() */
+#ifdef __GNUC__
+ #include <t2ex/ctype.h>				/* for isprint() */
 #else
-#include <t2ex/ctype.h>				/* for isprint() */
+ #include <ctype.h>						/* for isprint() */
 #endif
-//#include <t2ex/errno.h>				/* for t2ex/string.h */
 #include <misc/libmisc.h>
 
 

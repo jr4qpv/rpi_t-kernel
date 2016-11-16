@@ -7,7 +7,7 @@
  */
 
 /*
- *  @(#)conio.c (libmisc) 2016/11/14
+ *  @(#)conio.c (libmisc) 2016/11/16
  *  ｺﾝｿｰﾙI/O ﾙｰﾁﾝ
  */
 
@@ -18,9 +18,12 @@
 
 
 #ifndef USE_ERRIO_SERIAL
-///#include <t2ex/errno.h>					/* for t2ex/string.h */
-///#include <t2ex/string.h>				/* for strlen() */
+#include <libstr>						/* for strlen() *?
 ///#include <sys/consio.h>
+
+#ifdef STRLEN
+#define	strlen	STRLEN
+#endif
 
 #define	PORT_NO				1			/* 標準ｺﾝｿｰﾙ */
 #endif
