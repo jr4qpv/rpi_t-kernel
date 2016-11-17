@@ -203,6 +203,7 @@ int egetstring(char *s, int n)
 
 		if (c == BS_CODE || c == DEL_CODE)  {	// BS,DEL ?
 			if (i > 0) {
+				s--;
 				i--;
 				eputchar(BS_CODE);		// BS エコーバック 
 				eputchar(' ');
