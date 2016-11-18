@@ -49,7 +49,7 @@
  */
 
 /*
- *	@(#)command.c (appl) 2016/11/17
+ *	@(#)command.c (appl) 2016/11/18
  *
  */
 
@@ -74,7 +74,6 @@
 /*
 	ref command
 */
-#include "ref_command.c"
 //#ifdef	USE_APP_EXTCMD
 //#include "ext_command.c"
 //#endif
@@ -867,7 +866,7 @@ LOCAL void help_cmd(int ac, char *av[])
 }
 
 
-
+IMPORT void cmd_ref(int ac, char *av[]);
 
 #ifdef	USE_APP_EXTCMD
 IMPORT void cmd_dump(int argc, char *argv[]);
