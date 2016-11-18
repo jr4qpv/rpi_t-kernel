@@ -12,9 +12,9 @@
  */
 
 #include <basic.h>
-#include <libstr.h>
 #include <tk/tkernel.h>
 #include <misc/libmisc.h>
+#include <string.h>
 #include "ccp_local.h"
 
 
@@ -237,9 +237,9 @@ void cmd_dir(int argc, char *argv[])
  =============================================*/
 void cmd_fload(int argc, char *argv[])
 {
+///	int rc;
 ///	char *fn;
 	long addr;
-	int rc;
 
 	addr = 0x8c800800;
 
@@ -256,8 +256,8 @@ void cmd_fload(int argc, char *argv[])
 	P("Loading to %08X...", addr);
 #if 0	/////////////
 	rc = file_read(fn, (void *)addr, 0x40000);
-#endif	/////////////
 	P("...%d\n", rc);
+#endif	/////////////
 
 	return;
 }
