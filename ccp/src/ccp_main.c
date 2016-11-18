@@ -7,7 +7,7 @@
  */
 
 /*
- *	@(#)ccp_usermain.c (appl) 2016/11/17
+ *	@(#)ccp_main.c (appl) 2016/11/17
  *	コマンドコンソールプロセッサ(CCP)
  */
 #include <basic.h>
@@ -38,7 +38,7 @@ LOCAL void ccp_tsk( INT stacd, void *exinf )
 	char buf[256];
 	INT	fin, n;
 
-	P("\n\n");
+	P("\n");
 	P("Console Command Processor.  CCP Rev0.10\n\n");
 
 	/* command processing */
@@ -81,7 +81,7 @@ LOCAL void ccp_tsk( INT stacd, void *exinf )
 /*
  * Entry routine for the ccp application.
  */
-EXPORT  INT ccp_usermain( INT schid )
+EXPORT  INT ccp_main( INT schid )
 {
 	ER	ercd;
 	ID	ttskid;
@@ -99,12 +99,13 @@ EXPORT  INT ccp_usermain( INT schid )
 	}
 	tm_putstring((UB*)"\n");
 #else
-	tm_putstring((UB*)"\n*** ccp_usermain() start ***\n\n");
+	tm_putstring((UB*)"\n<< ccp_main() start >>\n");
 #endif
 
 
 #ifdef __ARMCC_VERSION					/* eT-Kernel ? */
 	/* Start the device drivers */
+	tk_dly_tsk(100);					/* ｼﾘｱﾙ出力が完了するまで待つ */
 	ercd = SerialIO(0, NULL);
 	if (!(ercd >= E_OK)) {
 		while (1) { ; };				/* Errror */
@@ -159,8 +160,8 @@ err_ret:
 
 
 /*----------------------------------------------------------------------
-#|History of "ccp_usermain.c"
-#|===========================
+#|History of "ccp_main.c"
+#|=======================
 #|* 2016/11/17	New created.(By T.Yokobayashi)
 #|  T2EXの"kernel/sysmain/src/appl_main.c"を参考に作成
 #|

@@ -29,7 +29,7 @@ VPATH	= $(S)
 HEADER := $(S) $(BD)/include/t2ex $(HEADER)
 
 # source files
-SRC	=	ccp_usermain.c
+SRC	=	ccp_main.c
 SRC	+=	command.c ext_command.c
 
 # object files
