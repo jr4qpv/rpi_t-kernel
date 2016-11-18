@@ -11,11 +11,10 @@
  *	コマンドコンソールプロセッサ(CCP)
  */
 #include <basic.h>
-#include <libstr.h>
-//#include <stdlib.h>
 #include <tk/tkernel.h>
 #include <tm/tmonitor.h>
 #include <misc/libmisc.h>
+#include <string.h>
 #include "ccp_local.h"
 
 #ifdef __ARMCC_VERSION					/* eT-Kernel ? */

@@ -54,7 +54,6 @@
  */
 
 #include <basic.h>
-#include <libstr.h>
 #include <stdlib.h>
 #ifdef	USE_T2EX_FS
 #include <stdio.h>
@@ -64,8 +63,9 @@
 ///#include <t2ex/datetime.h>
 ///#include <t2ex/fs.h>
 ///#include <t2ex/load.h>
-#include <device/clk.h>
+///#include <device/clk.h>
 #include <misc/libmisc.h>
+#include <string.h>
 #include "ccp_local.h"
 
 
