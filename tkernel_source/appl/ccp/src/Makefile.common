@@ -1,0 +1,82 @@
+#
+# ----------------------------------------------------------------------
+#
+#    T-Kernel Software Library (for TF T-Kernel)
+#
+# ----------------------------------------------------------------------
+#
+
+#
+#    @(#)Makefile.common (appl) 2016/11/18
+#
+#
+
+#    CCP: Console Command Prosessor
+
+# source file dependencies (generated automatically)
+DEPS = Dependencies
+DEPENDENCIES_OUTPUT := $(DEPS)
+
+# ----------------------------------------------------------------------------
+
+# target object
+TARGET	= ccp.o
+
+# source file path
+S	= ../../src
+
+VPATH	= $(S)
+HEADER := $(S) $(BD)/include/t2ex $(HEADER)
+
+# source files
+SRC	=	ccp_usermain.c
+SRC	+=	command.c ext_command.c
+
+# object files
+OBJ	= $(addsuffix .o, $(basename $(SRC)))
+
+# compiler options
+CFLAGS	+= $(CFLAGS_WARNING)
+
+# APPL object module install directory
+APPL_INSTALLDIR = $(BD)/appl/build/$(TETYPE)_$(MACHINE)
+
+# ----------------------------------------------------------------------------
+
+.PHONY: all clean install clean_install
+
+ALL = $(TARGET)
+
+all: $(ALL)
+
+# for auto generated svc interface headers (fn???.h, if???.h)
+##fs_tk.o: HEADER := $(HEADER) ../../../fs_if/svc/$(MACHINE)
+
+$(TARGET): $(OBJ)
+	$(LINK_R.o) $^ $(OUTPUT_OPTION)
+
+install: $(addprefix $(APPL_INSTALLDIR)/, $(TARGET))
+
+clean:
+	$(RM) $(OBJ) $(ALL) $(DEPS)
+
+clean_install:
+	$(RM) $(addprefix $(APPL_INSTALLDIR)/, $(TARGET))
+
+$(APPL_INSTALLDIR)/%: %
+	$(BD)/etc/backup_copy -t -d !OLD $< $(APPL_INSTALLDIR)
+
+# generate dependencies
+ifdef DEPENDENCIES_OUTPUT
+  $(DEPS): ; touch $(DEPS)
+else
+  $(DEPS): $(SRC) ; $(MAKEDEPS) $@ $?
+endif
+-include $(DEPS)
+
+
+# ----------------------------------------------------------------------
+#|History of "Makefile.common"
+#|============================
+#|* 2016/11/18	New created.(By T.Yokobayashi)
+#|

@@ -76,9 +76,14 @@
 
 #endif
 
+IMPORT  INT ccp_usermain( INT schid );
+
+#if 1	///////
 /* Command functions */
 IMPORT	INT	exec_cmd(B *cmd);
 IMPORT	void	init_calendar_date(void);
+#endif	////////
+
 #ifdef	USE_APP_SAMPLE
 IMPORT	void	sample_exec(void);
 #endif
@@ -89,6 +94,13 @@ IMPORT	void	sample_exec(void);
  */
 EXPORT	void	appl_main( void )
 {
+#if 1
+#ifdef	USE_APP_SAMPLE
+	sample_exec();
+#endif
+
+	ccp_usermain(1);
+#else
 	B	buf[256];
 	INT	fin, n;
 
@@ -131,6 +143,7 @@ EXPORT	void	appl_main( void )
 			}
 		}
 	}
+#endif
 }
 
 

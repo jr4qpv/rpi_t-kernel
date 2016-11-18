@@ -50,7 +50,7 @@
 #
 
 #
-#	@(#)Makefile for gmake (SH7760) 2016/11/08
+#	@(#)Makefile for gmake (SH7760) 2016/11/18
 #	sysmain (system-dependent description)
 #
 
@@ -110,7 +110,7 @@ BOARDNAME := IOP5
 SRC_SYS	= usermain_t2ex.c
 
 # source files for simple command interpreter
-SRC_SYS	+= appl_main.c command.c sample_task.c
+SRC_SYS	+= appl_main.c sample_task.c
 
 # user-level source files
 SRC_USR	=
