@@ -49,12 +49,11 @@
  */
 
 /*
- *	@(#)appl_main.c (t2ex) 2016/09/12
+ *	@(#)appl_main.c (t2ex) 2016/11/18
  *
  */
 #include <basic.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 #include <tk/tkernel.h>
 #include <tm/tmonitor.h>
@@ -67,6 +66,8 @@
 #else
 
 #ifdef	USE_T2EX_FS
+#include <stdio.h>
+
 #define	P			printf
 #define	Gets(buf, bufsz)	fgets(buf, bufsz, stdin)
 #else
@@ -76,9 +77,9 @@
 
 #endif
 
-IMPORT  INT ccp_usermain( INT schid );
+IMPORT  INT ccp_main( INT schid );
 
-#if 1	///////
+#if 0	///////
 /* Command functions */
 IMPORT	INT	exec_cmd(B *cmd);
 IMPORT	void	init_calendar_date(void);
@@ -95,11 +96,13 @@ IMPORT	void	sample_exec(void);
 EXPORT	void	appl_main( void )
 {
 #if 1
+
+	/* sample task execute */
 #ifdef	USE_APP_SAMPLE
 	sample_exec();
 #endif
 
-	ccp_usermain(1);
+	ccp_main(1);
 #else
 	B	buf[256];
 	INT	fin, n;
@@ -112,11 +115,6 @@ EXPORT	void	appl_main( void )
 	/* initialize calendar date */
 #ifdef	USE_T2EX_DT
 	init_calendar_date();
-#endif
-
-	/* sample task execute */
-#ifdef	USE_APP_SAMPLE
-	sample_exec();
 #endif
 
 	/* command processing */

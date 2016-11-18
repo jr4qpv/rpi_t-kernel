@@ -30,7 +30,7 @@ HEADER := $(S) $(BD)/include/t2ex $(HEADER)
 
 # source files
 SRC	=	ccp_main.c
-SRC	+=	command.c ext_command.c
+SRC	+=	command.c ref_command.c ext_command.c
 
 # object files
 OBJ	= $(addsuffix .o, $(basename $(SRC)))
