@@ -49,12 +49,11 @@
  */
 
 /*
- *	@(#)command.c (appl) 2016/11/17
+ *	@(#)command.c (appl) 2016/11/18
  *
  */
 
 #include <basic.h>
-#include <libstr.h>
 #include <stdlib.h>
 #ifdef	USE_T2EX_FS
 #include <stdio.h>
@@ -64,8 +63,9 @@
 ///#include <t2ex/datetime.h>
 ///#include <t2ex/fs.h>
 ///#include <t2ex/load.h>
-#include <device/clk.h>
+///#include <device/clk.h>
 #include <misc/libmisc.h>
+#include <string.h>
 #include "ccp_local.h"
 
 
@@ -74,7 +74,6 @@
 /*
 	ref command
 */
-#include "ref_command.c"
 //#ifdef	USE_APP_EXTCMD
 //#include "ext_command.c"
 //#endif
@@ -867,7 +866,7 @@ LOCAL void help_cmd(int ac, char *av[])
 }
 
 
-
+IMPORT void cmd_ref(int ac, char *av[]);
 
 #ifdef	USE_APP_EXTCMD
 IMPORT void cmd_dump(int argc, char *argv[]);

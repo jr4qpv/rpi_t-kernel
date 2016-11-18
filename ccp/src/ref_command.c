@@ -53,8 +53,15 @@
  *
  */
 
+#include <basic.h>
+#include <stdlib.h>
+#include <tk/tkernel.h>
 #include <tk/dbgspt.h>
 #include <sys/misc.h>
+#include <misc/libmisc.h>
+#include <string.h>
+#include "ccp_local.h"
+
 
 /*
 	display exinf
@@ -513,7 +520,7 @@ LOCAL	void	dump_task_register(ID tskid)
 /*
 	ref command
 */
-LOCAL	void	cmd_ref(int ac, char *av[])
+EXPORT	void	cmd_ref(int ac, char *av[])
 {
 	INT	num;
 
@@ -560,5 +567,6 @@ usage:
 #|History of "ref_command.c"
 #|==========================
 #|* 2016/02/04	T2EXの"kernel/sysmain/src/ref_command.c"を修正(By T.Yokobayashi)
+#|* 2016/11/18	inclueからではなく単独でｺﾝﾊﾟｲﾙできるように変更
 #|
 */
