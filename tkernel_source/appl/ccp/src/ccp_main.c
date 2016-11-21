@@ -17,13 +17,9 @@
 #include <string.h>
 #include "ccp_local.h"
 
-#ifdef __ARMCC_VERSION					/* eT-Kernel ? */
- #include <sys/ssid.h>					/* for SERIAL_SVC */
-#endif
-
 
 /* Device drivers */
-IMPORT ER SerialIO( INT ac, UB *av[] );
+IMPORT ER ConsoleIO( INT ac, UB *av[] );
 
 /* Command functions */
 ///IMPORT	void	init_calendar_date(void);
@@ -41,19 +37,11 @@ EXPORT  INT ccp_main( INT schid )
 
 	tm_putstring((UB*)"\n<< ccp_main() start >>\n");
 
-
 #ifdef __ARMCC_VERSION					/* eT-Kernel ? */
 	/* Start the device drivers */
 	tk_dly_tsk(100);					/* ｼﾘｱﾙ出力が完了するまで待つ */
-	ercd = SerialIO(0, NULL);
+	ercd = ConsoleIO(0, NULL);
 	if (!(ercd >= E_OK)) {
-		while (1) { ; };				/* Errror */
-	}
-
-	/* Open Serial device drivers */
-	n = tm_extsvc(TMEF_PORTNO, 0, 0, 0);	/* get T-Monitor port number */
-	ercd = tk_sta_ssy(SERIAL_SVC, n, NULL);
-	if (ercd != E_OK) {
 		while (1) { ; };				/* Errror */
 	}
 #endif
