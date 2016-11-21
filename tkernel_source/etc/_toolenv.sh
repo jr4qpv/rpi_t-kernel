@@ -1,14 +1,12 @@
 #!/bin/sh
 alias e='"${C_DRV}/Program Files/WZ EDITOR 9"/wzeditor'
-alias gterm='/usr/local/tool/etc/gterm -l /dev/ttyS0 -b -x'
-##alias gterm='/usr/local/tool/etc/gterm -l /dev/ttyS4 -b -x'
-##alias gterm='/usr/local/tool/etc/gterm -l /dev/ttyS3 -b -x -po'
+##alias gterm='/usr/local/tool/etc/gterm -l /dev/ttyS0 -b -x'
 
 #--- T-Kernel ---
 export BD=${C_DRV}/work/t-kernel/tkernel_source
 ##export BD=${C_DRV}/work/tk/tkv2/tkernel_source
 ##export BD=/C/work/tkv2-tmp/tkernel_source
-##export GNUs=/usr
+export GNUs=/usr
 
 if test ${TC_KIND} = SH_GCC_TF
 then
@@ -70,6 +68,8 @@ then
   export ARMCC41INC=/C/eSOL/eBinder/cl/ARM/RVCT/Data/4.1/462/include/windows
   export ARMCC41LIB=/C/eSOL/eBinder/cl/ARM\RVCT/Data/4.1/462/lib
   export PATH=${ARM_BD}:$PATH
+else
+  echo "--- TOOL ---"
 fi
 
 alias gdbarm='${GNU_BD}/bin/${_GNU_CONFIG}gdb'

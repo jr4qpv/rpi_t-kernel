@@ -1,0 +1,98 @@
+#!/usr/bin/env perl
+#	@(#)makedeps 06-12-20
+#	Copyright (C) 1995-2006 by Personal Media Corporation
+#
+#	src の依存ファイルを makefile の形式で deps に書き出す。
+#
+#	オプション
+#	-r	古い依存関係を削除するだけで、新しく依存関係を作成しない
+#
+$usage = 'usage: makedeps [-r] [cpp_options] deps src...';
+
+# コンパイラ
+$cc = "/usr/bin/gcc";
+$cc = "$ENV{'GNUs'}/bin/gcc"	if $ENV{'GNUs'} ne "";
+$cc = "$ENV{'CC'}"		if $ENV{'CC'} ne "";
+
+$mopt = "-MM";
+$mopt = "-Make" if ( $cc =~ /c[cx]810/ );
+
+# オプションスイッチのデフォルト
+$sw_r = 0;
+
+# コマンドライン引数の解析
+$cont = 0;
+foreach ( @ARGV ) {
+
+	if ( $cont ) {
+		$cppopt[@cppopt] = $_;
+		$cont = 0;
+	} else {
+		switch: {
+		  if ( /^-r/ )	{ $sw_r = 1;				last; }
+		  if ( /^-b/ )	{ $cppopt[@cppopt] = $_; $cont = 1;	last; }
+		  if ( /^-.*/ )	{ $cppopt[@cppopt] = $_;		last; }
+		  $src[@src] = $_;
+		}
+	}
+}
+
+if ( @src < 2 ) {
+	die "$usage\n";
+}
+
+$deps = $src[0];
+shift @src;
+
+# ターゲットファイル名の抽出
+for ( $i = 0; $i <= $#src; $i++ ) {
+
+	( $basename, $sfx ) = ( $src[$i] =~ m!([^/]+)\.([^.]+)$! );
+
+	if ( $sfx !~ /(o|s|c|S|C|cc|CC|810)/ ) {
+		die "makedeps: unknown file type\n";
+	}
+
+	$targets[$i] = "$basename.o";
+}
+
+# 古い依存関係を削除して deplist に保持する
+@deplist = ();
+open(DEPS, "$deps");
+$match = 0;
+$cont = 0;
+while ( <DEPS> ) {
+	chop;
+
+	if ( !$cont ) {
+		$match = 0;
+		foreach $t ( @targets ) {
+			last if $match = ( /^$t *:/ );
+		}
+	}
+	$cont = ( /\\$/ );
+
+	if ( !$match ) {
+		push @deplist, "$_\n";
+	}
+}
+close(DEPS);
+
+if ( !$sw_r ) {
+	# 新しい依存関係を deplist に追加する
+	open(CC, "$cc @cppopt $mopt @src |") || die "makedeps: $cc, error\n";
+	while ( <CC> ) {
+		push @deplist, $_;
+	}
+	close(CC);
+	if ( $? != 0 ) {
+		die "makedeps: $cc, error\n";
+	}
+}
+
+# 古い依存ファイルを、新しい依存ファイルに置き換える
+open(DEPS, ">$deps") || die "makedeps: can not update, $deps\n";
+print DEPS @deplist;
+close(DEPS);
+
+exit(0);
