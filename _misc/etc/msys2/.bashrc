@@ -189,6 +189,7 @@ alias l='ls -CF'                              #
 # 
 # alias cd=cd_func
 
+#export TC_KIND=TOOL
 #export TC_KIND=SH_GCC_v332
 #export TC_KIND=SH_GCC_v402
 export TC_KIND=SH_GCC_KPIT
@@ -196,6 +197,7 @@ export TC_KIND=SH_GCC_KPIT
 export C_DRV=/C
 source ${C_DRV}/work/t-kernel/tkernel_source/etc/_toolenv.sh
 
+alias gterm='${BD}/tool/mingw32-x86_64/etc/gterm -l /dev/ttyS0 -b -x'
 ##cd $BD/monitor/tmmain/build
 ##cd $BD/kernel/sysmain/build_t2ex/app_rzt1.debug
 cd $BD
