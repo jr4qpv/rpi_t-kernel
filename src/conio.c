@@ -14,18 +14,18 @@
 #include <basic.h>
 #include <misc/libmisc.h>
 
-#define	USE_ERRIO_SERIAL	1			/* =1:serialﾄﾞﾗｲﾊﾞを使う */
+#define	USE_ERRIO_SERIAL	0			/* =1:serialﾄﾞﾗｲﾊﾞを使う(for debug) */
 
 
 #ifndef USE_ERRIO_SERIAL
 #include <libstr>						/* for strlen() *? */
-///#include <sys/consio.h>
+#include <sys/consio.h>
 
 #ifdef STRLEN
 #define	strlen	STRLEN
 #endif
 
-#define	PORT_NO				1			/* 標準ｺﾝｿｰﾙ */
+#define	PORT_NO		CONSOLE_PORT		/* 標準ｺﾝｿｰﾙ */
 #endif
 
 
