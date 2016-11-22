@@ -27,7 +27,7 @@
 #include <tm/tmonitor.h>
 #include "tkdev_conf.h"
 
-#include <misc/rpi/bcm283x.h>
+#include <rpi/bcm283x.h>
 
 /*
  * Target system-dependent initialization

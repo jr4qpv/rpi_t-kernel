@@ -1,17 +1,13 @@
 /*
  *----------------------------------------------------------------------
+ *
  *    T-Kernel 2.0 Software Package
- *
- *    Copyright(C) 2016 by T.Yokobayashi.
- *----------------------------------------------------------------------
- *
- *    Created by T.Yokobayashi at 2016/07/21.
  *
  *----------------------------------------------------------------------
  */
 
 /*
- *	@(#)bcm283x.h () 2016/08/20
+ *	@(#)bcm283x.h () 2016/11/22
  *
  *       Raspberry Pi (BCM283x) register definitions (excerpt)
  *
@@ -25,11 +21,11 @@
 
 
 #if (TYPE_RPI <= 1)						/*** BCM2835 ? ***/
-#include <misc/rpi/mach-bcm2708/platform.h>
-#include <misc/rpi/mach-bcm2708/arm_control.h>
+#include <rpi/mach-bcm2708/platform.h>
+#include <rpi/mach-bcm2708/arm_control.h>
 #else									/*** BCM2836 or BCM2837 ***/
-#include <misc/rpi/mach-bcm2709/platform.h>
-#include <misc/rpi/mach-bcm2709/arm_control.h>
+#include <rpi/mach-bcm2709/platform.h>
+#include <rpi/mach-bcm2709/arm_control.h>
 #endif
 
 
@@ -80,5 +76,6 @@
 #|======================
 #|* 2016/07/19	新規作成（By T.Yokobayashi）
 #|* 2016/08/20	機種判定は、TYPE_RPIを参照するように変更
+#|* 2016/11/22	includeフォルダを"misc/rpi"→"rpi"に変更
 #|
 */

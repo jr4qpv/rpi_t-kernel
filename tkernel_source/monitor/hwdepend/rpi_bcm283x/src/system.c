@@ -27,7 +27,7 @@
  */
 
 #include "sysdepend.h"
-#include <misc/rpi/bcm283x.h>
+#include <rpi/bcm283x.h>
 
 EXPORT	UW	DipSw;		/* DipSw status */
 

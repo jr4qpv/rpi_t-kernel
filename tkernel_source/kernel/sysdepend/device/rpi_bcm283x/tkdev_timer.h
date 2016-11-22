@@ -28,7 +28,7 @@
 #include <sys/sysinfo.h>
 #include "tkdev_conf.h"
 
-#include <misc/rpi/bcm283x.h>
+#include <rpi/bcm283x.h>
 
 
 /*

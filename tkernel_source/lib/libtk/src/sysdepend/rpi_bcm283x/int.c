@@ -30,7 +30,7 @@
 #include <basic.h>
 #include <tk/syslib.h>
 #include <tk/sysdef.h>
-#include <misc/rpi/bcm283x.h>
+#include <rpi/bcm283x.h>
 
 
 #define	AINTNO(intvec)	( ((intvec) - IV_IRQ(0)) / 32 )		/* AINT number */

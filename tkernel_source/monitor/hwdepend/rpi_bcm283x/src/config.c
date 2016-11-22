@@ -26,7 +26,7 @@
  */
 
 #include "sysdepend.h"
-#include <misc/rpi/bcm283x.h>
+#include <rpi/bcm283x.h>
 
 /* used device driver */
 IMPORT	ER	initSIO_pl011(SIOCB *, const CFGSIO *, W speed);

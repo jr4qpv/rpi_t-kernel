@@ -23,7 +23,7 @@
  *	Serial line low-level driver system-dependent port definition(BCM283x)
  */
 
-#include <misc/rpi/bcm283x.h>
+#include <rpi/bcm283x.h>
 
 /* Port definition */
 IMPORT	SC_FUNC	ScFuncPL011;

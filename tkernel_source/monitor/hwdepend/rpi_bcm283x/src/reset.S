@@ -26,7 +26,7 @@
 
 #include <machine.h>
 #include <tk/sysdef.h>
-#include <misc/rpi/bcm283x.h>
+#include <rpi/bcm283x.h>
 #include <sys/sysinfo.h>
 
 #include "setup_bcm283x.h"
