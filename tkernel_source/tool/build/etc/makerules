@@ -80,6 +80,7 @@ endif
 #		FreeBSD-i386	FreeBSD x86
 #		Cygwin-i686	Cygwin x86
 #		mingw32-x86_64	msys2(64bit)
+#   Darwin-i386   macOS
 #		unknown		不明
 #	CCS
 #		/usr/ccs が存在するとき ccs/

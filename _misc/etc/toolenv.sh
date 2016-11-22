@@ -66,6 +66,12 @@ then
   export ARMCC41INC=/C/eSOL/eBinder/cl/ARM/RVCT/Data/4.1/462/include/windows
   export ARMCC41LIB=/C/eSOL/eBinder/cl/ARM\RVCT/Data/4.1/462/lib
   export PATH=${ARM_BD}:$PATH
+elif test ${TC_KIND} = MAC_ARM_GCC_EMB
+then
+  echo "--- macOS GNU ARM Embedded ---"
+  export GNU_BD=/opt/gnu_arm/gcc-arm-none-eabi-5_4-2016q2
+  export _GNU_CONFIG=arm-none-eabi-
+  export PATH=$PATH:${GNU_BD}/bin
 else
   echo "--- TOOL ---"
 fi
