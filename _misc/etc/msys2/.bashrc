@@ -195,7 +195,8 @@ alias l='ls -CF'                              #
 export TC_KIND=SH_GCC_KPIT
 #export TC_KIND=ARM_GCC_EMB
 export C_DRV=/C
-source ${C_DRV}/work/t-kernel/tkernel_source/etc/_toolenv.sh
+export PRJPATH=${C_DRV}/work/t-kernel
+source ${PRJPATH}/_misc/etc/toolenv.sh
 
 alias gterm='${BD}/tool/mingw32-x86_64/etc/gterm -l /dev/ttyS0 -b -x'
 ##cd $BD/monitor/tmmain/build

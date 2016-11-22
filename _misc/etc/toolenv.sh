@@ -3,9 +3,7 @@ alias e='"${C_DRV}/Program Files/WZ EDITOR 9"/wzeditor'
 ##alias gterm='/usr/local/tool/etc/gterm -l /dev/ttyS0 -b -x'
 
 #--- T-Kernel ---
-export BD=${C_DRV}/work/t-kernel/tkernel_source
-##export BD=${C_DRV}/work/tk/tkv2/tkernel_source
-##export BD=/C/work/tkv2-tmp/tkernel_source
+export BD=${PRJPATH}/tkernel_source
 export GNUs=/usr
 
 if test ${TC_KIND} = SH_GCC_TF
