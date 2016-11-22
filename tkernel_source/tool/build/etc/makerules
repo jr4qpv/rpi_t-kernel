@@ -153,6 +153,9 @@ endif
 ifneq ($(filter Cygwin-%, $(CROSS_ARCH)), )
   PATH := $(PATH):/usr/local/bin:/bin:/usr/bin
 endif
+ifneq ($(filter Darwin-%, $(CROSS_ARCH)), )
+  PATH := $(PATH):/usr/local/bin:/bin:/usr/bin
+endif
 
 ### 依存ファイル生成関連 ###
 # 依存ファイルの自動生成コマンド
@@ -180,8 +183,9 @@ endif
 ### その他 ###
 ifneq ($(filter mingw32-x86_64, $(CROSS_ARCH)), )
   ETCBIN := $(BD)/tool/mingw32-x86_64/etc
-else
-  ETCBIN := $(GNU_BD)/etc
+endif
+ifneq ($(filter Darwin-i386, $(CROSS_ARCH)), )
+  ETCBIN := $(BD)/tool/Darwin-i386/etc
 endif
 
 RM	= rm -f

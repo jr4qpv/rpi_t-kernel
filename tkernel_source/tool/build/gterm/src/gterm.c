@@ -1316,7 +1316,7 @@ static	unsigned int	gettime(void)
 /*
 	メインプログラム
 */
-int	main(int ac, uchar **av)
+int	main(int ac, char **av)
 {
 	uchar	c, c1, *ln, *p;
 	int	i, j, quit, xinterrupt, use_stdin, sjis, ret;
