@@ -192,8 +192,8 @@ alias l='ls -CF'                              #
 #export TC_KIND=TOOL
 #export TC_KIND=SH_GCC_v332
 #export TC_KIND=SH_GCC_v402
-#export TC_KIND=SH_GCC_KPIT
-export TC_KIND=ARM_GCC_EMB
+export TC_KIND=SH_GCC_KPIT
+#export TC_KIND=ARM_GCC_EMB
 export C_DRV=/C
 export PRJPATH=${C_DRV}/work/t-kernel
 source ${PRJPATH}/_misc/etc/toolenv.sh
