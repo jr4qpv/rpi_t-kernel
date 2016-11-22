@@ -1,6 +1,4 @@
 #!/bin/sh
-alias e='"${C_DRV}/Program Files/WZ EDITOR 9"/wzeditor'
-##alias gterm='/usr/local/tool/etc/gterm -l /dev/ttyS0 -b -x'
 
 #--- T-Kernel ---
 export BD=${PRJPATH}/tkernel_source

@@ -49,7 +49,7 @@
  */
 
 /*
- *	@(#)appl_main.c (t2ex) 2016/11/18
+ *	@(#)appl_main.c (t2ex) 2016/11/22
  *
  */
 #include <basic.h>
@@ -77,7 +77,11 @@
 
 #endif
 
-IMPORT  INT ccp_main( INT schid );
+IMPORT  int ccp_main( int flag );
+
+#ifdef	USE_APP_SAMPLE
+IMPORT	void	sample_exec(void);
+#endif
 
 #if 0	///////
 /* Command functions */
@@ -85,9 +89,6 @@ IMPORT	INT	exec_cmd(B *cmd);
 IMPORT	void	init_calendar_date(void);
 #endif	////////
 
-#ifdef	USE_APP_SAMPLE
-IMPORT	void	sample_exec(void);
-#endif
 
 
 /*
@@ -95,22 +96,21 @@ IMPORT	void	sample_exec(void);
  */
 EXPORT	void	appl_main( void )
 {
-#if 1
 
 	/* sample task execute */
 #ifdef	USE_APP_SAMPLE
 	sample_exec();
 #endif
 
+	/* initialize library */
+	init_libmisc();
+
 	ccp_main(1);
-#else
+
+
+#if 0
 	B	buf[256];
 	INT	fin, n;
-
-	/* initialize library */
-#ifdef APP_EXTCMD
-	init_libmisc();
-#endif
 
 	/* initialize calendar date */
 #ifdef	USE_T2EX_DT
@@ -152,6 +152,6 @@ EXPORT	void	appl_main( void )
 #|* 2016/09/12	"USE_T2EX_DT"未定義時は、init_calendar_date()関数は呼ばない
 #|* 2016/09/12	"USE_MISC_CPRINT"定義時には、cprintf()を使うようにした。
 #|  "#include <misc/libmisc.h>"の追加。
-#|* init_libmisc()呼び出し処理の追加。
+#|* 2016/11/22	init_libmisc()呼び出し処理の追加。
 #|
 */
