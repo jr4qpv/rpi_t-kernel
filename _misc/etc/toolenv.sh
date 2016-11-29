@@ -18,6 +18,7 @@ then
   export _GNU_CONFIG=sh-elf
   export GNUsh=${GNU_BD}/${_GNU_CONFIG}
   export GCC_EXEC_PREFIX=$GNU_BD/lib/gcc/
+  export PATH=${GNU_BD}/bin:$PATH
 elif test ${TC_KIND} = SH_GCC_v332
 then
   echo "--- SH7760 GCC v3.3.2 ---"
@@ -44,12 +45,14 @@ then
   # export GNU_BD='/C/Program Files (x86)/KPIT/GNUARM-NONEv14.02-EABI/arm-none-eabi/arm-none-eabi'
   export GNU_BD='/C/Program Files (x86)/KPIT/GNUARM-NONEv16.01-EABI/arm-none-eabi/arm-none-eabi'
   export _GNU_CONFIG=arm-none-eabi-
+  export PATH=${GNU_BD}/bin:$PATH
 elif test ${TC_KIND} = ARM_GCC_EMB
 then
   echo "--- GNU ARM Embedded ---"
   # export GNU_BD='/C/Program Files (x86)/GNU Tools ARM Embedded/4.9 2015q3'
   export GNU_BD='/C/Program Files (x86)/GNU Tools ARM Embedded/5.4 2016q2'
   export _GNU_CONFIG=arm-none-eabi-
+  export PATH=${GNU_BD}/bin:$PATH
 elif test ${TC_KIND} = ARMCT50
 then
   echo "--- ARMCT 5.0x ---"
