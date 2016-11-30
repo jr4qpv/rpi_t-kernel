@@ -259,11 +259,11 @@ DATABOX = $(DB) $(DBFLAGS)
 
 ### other ###
 ifndef CPP
-  CPP = $(GNU_BD)/bin/$(_GNU_CONFIG)-cpp
+  CPP = $(GNU_BD)/bin/$(_GNU_CONFIG)cpp
 endif
 STRIP = $(GNUsh)/bin/strip --strip-unneeded
 
-OBJCOPY = $(GNU_BD)/bin/$(_GNU_CONFIG)-objcopy
+OBJCOPY = $(GNU_BD)/bin/$(_GNU_CONFIG)objcopy
 OUTPUT_SREC = -O srec --srec-forceS3 --srec-len 32
 
 
@@ -280,4 +280,5 @@ OUTPUT_SREC = -O srec --srec-forceS3 --srec-len 32
 #|* 2016/03/16	"-m4 -mno-implicit-fp"→"-m4-nofpu"に変更
 #|* 2016/08/19	gccshの所在を"$(BD)/etc/"に移動
 #|* 2016/11/09	_CPUTYPE_FLAGSにﾘﾄﾙｴﾝﾃﾞｨｱﾝ"-ml"指定を追加
+#|* 2016/11/30	｢_GNU_CONFIG｣のprefix指定は、最後の"-"まで含めるように変更
 #|
