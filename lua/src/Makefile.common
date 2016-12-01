@@ -1,0 +1,92 @@
+#
+# ----------------------------------------------------------------------
+#
+#    T-Kernel Software Library (for TF T-Kernel)
+#
+# ----------------------------------------------------------------------
+#
+
+#
+#    @(#)Makefile.common (Appl) 2016/12/01
+#
+#
+
+#    Makefile for building Lua
+# See ../doc/readme.html for installation and customization instructions.
+
+# source file dependencies (generated automatically)
+DEPS = Dependencies
+DEPENDENCIES_OUTPUT := $(DEPS)
+
+# ----------------------------------------------------------------------------
+
+# target object
+TARGET	= liblua.o
+
+# source file path
+S	= ../../src
+
+VPATH	= $(S)
+##HEADER := $(S) $(BD)/include/t2ex $(HEADER)
+HEADER := $(S)
+
+# source files
+CORE_S= lapi.c lcode.c lctype.c ldebug.c ldo.c ldump.c lfunc.c lgc.c llex.c \
+	lmem.c lobject.c lopcodes.c lparser.c lstate.c lstring.c ltable.c \
+	ltm.c lundump.c lvm.c lzio.c
+LIB_S=  lauxlib.c lbaselib.c lbitlib.c lcorolib.c ldblib.c liolib.c \
+	lmathlib.c loslib.c lstrlib.c ltablib.c lutf8lib.c loadlib.c linit.c
+BASE_S=	$(CORE_S) $(LIB_S)
+
+SRC	= $(BASE_S) 
+##SRC  += lua.c luac.c
+
+# object files
+OBJ	= $(addsuffix .o, $(basename $(SRC)))
+
+# compiler options
+CFLAGS	+= $(CFLAGS_WARNING)
+CFLAGS	+= -std=gnu99 -Wextra -DLUA_COMPAT_5_2
+
+# APPL object module install directory
+APPL_INSTALLDIR = $(BD)/appl/build/$(TETYPE)_$(MACHINE)
+
+# ----------------------------------------------------------------------------
+
+.PHONY: all clean install clean_install
+
+ALL = $(TARGET)
+
+all: $(ALL)
+
+# for auto generated svc interface headers (fn???.h, if???.h)
+##fs_tk.o: HEADER := $(HEADER) ../../../fs_if/svc/$(MACHINE)
+
+$(TARGET): $(OBJ)
+	$(LINK_R.o) $^ $(OUTPUT_OPTION)
+
+install: $(addprefix $(APPL_INSTALLDIR)/, $(TARGET))
+
+clean:
+	$(RM) $(OBJ) $(ALL) $(DEPS)
+
+clean_install:
+	$(RM) $(addprefix $(APPL_INSTALLDIR)/, $(TARGET))
+
+$(APPL_INSTALLDIR)/%: %
+	$(BD)/etc/backup_copy -t -d !OLD $< $(APPL_INSTALLDIR)
+
+# generate dependencies
+ifdef DEPENDENCIES_OUTPUT
+  $(DEPS): ; touch $(DEPS)
+else
+  $(DEPS): $(SRC) ; $(MAKEDEPS) $@ $?
+endif
+-include $(DEPS)
+
+
+# ----------------------------------------------------------------------
+#|History of "Makefile.common"
+#|============================
+#|* 2016/12/01	New created.(By T.Yokobayashi)
+#|  Lua5.3.3のsrc/makefileを参考に作成
