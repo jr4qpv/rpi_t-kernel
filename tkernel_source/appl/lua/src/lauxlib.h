@@ -14,7 +14,7 @@
 
 #include "lua.h"
 
-#if 1	////// kari //////
+#if 0	////// kari //////
 int errno;
 #define	EXIT_SUCCESS		E_OK
 #define	EXIT_FAILURE		-1
