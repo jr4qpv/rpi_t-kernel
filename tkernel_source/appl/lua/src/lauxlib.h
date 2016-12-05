@@ -14,13 +14,6 @@
 
 #include "lua.h"
 
-#if 0	////// kari //////
-int errno;
-#define	EXIT_SUCCESS		E_OK
-#define	EXIT_FAILURE		-1
-#define	CLOCKS_PER_SEC		1000
-#define	clock_t				long
-#endif	//////////////////
 
 
 /* extra error code for 'luaL_load' */

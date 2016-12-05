@@ -12,7 +12,7 @@
 #
 
 # standard libraries
-APPL_TARGET = ccp
+APPL_TARGET = ccp lua
 ##APPL_TARGET += libsvc libstr libsys
 
 # ----------------------------------------------------------------------------

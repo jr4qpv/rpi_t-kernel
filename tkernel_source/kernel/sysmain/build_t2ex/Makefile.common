@@ -171,6 +171,7 @@ ifdef APP_SAMPLE
 endif
 
 K_OBJ += $(BLD_APPL_PATH)/ccp.o
+##	 $(BLD_APPL_PATH)/lua.o
 ADD_MODULES += appl
 
 

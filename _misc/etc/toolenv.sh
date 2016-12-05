@@ -50,7 +50,8 @@ elif test ${TC_KIND} = ARM_GCC_EMB
 then
   echo "--- GNU ARM Embedded ---"
   # export GNU_BD='/C/Program Files (x86)/GNU Tools ARM Embedded/4.9 2015q3'
-  export GNU_BD='/C/Program Files (x86)/GNU Tools ARM Embedded/5.4 2016q2'
+  # export GNU_BD='/C/Program Files (x86)/GNU Tools ARM Embedded/5.4 2016q2'
+  export GNU_BD='/C/Program Files (x86)/GNU Tools ARM Embedded/5.4 2016q3'
   export _GNU_CONFIG=arm-none-eabi-
   export PATH=${GNU_BD}/bin:$PATH
 elif test ${TC_KIND} = ARMCT50
