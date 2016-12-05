@@ -7,6 +7,17 @@
 #ifndef lprefix_h
 #define lprefix_h
 
+#if 1	////// kari //////
+//#include <basic.h>
+#define	wint_t		int
+//#define	l_signalT	int
+int errno;
+#define	EXIT_SUCCESS		E_OK
+#define	EXIT_FAILURE		-1
+#define	CLOCKS_PER_SEC		1000
+#define	clock_t				long
+#endif	//////////////////
+
 
 /*
 ** Allows POSIX/XSI stuff

@@ -35,7 +35,7 @@ EXPORT  int ccp_main( int flag )
 
 	/* command processing */
 	for (fin = 0; fin == 0; ) {
-		P("CCP> ");
+		P(CCP_PROMPT);
 		Gets(buf, sizeof(buf));
 		for (n = strlen(buf); --n >= 0 && buf[n] <= ' '; ) 
 			buf[n] = '\0';

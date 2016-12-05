@@ -21,14 +21,14 @@ DEPENDENCIES_OUTPUT := $(DEPS)
 # ----------------------------------------------------------------------------
 
 # target object
-TARGET	= liblua.o
+TARGET	= lua.o
 
 # source file path
 S	= ../../src
 
 VPATH	= $(S)
-##HEADER := $(S) $(BD)/include/t2ex $(HEADER)
-HEADER := $(S)
+HEADER := $(S) $(BD)/include/t2ex $(HEADER)
+##HEADER := $(S)
 
 # source files
 CORE_S= lapi.c lcode.c lctype.c ldebug.c ldo.c ldump.c lfunc.c lgc.c llex.c \
@@ -39,7 +39,8 @@ LIB_S=  lauxlib.c lbaselib.c lbitlib.c lcorolib.c ldblib.c liolib.c \
 BASE_S=	$(CORE_S) $(LIB_S)
 
 SRC	= $(BASE_S) 
-##SRC  += lua.c luac.c
+SRC	+= lua_main.c
+##SRC  += lua_main.c luac.c
 
 # object files
 OBJ	= $(addsuffix .o, $(basename $(SRC)))

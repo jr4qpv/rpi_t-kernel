@@ -590,7 +590,7 @@ static int pmain (lua_State *L) {
 }
 
 
-int main (int argc, char **argv) {
+int lua_main (int argc, char **argv) {
   int status, result;
   lua_State *L = luaL_newstate();  /* create state */
   if (L == NULL) {
@@ -607,3 +607,11 @@ int main (int argc, char **argv) {
   return (result && status == LUA_OK) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
+
+/*----------------------------------------------------------------------
+#|History of "lua_main.c"
+#|=======================
+#|* 2016/12/05	Modified.(By T.Yokobayashi)
+#|  lua.c→lua_main.cファイル名変更、main()→lua_main()関数名変更
+#|
+*/
