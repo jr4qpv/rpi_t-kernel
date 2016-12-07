@@ -37,7 +37,7 @@ int kdata;									/* MFｺﾏﾝﾄﾞ等のﾃﾞｰﾀ記憶用 */
 /*============================================
        メモリダンプコマンド(db,dh,dw,d)
  =============================================*/
-EXPORT void cmd_dump(int argc, char *argv[])
+LOCAL void cmd_dump(int argc, char *argv[])
 {
 	long count;
 	int loop;
@@ -118,7 +118,7 @@ return;
 /*============================================
        メモリセットコマンド(mb,mh,mw,m)
  =============================================*/
-EXPORT void cmd_mem(int argc, char *argv[])
+LOCAL void cmd_mem(int argc, char *argv[])
 {
 	switch (argv[0][1]) {					/* 2文字目? */
 	  case 'b': ksize = 0; break;			/* ﾊﾞｲﾄｻｲｽﾞ表示(8bit) */
@@ -143,7 +143,7 @@ EXPORT void cmd_mem(int argc, char *argv[])
 
 	LO protocol[,loading_addr]
  =============================================*/
-EXPORT void cmd_load(int argc, char *argv[])
+LOCAL void cmd_load(int argc, char *argv[])
 {
 	int rc;
 	W	i, par;
@@ -216,7 +216,7 @@ LOCAL	const	struct {
 /*============================================
        ファイル名表示(DIR)
  =============================================*/
-void cmd_dir(int argc, char *argv[])
+LOCAL void cmd_dir(int argc, char *argv[])
 {
 	char *path;
 
@@ -235,7 +235,7 @@ void cmd_dir(int argc, char *argv[])
 /*============================================
        ダウンロード(FLOAD)
  =============================================*/
-void cmd_fload(int argc, char *argv[])
+LOCAL void cmd_fload(int argc, char *argv[])
 {
 ///	int rc;
 ///	char *fn;
@@ -269,7 +269,7 @@ void cmd_fload(int argc, char *argv[])
 //extern void fmem_test(void);	/////////
 
 
-void cmd_test(int argc, char *argv[])
+LOCAL void cmd_test(int argc, char *argv[])
 {
 	FP	fnc;
 	W	p1, p2, p3;
@@ -315,9 +315,81 @@ void cmd_test(int argc, char *argv[])
 }
 
 
+/*============================================
+      使用法の表示 (?)
+ =============================================*/
+LOCAL void help_cmd(int ac, char *av[])
+{
+	P("ref      [item]\n");
+}
+
+
+IMPORT void cmd_ref(int ac, char *av[]);
 
 
 
+/*---------------------------------------------------------
+	execute command
+*/
+EXPORT	int	exec_extcmd(int ac, char *av[])
+{
+	int i, n_cmd_table;
+
+	/*** コマンドテーブル ***/
+	static const struct {
+		char  *cmd_str ;
+		void (*cmd_func)(int ac, char *av[]) ;
+    } cmd_table[] = {
+#ifdef	USE_APP_EXTCMD
+		{ "d",			cmd_dump		},
+		{ "db",			cmd_dump		},
+		{ "dh",			cmd_dump		},
+		{ "dw",			cmd_dump		},
+
+		{ "m",			cmd_mem			},
+		{ "mb",			cmd_mem			},
+		{ "mh",			cmd_mem			},
+		{ "mw",			cmd_mem			},
+
+		{ "LO",			cmd_load		},
+		{ "lo",			cmd_load		},
+		{ "load",		cmd_load		},
+
+///		{ "dir",		cmd_dir		},
+		{ "fload",		cmd_fload		},
+
+		{ "t",			cmd_test		},
+		{ "test",		cmd_test		},
+#endif
+
+		{ "ref",		cmd_ref			},
+
+#if 0	//////////
+		{ "lua",		lua_main		},
+#endif	//////////
+		{ "?",			help_cmd		}
+	};
+
+	/*======( コマンドのチェック )======*/
+	if (ac < 1) return 0;
+
+	/*======( コマンド行の解析＆実行 )======*/
+	n_cmd_table = sizeof(cmd_table) / sizeof(cmd_table[0]) ;
+	for (i=0 ; i<n_cmd_table ; i++) {
+	    if (strcmp(av[0], cmd_table[i].cmd_str) == 0)
+			break;
+	}
+
+	if (i < n_cmd_table) {					// ﾃｰﾌﾞﾙにあった?
+		/* コマンド関数の呼び出し */
+		(*(cmd_table[i].cmd_func))(ac, av);
+	}
+	else {									// ﾃｰﾌﾞﾙにない
+		return 0;
+	}
+
+	return 1;
+}
 
 
 /*----------------------------------------------------------------------

@@ -169,27 +169,27 @@ EXPORT	INT	usermain( void )
 	/* Start the device drivers */
 #ifdef DRV_CONSOLE
 	ercd = ConsoleIO(0, NULL);
-	tm_putstring(ercd >= E_OK ? "ConsoleIO - OK\n" : "ConsoleIO - ERR\n");
+	tm_putstring(ercd >= E_OK ? (UB*)"ConsoleIO - OK\n" : (UB*)"ConsoleIO - ERR\n");
 #endif
 #ifdef DRV_CLOCK
 	ercd = ClockDrv(0, NULL);
-	tm_putstring(ercd >= E_OK ? "ClockDrv - OK\n" : "ClockDrv - ERR\n");
+	tm_putstring(ercd >= E_OK ? (UB*)"ClockDrv - OK\n" : (UB*)"ClockDrv - ERR\n");
 #endif
 #ifdef DRV_SYSDISK
 	ercd = SysDiskDrv(0, NULL);
-	tm_putstring(ercd >= E_OK ? "SysDiskDrv - OK\n" : "SysDiskDrv - ERR\n");
+	tm_putstring(ercd >= E_OK ? (UB*)"SysDiskDrv - OK\n" : (UB*)"SysDiskDrv - ERR\n");
 #endif
 #ifdef DRV_SCREEN
 	ercd = ScreenDrv(0, NULL);
-	tm_putstring(ercd >= E_OK ? "ScreenDrv - OK\n" : "ScreenDrv - ERR\n");
+	tm_putstring(ercd >= E_OK ? (UB*)"ScreenDrv - OK\n" : (UB*)"ScreenDrv - ERR\n");
 #endif
 #ifdef DRV_KBPD
 	ercd = KbPdDrv(0, NULL);
-	tm_putstring(ercd >= E_OK ? "KbPdDrv - OK\n" : "KbPdDrv - ERR\n");
+	tm_putstring(ercd >= E_OK ? (UB*)"KbPdDrv - OK\n" : (UB*)"KbPdDrv - ERR\n");
 #endif
 #ifdef DRV_LOWKBPD
 	ercd = LowKbPdDrv(0, NULL);
-	tm_putstring(ercd >= E_OK ? "LowKbPdDrv - OK\n" : "LowKbPdDrv - ERR\n");
+	tm_putstring(ercd >= E_OK ? (UB*)"LowKbPdDrv - OK\n" : (UB*)"LowKbPdDrv - ERR\n");
 #endif
 
 #ifdef DEBUG_TEST

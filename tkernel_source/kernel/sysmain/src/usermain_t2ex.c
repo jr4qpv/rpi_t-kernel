@@ -93,74 +93,74 @@ EXPORT	INT	usermain( void )
 	/* Start the device drivers */
 #ifdef DRV_CONSOLE
 	err = ConsoleIO(0, NULL);
-	tm_putstring(err >= E_OK ? "ConsoleIO - OK\n" : "ConsoleIO - ERR\n");
+	tm_putstring(err >= E_OK ? (UB*)"ConsoleIO - OK\n" : (UB*)"ConsoleIO - ERR\n");
 #endif
 #ifdef DRV_CLOCK
 	err = ClockDrv(0, NULL);
-	tm_putstring(err >= E_OK ? "ClockDrv - OK\n" : "ClockDrv - ERR\n");
+	tm_putstring(err >= E_OK ? (UB*)"ClockDrv - OK\n" : (UB*)"ClockDrv - ERR\n");
 #endif
 #ifdef DRV_SYSDISK
 	err = SysDiskDrv(0, NULL);
-	tm_putstring(err >= E_OK ? "SysDiskDrv - OK\n" : "SysDiskDrv - ERR\n");
+	tm_putstring(err >= E_OK ? (UB*)"SysDiskDrv - OK\n" : (UB*)"SysDiskDrv - ERR\n");
 #endif
 #ifdef DRV_SCREEN
 	err = ScreenDrv(0, NULL);
-	tm_putstring(err >= E_OK ? "ScreenDrv - OK\n" : "ScreenDrv - ERR\n");
+	tm_putstring(err >= E_OK ? (UB*)"ScreenDrv - OK\n" : (UB*)"ScreenDrv - ERR\n");
 #endif
 #ifdef DRV_KBPD
 	err = KbPdDrv(0, NULL);
-	tm_putstring(err >= E_OK ? "KbPdDrv - OK\n" : "KbPdDrv - ERR\n");
+	tm_putstring(err >= E_OK ? (UB*)"KbPdDrv - OK\n" : (UB*)"KbPdDrv - ERR\n");
 #endif
 #ifdef DRV_LOWKBPD
 	err = LowKbPdDrv(0, NULL);
-	tm_putstring(err >= E_OK ? "LowKbPdDrv - OK\n" : "LowKbPdDrv - ERR\n");
+	tm_putstring(err >= E_OK ? (UB*)"LowKbPdDrv - OK\n" : (UB*)"LowKbPdDrv - ERR\n");
 #endif
 #ifdef DRV_NET
 	err = NetDrv(0, NULL);
-	tm_putstring(err >= E_OK ? "NetDrv - OK\n" : "NetDrv - ERR\n");
+	tm_putstring(err >= E_OK ? (UB*)"NetDrv - OK\n" : (UB*)"NetDrv - ERR\n");
 #endif
 
 	/* Start the T2EX extension modules */
 #ifdef	USE_T2EX_DT
 	err = dt_main(0, NULL);
-	tm_putstring(err >= E_OK ? "dt_main(0) - OK\n":"dt_main(0) - ERR\n");
+	tm_putstring(err >= E_OK ? (UB*)"dt_main(0) - OK\n":(UB*)"dt_main(0) - ERR\n");
 #endif
 #ifdef	USE_T2EX_PM
 	err = pm_main(0, NULL);
-	tm_putstring(err >= E_OK ? "pm_main(0) - OK\n":"pm_main(0) - ERR\n");
+	tm_putstring(err >= E_OK ? (UB*)"pm_main(0) - OK\n":(UB*)"pm_main(0) - ERR\n");
 #endif
 #ifdef	USE_T2EX_FS
 	err = fs_main(0, NULL);
-	tm_putstring(err >= E_OK ? "fs_main(0) - OK\n":"fs_main(0) - ERR\n");
+	tm_putstring(err >= E_OK ? (UB*)"fs_main(0) - OK\n":(UB*)"fs_main(0) - ERR\n");
 #endif
 #ifdef	USE_T2EX_NET
 	err = so_main(0, NULL);
-	tm_putstring(err >= E_OK ? "so_main(0) - OK\n":"so_main(0) - ERR\n");
+	tm_putstring(err >= E_OK ? (UB*)"so_main(0) - OK\n":(UB*)"so_main(0) - ERR\n");
 #endif
 
 	/* Initialize stdio */
 	libc_stdio_init();
 
 	/* Start the T2EX application */
-	tm_putstring("*** T2EX Application program start !!\n");
+	tm_putstring((UB*)"*** T2EX Application program start !!\n");
 	appl_main();
 
 	/* Shutdowm the T2EX extension modules */
 #ifdef	USE_T2EX_DT
 	err = dt_main(-1, NULL);
-	tm_putstring(err >= E_OK ? "dt_main(-1) - OK\n":"dt_main(-1) - ERR\n");
+	tm_putstring(err >= E_OK ? (UB*)"dt_main(-1) - OK\n":(UB*)"dt_main(-1) - ERR\n");
 #endif
 #ifdef	USE_T2EX_PM
 	err = pm_main(-1, NULL);
-	tm_putstring(err >= E_OK ? "pm_main(-1) - OK\n":"pm_main(-1) - ERR\n");
+	tm_putstring(err >= E_OK ? (UB*)"pm_main(-1) - OK\n":(UB*)"pm_main(-1) - ERR\n");
 #endif
 #ifdef	USE_T2EX_FS
 	err = fs_main(-1, NULL);
-	tm_putstring(err >= E_OK ? "fs_main(-1) - OK\n":"fs_main(-1) - ERR\n");
+	tm_putstring(err >= E_OK ? (UB*)"fs_main(-1) - OK\n":(UB*)"fs_main(-1) - ERR\n");
 #endif
 #ifdef	USE_T2EX_NET
 	err = so_main(-1, NULL);
-	tm_putstring(err >= E_OK ? "so_main(-1) - OK\n":"so_main(-1) - ERR\n");
+	tm_putstring(err >= E_OK ? (UB*)"so_main(-1) - OK\n":(UB*)"so_main(-1) - ERR\n");
 #endif
 
 	/* Stop the device drivers */

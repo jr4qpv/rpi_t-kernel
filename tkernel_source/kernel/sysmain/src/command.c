@@ -60,26 +60,18 @@
 #endif
 #include <tk/tkernel.h>
 #include <tm/tmonitor.h>
-///#include <t2ex/datetime.h>
-///#include <t2ex/fs.h>
-///#include <t2ex/load.h>
-///#include <device/clk.h>
+#include <t2ex/datetime.h>
+#include <t2ex/fs.h>
+#include <t2ex/load.h>
+#include <device/clk.h>
 #include <misc/libmisc.h>
 #include <string.h>
-#include "ccp_local.h"
+#include "cmd_local.h"
 
-
-#define	N_ARGS		16
 
 IMPORT int lua_main (int argc, char **argv);		///////////
 
 
-/*
-	ref command
-*/
-//#ifdef	USE_APP_EXTCMD
-//#include "ext_command.c"
-//#endif
 
 #ifdef	USE_T2EX_DT
 /*
@@ -776,7 +768,7 @@ LOCAL	void	cmd_unload(INT ac, B *av[])
 /*
 	call command
 */
-LOCAL	void	cmd_call(int ac, char *av[])
+LOCAL	void	cmd_call(INT ac, B *av[])
 {
 	FP	fnc;
 	W	p1, p2, p3;
@@ -784,13 +776,13 @@ LOCAL	void	cmd_call(int ac, char *av[])
 	if (ac < 2) return;
 
 #if 1
-	fnc = (FP)atolhex(av[1]);	/* ｱﾄﾞﾚｽの獲得 */
+	fnc = (FP)atolhex((char*)av[1]);	/* ｱﾄﾞﾚｽの獲得 */
 #else
 	fnc = (FP)strtol(av[1], NULL, 0);
 #endif
-	p1 = (ac >= 3) ? strtol(av[2], NULL, 0) : 0;
-	p2 = (ac >= 4) ? strtol(av[3], NULL, 0) : 0;
-	p3 = (ac >= 5) ? strtol(av[4], NULL, 0) : 0;
+	p1 = (ac >= 3) ? strtol((char*)av[2], NULL, 0) : 0;
+	p2 = (ac >= 4) ? strtol((char*)av[3], NULL, 0) : 0;
+	p3 = (ac >= 5) ? strtol((char*)av[4], NULL, 0) : 0;
 
 	(*fnc)(p1, p2, p3);
 }
@@ -808,30 +800,22 @@ IMPORT	void	net_test(void);
 
 
 /*
-	setup parameters
+	debug command
 */
-LOCAL	int	setup_param(char *bp, char **av)
+LOCAL	void	cmd_debug(INT ac, B *av[])
 {
-	INT	ac;
+	INT i;
 
-	for (ac = 0; ac < N_ARGS; ac++) {
-		while (*((UB*)bp) <= ' ' && *bp != '\0') bp++;	// 先頭の文字以外削除
-		if (*bp == '\0') break;
-		av[ac] = bp;
-		while (*((UB*)bp) > ' ' && *bp != ',') bp++;	// 区切りに','も含める
-		if (*bp != '\0') {
-			*bp++ = '\0';
-		}
+	for (i=0; i<ac; i++) {
+		P("av[%d]=\"%s\"\n", i, av[i]);
 	}
-	av[ac] = NULL;
-	return ac;
 }
 
 
 /*============================================
       使用法の表示 (?)
  =============================================*/
-LOCAL void help_cmd(int ac, char *av[])
+LOCAL void help_cmd(INT ac, B *av[])
 {
 #ifdef	USE_T2EX_DT
 	P("date     [y m d [h m s]]\n");
@@ -855,7 +839,6 @@ LOCAL void help_cmd(int ac, char *av[])
 	P("cp       s-path d-path/dir [wofs [wlen]]\n");
 #endif
 
-	P("ref      [item]\n");
 	P("call     addr [p1 p2 p3]\n");
 
 #ifdef	USE_T2EX_PM
@@ -869,55 +852,19 @@ LOCAL void help_cmd(int ac, char *av[])
 }
 
 
-IMPORT void cmd_ref(int ac, char *av[]);
-
-#ifdef	USE_APP_EXTCMD
-IMPORT void cmd_dump(int argc, char *argv[]);
-IMPORT void cmd_mem(int argc, char *argv[]);
-IMPORT void cmd_load(int argc, char *argv[]);
-IMPORT void cmd_dir(int argc, char *argv[]);
-IMPORT void cmd_fload(int argc, char *argv[]);
-
-IMPORT void cmd_test(int argc, char *argv[]);		//////////
-#endif
-
 
 /*---------------------------------------------------------
 	execute command
 */
-EXPORT	int	exec_cmd(char *cmd)
+EXPORT	INT	exec_cmd(INT ac, B *av[])
 {
 	int i, n_cmd_table;
-	INT	ac;
-	char	*av[N_ARGS];
 
 	/*** コマンドテーブル ***/
 	static const struct {
 		char  *cmd_str ;
-		void (*cmd_func)(int ac, char *av[]) ;
+		void (*cmd_func)(INT ac, B *av[]) ;
     } cmd_table[] = {
-#ifdef	USE_APP_EXTCMD
-		{ "d",			cmd_dump		},
-		{ "db",			cmd_dump		},
-		{ "dh",			cmd_dump		},
-		{ "dw",			cmd_dump		},
-
-		{ "m",			cmd_mem			},
-		{ "mb",			cmd_mem			},
-		{ "mh",			cmd_mem			},
-		{ "mw",			cmd_mem			},
-
-		{ "LO",			cmd_load		},
-		{ "lo",			cmd_load		},
-		{ "load",		cmd_load		},
-
-///		{ "dir",		cmd_dir		},
-		{ "fload",		cmd_fload		},
-
-		{ "t",			cmd_test		},
-		{ "test",		cmd_test		},
-#endif
-
 #ifdef	USE_T2EX_DT
 		{ "date",		cmd_date		},
 #endif
@@ -940,7 +887,6 @@ EXPORT	int	exec_cmd(char *cmd)
 		{ "chmod",		cmd_chmod		},
 #endif	/* USE_T2EX_FS */
 
-		{ "ref",		cmd_ref			},
 		{ "call",		cmd_call		},
 
 #ifdef	USE_T2EX_PM
@@ -954,18 +900,17 @@ EXPORT	int	exec_cmd(char *cmd)
 #if 0	//////////
 		{ "lua",		lua_main		},
 #endif	//////////
-		{ "h",			help_cmd		},
+		{ "debug",		cmd_debug		},
 		{ "?",			help_cmd		}
 	};
 
-	/*======( コマンドの抽出 )======*/
-	ac = setup_param(cmd, av);
+	/*======( コマンドのチェッック )======*/
 	if (ac < 1) return 0;
 
 	/*======( コマンド行の解析＆実行 )======*/
 	n_cmd_table = sizeof(cmd_table) / sizeof(cmd_table[0]) ;
 	for (i=0 ; i<n_cmd_table ; i++) {
-	    if (strcmp(av[0], cmd_table[i].cmd_str) == 0)
+	    if (strcmp((char*)av[0], cmd_table[i].cmd_str) == 0)
 			break;
 	}
 
@@ -989,7 +934,5 @@ EXPORT	int	exec_cmd(char *cmd)
 #|* 2016/02/04	"USE_T2EX_DT"未定義時には、dt_*()関数は呼びださないようにした。
 #|* 2016/02/04	"USE_T2EX_FS"未定義時には、fs_*()関数は呼びださないようにした。
 #|* 2016/02/10	コマンド解析を、cmd_table[]を使った方式に見直し。
-#|* 2016/02/19	setup_param()で区切文字に空白の他に','文字も見るようにした。
-#|* 2016/09/12	APP拡張コマンド"USE_APP_EXTCMD"関連を追加。
 #|
 */

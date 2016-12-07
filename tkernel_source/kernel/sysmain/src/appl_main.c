@@ -59,36 +59,42 @@
 #include <tm/tmonitor.h>
 
 #include <misc/libmisc.h>
+#include "cmd_local.h"
 
-//#ifdef	USE_MISC_CPRINT
-//  #define	P			cprintf
-//  #define	Gets(buf, bufsz)	cgetstring(buf, bufsz)
-//#else
 
-#ifdef	USE_T2EX_FS
-  #include <stdio.h>
+#define	N_ARGS		16
 
-  #define	P			printf
-  #define	Gets(buf, bufsz)	fgets(buf, bufsz, stdin)
-#else
-  #define	P			tm_printf
-  #define	Gets(buf, bufsz)	tm_getline(buf)
-#endif
-
-//#endif
-
-IMPORT  int ccp_main( int flag );
 
 #ifdef	USE_APP_SAMPLE
 IMPORT	void	sample_exec(void);
 #endif
 
-#if 1	///////
 /* Command functions */
-IMPORT	INT	exec_cmd(B *cmd);
+IMPORT	INT	exec_cmd(INT ac, B *av[]);
+IMPORT	int	exec_extcmd(int ac, char *av[]);
 ///IMPORT	void	init_calendar_date(void);
-#endif	////////
 
+
+
+/*
+	setup parameters
+*/
+LOCAL	INT	setup_param(B *bp, B **av)
+{
+	INT	ac;
+
+	for (ac = 0; ac < N_ARGS; ac++) {
+		while (*((UB*)bp) <= ' ' && *bp != '\0') bp++;	// 先頭の文字以外削除
+		if (*bp == '\0') break;
+		av[ac] = bp;
+		while (*((UB*)bp) > ' ' && *bp != ',') bp++;	// 区切りに','も含める
+		if (*bp != '\0') {
+			*bp++ = '\0';
+		}
+	}
+	av[ac] = NULL;
+	return ac;
+}
 
 
 /*
@@ -96,6 +102,10 @@ IMPORT	INT	exec_cmd(B *cmd);
  */
 EXPORT	void	appl_main( void )
 {
+	B	buf[256];
+	INT	fin, n;
+	INT	ac;
+	B	*av[N_ARGS];
 
 	/* sample task execute */
 #ifdef	USE_APP_SAMPLE
@@ -110,13 +120,9 @@ EXPORT	void	appl_main( void )
 	/* initialize library */
 	init_libmisc();
 
-///	ccp_main(1);
 
 
 #if 1
-	B	buf[256];
-	INT	fin, n;
-
 	/* initialize calendar date */
 #ifdef	USE_T2EX_DT
 ///	init_calendar_date();
@@ -124,25 +130,38 @@ EXPORT	void	appl_main( void )
 
 	/* command processing */
 	for (fin = 0; fin == 0; ) {
-		P("T2EX >> ");
+		P(CMD_PROMPT);
 		Gets(buf, sizeof(buf));
-		for (n = strlen(buf); --n >= 0 && buf[n] <= ' '; ) 
+		for (n = strlen((char*)buf); --n >= 0 && buf[n] <= ' '; ) 
 			buf[n] = '\0';
 
-		if (strncmp(buf, "quit", 1) == 0) {
+		if (strncmp((char*)buf, "quit", 1) == 0) {
 			fin = 1;
 
 		/* t-monitor */
-		} else if (strncmp(buf, "#", 1) == 0) {
-			tm_command(&buf[1]);
+		} else if (strncmp((char*)buf, "#", 1) == 0) {
+			tm_command((UB*)&buf[1]);
 
 		/* misc. command */
 		} else {
-			if (exec_cmd(buf) == 0) {
+			/* コマンドの抽出 */
+			ac = setup_param(buf, av);
+			if (ac < 1) {
 				P("q[uit]      quit\n");
 				P("# [cmd]     exec t-monitor command\n");
 				P("?           command help\n");
 				P("<command>   misc. command\n");
+			}
+			else if (av[0][0] == '?') {
+				/* ヘルプ表示 */
+				exec_cmd(ac, av);
+				exec_extcmd(ac, (char**)av);
+			}
+			else {
+				/* コマンド実行 */
+				if (exec_cmd(ac, av) == 0) {
+					exec_extcmd(ac, (char**)av);
+				}
 			}
 		}
 	}
@@ -158,5 +177,6 @@ EXPORT	void	appl_main( void )
 #|* 2016/09/12	"USE_MISC_CPRINT"定義時には、cprintf()を使うようにした。
 #|  "#include <misc/libmisc.h>"の追加。
 #|* 2016/11/22	init_libmisc()呼び出し処理の追加。
+#|* 2016/12/07	setup_param()で区切文字に空白の他に','文字も見るようにした。
 #|
 */

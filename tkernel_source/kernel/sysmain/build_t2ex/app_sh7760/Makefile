@@ -83,13 +83,13 @@ T2EX_MM_USE_TASKEXCEPTION = 1
 T2EX_MM_USE_DEFAULT_FAULT_HANDLER = 1
 
 # use T2EX file management
-T2EX_FS = yes
+##T2EX_FS = yes
 
 # use T2EX network communication
 ##T2EX_NET = yes
 
 # use T2EX calendar
-T2EX_DT = yes
+##T2EX_DT = yes
 
 # use T2EX program load
 ##T2EX_PM = yes
@@ -110,7 +110,7 @@ BOARDNAME := IOP5
 SRC_SYS	= usermain_t2ex.c
 
 # source files for simple command interpreter
-SRC_SYS	+= appl_main.c sample_task.c
+SRC_SYS	+= appl_main.c command.c sample_task.c
 
 # user-level source files
 SRC_USR	=
