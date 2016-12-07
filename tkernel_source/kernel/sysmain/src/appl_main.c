@@ -60,22 +60,22 @@
 
 #include <misc/libmisc.h>
 
-#ifdef	USE_MISC_CPRINT
-#define	P			cprintf
-#define	Gets(buf, bufsz)	cgetstring(buf, bufsz)
-#else
+//#ifdef	USE_MISC_CPRINT
+//  #define	P			cprintf
+//  #define	Gets(buf, bufsz)	cgetstring(buf, bufsz)
+//#else
 
 #ifdef	USE_T2EX_FS
-#include <stdio.h>
+  #include <stdio.h>
 
-#define	P			printf
-#define	Gets(buf, bufsz)	fgets(buf, bufsz, stdin)
+  #define	P			printf
+  #define	Gets(buf, bufsz)	fgets(buf, bufsz, stdin)
 #else
-#define	P			tm_printf
-#define	Gets(buf, bufsz)	tm_getline(buf)
+  #define	P			tm_printf
+  #define	Gets(buf, bufsz)	tm_getline(buf)
 #endif
 
-#endif
+//#endif
 
 IMPORT  int ccp_main( int flag );
 
@@ -83,10 +83,10 @@ IMPORT  int ccp_main( int flag );
 IMPORT	void	sample_exec(void);
 #endif
 
-#if 0	///////
+#if 1	///////
 /* Command functions */
 IMPORT	INT	exec_cmd(B *cmd);
-IMPORT	void	init_calendar_date(void);
+///IMPORT	void	init_calendar_date(void);
 #endif	////////
 
 
@@ -102,19 +102,24 @@ EXPORT	void	appl_main( void )
 	sample_exec();
 #endif
 
+	/* initialize calendar date */
+#ifdef	USE_T2EX_DT
+///	init_calendar_date();
+#endif
+
 	/* initialize library */
 	init_libmisc();
 
-	ccp_main(1);
+///	ccp_main(1);
 
 
-#if 0
+#if 1
 	B	buf[256];
 	INT	fin, n;
 
 	/* initialize calendar date */
 #ifdef	USE_T2EX_DT
-	init_calendar_date();
+///	init_calendar_date();
 #endif
 
 	/* command processing */

@@ -50,7 +50,7 @@
 #
 
 #
-#	@(#)Makefile for gmake (tkernel) 2016/11/18
+#	@(#)Makefile for gmake (tkernel) 2016/12/07
 #	sysmain (common description)
 #
 
@@ -171,7 +171,7 @@ ifdef APP_SAMPLE
 endif
 
 K_OBJ += $(BLD_APPL_PATH)/ccp.o
-##	 $(BLD_APPL_PATH)/lua.o
+###K_OBJ += $(BLD_APPL_PATH)/lua.o
 ADD_MODULES += appl
 
 
@@ -179,7 +179,7 @@ ADD_MODULES += appl
 # T2EX function objects
 ifdef  T2EX
 
-##  LDUSRLIBS += -lc
+  LDUSRLIBS += -lc
 
   ifdef  T2EX_DT
     # T2EX calendar date / time
@@ -188,8 +188,6 @@ ifdef  T2EX
     CPPFLAGS += -DUSE_T2EX_DT
     LDUSRLIBS += -ldatetime
   endif
-
-  LDUSRLIBS += -lc		##←この位置でないとリンクエラー
 
   ifdef  T2EX_PM
     # T2EX program load
@@ -242,7 +240,7 @@ CPPFLAGS += -DTKERNEL_ONLY
 ALL  = $(TARGET_ROM) $(TARGET_ROM:%.rom=%.map) $(TARGET_ROM:%.rom=%.mot)
 ALL += $(TARGET_RAM) $(TARGET_RAM:%.sys=%.map) $(TARGET_RAM:%.sys=%.mot)
 ALL += $(TARGET_RAM:%.sys=%.bin)
-ALL += $(TARGET_ROM:%.rom=%.bin)		######
+ALL += $(TARGET_ROM:%.rom=%.bin)
 ###EMU  = $(TARGET_EMU) $(TARGET_DBG_EMU)
 REQ_MODULES = libraries tkernel sysmgr sysinit drivers $(ADD_MODULES)
 
@@ -290,8 +288,8 @@ $(TARGET_ROM:%.rom=%.map): $(TARGET_ROM)
 $(TARGET_ROM:%.rom=%.mot): $(TARGET_ROM)
 	$(OBJCOPY) $(OUTPUT_SREC) $< $@
 
-$(TARGET_ROM:%.rom=%.bin): $(TARGET_ROM)		#####
-	$(OBJCOPY) -O binary $< $@			#####
+$(TARGET_ROM:%.rom=%.bin): $(TARGET_ROM)
+	$(OBJCOPY) -O binary $< $@
 
 version.c: Makefile $(OBJ)
 	echo "$$VERSION_APP" > version.c
@@ -425,7 +423,6 @@ $(DEPS): ; touch $(DEPS)
 #|History of "Makefile"
 #|=====================
 #|* 2016/01/05	ﾘﾝｸｽｸﾘﾌﾟﾄの拡張子を｢.lnk｣→｢.lds｣に変更。
-#|* 2016/01/06	リンクエラー回避の為、"-lc"のリンク指定の位置を変更。
 #|* 2016/07/07	debugﾌｫﾙﾀﾞとmakefileとﾘﾝｸｽｸﾘﾌﾟﾄが共通にできるように、
 #|  ﾘﾝｸｽｸﾘﾌﾟﾄに"..\$(MDIR)\"のパス記述追加
 #|* 2016/09/12	version情報ファイル生成追加

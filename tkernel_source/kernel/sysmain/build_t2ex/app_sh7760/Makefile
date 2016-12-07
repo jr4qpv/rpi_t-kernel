@@ -83,13 +83,13 @@ T2EX_MM_USE_TASKEXCEPTION = 1
 T2EX_MM_USE_DEFAULT_FAULT_HANDLER = 1
 
 # use T2EX file management
-##T2EX_FS = yes
+T2EX_FS = yes
 
 # use T2EX network communication
 ##T2EX_NET = yes
 
 # use T2EX calendar
-##T2EX_DT = yes
+T2EX_DT = yes
 
 # use T2EX program load
 ##T2EX_PM = yes
@@ -121,7 +121,7 @@ LDUSRLIBS = -lmisc
 # ----------------------------------------------------------------------------
 # device driver definitions
 DRV_CONSOLE = yes
-##DRV_CLOCK   = yes
+DRV_CLOCK   = yes
 ##DRV_SYSDISK = yes
 ##DRV_SCREEN  = yes
 ##DRV_KBPD    = yes

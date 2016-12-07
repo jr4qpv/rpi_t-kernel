@@ -48,7 +48,7 @@
  */
 
 /*
- *	@(#)kernel-ram.lnk (sysmain, SH7760) 2016/11/09
+ *	@(#)kernel-ram.lnk (sysmain, SH7760) 2016/12/07
  *	linker script (RAM)
  */
 
@@ -56,7 +56,7 @@
 OUTPUT_FORMAT("elf32-shl", "elf32-shl", "elf32-shl")
 OUTPUT_ARCH(sh)
 /* ENTRY(_start) */
-ENTRY(__start)
+ENTRY(start)
 
 SECTIONS
 {

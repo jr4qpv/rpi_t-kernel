@@ -8,9 +8,15 @@
 #define __warn_references(sym,msg)
 #define __weak_alias(alias,sym)		__lint_equal__(sym,alias)
 #elif defined(__GNUC__) && defined(__STDC__)
-#define __weak_alias(alias,sym)					\
+#if 1	/* _Csym=1, Modified by T.Yokobayashi at 2016/12/07 */
+  #define __weak_alias(alias,sym)					\
+	__asm__(".weak _" __STRING(alias) " ; _" __STRING(alias)	\
+	    " = _" __STRING(sym))
+#else
+  #define __weak_alias(alias,sym)					\
 	__asm__(".weak " __STRING(alias) " ; " __STRING(alias)	\
 	    " = " __STRING(sym))
+#endif
 #define	__warn_references(sym,msg)				\
 	__asm__(".section .gnu.warning." __STRING(sym)		\
 	    " ; .ascii \"" msg "\" ; .text")
