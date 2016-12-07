@@ -28,8 +28,8 @@
 #endif
 
 
-#define		CCP_PROMPT			"T2EX >> "
-//#define		CCP_PROMPT			"CCP> "
+//#define		CCP_PROMPT			"T2EX >> "
+#define		CCP_PROMPT			"CCP> "
 
 
 

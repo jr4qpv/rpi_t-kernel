@@ -71,6 +71,9 @@
 
 #define	N_ARGS		16
 
+IMPORT int lua_main (int argc, char **argv);		///////////
+
+
 /*
 	ref command
 */
@@ -948,6 +951,9 @@ EXPORT	int	exec_cmd(char *cmd)
 #ifdef	NET_SAMPLE
 		{ "net",		cmd_net			},
 #endif
+#if 0	//////////
+		{ "lua",		lua_main		},
+#endif	//////////
 		{ "h",			help_cmd		},
 		{ "?",			help_cmd		}
 	};
