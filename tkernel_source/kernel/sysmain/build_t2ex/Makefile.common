@@ -50,7 +50,7 @@
 #
 
 #
-#	@(#)Makefile for gmake (tkernel) 2016/12/07
+#	@(#)Makefile for gmake (tkernel) 2016/12/08
 #	sysmain (common description)
 #
 
@@ -163,15 +163,17 @@ K_OBJ	+=	$(BLD_TKERNEL_PATH)/tkernel.o \
 ifdef MISC_CPRINT
   CFLAGS += -DUSE_MISC_CPRINT
 endif
-ifdef APP_EXTCMD
-  CFLAGS += -DUSE_APP_EXTCMD
-endif
 ifdef APP_SAMPLE
   CFLAGS += -DUSE_APP_SAMPLE
 endif
+ifdef LUA_CMD
+  CFLAGS += -DUSE_LUA_CMD
+endif
 
 K_OBJ += $(BLD_APPL_PATH)/ccp.o
-###K_OBJ += $(BLD_APPL_PATH)/lua.o
+ifdef LUA_CMD
+  K_OBJ += $(BLD_APPL_PATH)/lua.o
+endif
 ADD_MODULES += appl
 
 
@@ -179,7 +181,7 @@ ADD_MODULES += appl
 # T2EX function objects
 ifdef  T2EX
 
-  LDUSRLIBS += -lc
+##  LDUSRLIBS += -lc
 
   ifdef  T2EX_DT
     # T2EX calendar date / time
@@ -188,6 +190,8 @@ ifdef  T2EX
     CPPFLAGS += -DUSE_T2EX_DT
     LDUSRLIBS += -ldatetime
   endif
+
+  LDUSRLIBS += -lc                 ## この位置にしないとリンクエラー
 
   ifdef  T2EX_PM
     # T2EX program load
@@ -427,3 +431,4 @@ $(DEPS): ; touch $(DEPS)
 #|  ﾘﾝｸｽｸﾘﾌﾟﾄに"..\$(MDIR)\"のパス記述追加
 #|* 2016/09/12	version情報ファイル生成追加
 #|* 2016/11/18	｢Appl definitions」関連処理の追加
+#|* 2016/12/08	-lcの位置変更

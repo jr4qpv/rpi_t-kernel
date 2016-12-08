@@ -31,6 +31,8 @@
 #define		CMD_PROMPT			"T2EX >> "
 //#define		CMD_PROMPT			"CCP> "
 
+#define		FS_CMD_ENABLE		0
+
 
 
 #endif  /* __CMD_LOCAL_H__ */

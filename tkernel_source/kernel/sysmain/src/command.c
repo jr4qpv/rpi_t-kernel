@@ -49,13 +49,13 @@
  */
 
 /*
- *	@(#)command.c (appl) 2016/11/18
+ *	@(#)command.c (appl) 2016/12/08
  *
  */
 
 #include <basic.h>
 #include <stdlib.h>
-#ifdef	USE_T2EX_FS
+#if	defined(USE_T2EX_FS) & FS_CMD_ENABLE
 #include <stdio.h>
 #endif
 #include <tk/tkernel.h>
@@ -69,8 +69,9 @@
 #include "cmd_local.h"
 
 
-IMPORT int lua_main (int argc, char **argv);		///////////
-
+#ifdef USE_LUA_CMD
+IMPORT int lua_main (int argc, char **argv);
+#endif
 
 
 #ifdef	USE_T2EX_DT
@@ -229,7 +230,7 @@ static	const B	*week[] = {"sun","mon","tue","wed","thu","fri","sat"};
 #endif	/* USE_T2EX_DT */
 
 
-#ifdef	USE_T2EX_FS
+#if	defined(USE_T2EX_FS) & FS_CMD_ENABLE
 /*
 	attach command
 */
@@ -820,7 +821,7 @@ LOCAL void help_cmd(INT ac, B *av[])
 #ifdef	USE_T2EX_DT
 	P("date     [y m d [h m s]]\n");
 #endif
-#ifdef	USE_T2EX_PM
+#if	defined(USE_T2EX_FS) & FS_CMD_ENABLE
 	P("attach   devnm connm\n");
 	P("detach   connm\n");
 	P("cd       dir\n");
@@ -849,6 +850,9 @@ LOCAL void help_cmd(INT ac, B *av[])
 #ifdef	NET_SAMPLE
 	P("net      execute network sample\n");
 #endif
+#ifdef USE_LUA_CMD
+	P("lua      lua Interpreter\n");
+#endif
 }
 
 
@@ -868,7 +872,7 @@ EXPORT	INT	exec_cmd(INT ac, B *av[])
 #ifdef	USE_T2EX_DT
 		{ "date",		cmd_date		},
 #endif
-#ifdef	USE_T2EX_FS
+#if	defined(USE_T2EX_FS) & FS_CMD_ENABLE
 		{ "attach",		cmd_attach		},
 		{ "detach",		cmd_detach		},
 		{ "mkdir",		cmd_mkdir		},
@@ -897,9 +901,9 @@ EXPORT	INT	exec_cmd(INT ac, B *av[])
 #ifdef	NET_SAMPLE
 		{ "net",		cmd_net			},
 #endif
-#if 0	//////////
+#ifdef USE_LUA_CMD
 		{ "lua",		lua_main		},
-#endif	//////////
+#endif
 		{ "debug",		cmd_debug		},
 		{ "?",			help_cmd		}
 	};

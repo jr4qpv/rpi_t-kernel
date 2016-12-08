@@ -68,11 +68,14 @@
 #ifdef	USE_APP_SAMPLE
 IMPORT	void	sample_exec(void);
 #endif
+#ifdef	USE_T2EX_DT
+IMPORT	void	init_calendar_date(void);
+#endif
+
 
 /* Command functions */
 IMPORT	INT	exec_cmd(INT ac, B *av[]);
 IMPORT	int	exec_extcmd(int ac, char *av[]);
-///IMPORT	void	init_calendar_date(void);
 
 
 
@@ -114,19 +117,11 @@ EXPORT	void	appl_main( void )
 
 	/* initialize calendar date */
 #ifdef	USE_T2EX_DT
-///	init_calendar_date();
+	init_calendar_date();
 #endif
 
 	/* initialize library */
 	init_libmisc();
-
-
-
-#if 1
-	/* initialize calendar date */
-#ifdef	USE_T2EX_DT
-///	init_calendar_date();
-#endif
 
 	/* command processing */
 	for (fin = 0; fin == 0; ) {
@@ -165,7 +160,6 @@ EXPORT	void	appl_main( void )
 			}
 		}
 	}
-#endif
 }
 
 

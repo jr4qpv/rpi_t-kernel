@@ -50,7 +50,7 @@
 #
 
 #
-#	@(#)Makefile for gmake (BCM283x) 2016/11/22
+#	@(#)Makefile for gmake (BCM283x) 2016/12/08
 #	sysmain (system-dependent description)
 #
 
@@ -68,8 +68,8 @@ APP_VER = 0.10
 # ----------------------------------------------------------------------------
 # App definitions
 MISC_CPRINT = yes
-APP_EXTCMD = yes
 APP_SAMPLE = yes
+##LUA_CMD = yes
 
 # ----------------------------------------------------------------------------
 # T2EX definitions
@@ -200,6 +200,7 @@ include ../Makefile.common
 #|* 2016/03/13	LDUSRLIBS に｢-lmisc指定の追加
 #|* 2016/08/08	TYPE_RPI指定を追加(1,2,3を指定)、但しﾌｫﾙﾀﾞ名による指定が優先
 #|* 2016/09/08	APP_VERの追加
-#|* 2016/09/12	MISC_CPRINT,APP_EXTCMD,APP_SAMPLEの追加
-#|* 2016/11/22	LDUSRLIBS に｢-lrpi指定の追加
+#|* 2016/09/12	MISC_CPRINT,APP_SAMPLEの追加
+#|* 2016/11/22	LDUSRLIBS に｢-lrpi｣指定の追加
+#|* 2016/12/08	LUA_CMDの追加
 #|

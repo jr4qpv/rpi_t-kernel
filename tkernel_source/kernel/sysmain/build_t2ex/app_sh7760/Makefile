@@ -50,7 +50,7 @@
 #
 
 #
-#	@(#)Makefile for gmake (SH7760) 2016/11/18
+#	@(#)Makefile for gmake (SH7760) 2016/12/08
 #	sysmain (system-dependent description)
 #
 
@@ -65,8 +65,8 @@ APP_VER = 0.10
 # ----------------------------------------------------------------------------
 # App definitions
 MISC_CPRINT = yes
-APP_EXTCMD = yes
 APP_SAMPLE = yes
+##LUA_CMD = yes
 
 # ----------------------------------------------------------------------------
 # T2EX definitions
@@ -83,13 +83,13 @@ T2EX_MM_USE_TASKEXCEPTION = 1
 T2EX_MM_USE_DEFAULT_FAULT_HANDLER = 1
 
 # use T2EX file management
-##T2EX_FS = yes
+T2EX_FS = yes
 
 # use T2EX network communication
 ##T2EX_NET = yes
 
 # use T2EX calendar
-##T2EX_DT = yes
+T2EX_DT = yes
 
 # use T2EX program load
 ##T2EX_PM = yes
@@ -192,4 +192,5 @@ include ../Makefile.common
 #|* 2016/09/12	MISC_CPRINT,APP_EXTCMD,APP_SAMPLEの追加
 #|* 2016/11/09	KPIT GCCでは、LDLIBSに"-lgcc-Os-4-200"追加
 #|  (___udivsi3_i4i がundefined対策)
+#|* 2016/12/08	LUA_CMDの追加
 #|
