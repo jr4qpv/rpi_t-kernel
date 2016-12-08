@@ -16,7 +16,7 @@
   #include <stdio.h>
 
   #define	P			printf
-  #define	Gets(buf, bufsz)	fgets(buf, bufsz, stdin)
+  #define	Gets(buf, bufsz)	fgets((char*)buf, bufsz, stdin)
 #else
  #ifdef	USE_MISC_CPRINT
   #define	P			cprintf
