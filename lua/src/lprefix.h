@@ -7,7 +7,7 @@
 #ifndef lprefix_h
 #define lprefix_h
 
-#if 1	////// kari //////
+#ifdef __GNUC__		////// kari //////
 //#include <basic.h>
 #define	wint_t		int
 #define	l_signalT	int
