@@ -189,16 +189,18 @@ alias l='ls -CF'                              #
 # 
 # alias cd=cd_func
 
-#export TC_KIND=TOOL
+export TC_KIND=TOOL
+#export TC_KIND=ARMCT41
 #export TC_KIND=SH_GCC_v332
 #export TC_KIND=SH_GCC_v402
-export TC_KIND=SH_GCC_KPIT
+#export TC_KIND=SH_GCC_KPIT
 #export TC_KIND=ARM_GCC_EMB
 export C_DRV=/C
 export PRJPATH=${C_DRV}/work/t-kernel
 source ${PRJPATH}/_misc/etc/toolenv.sh
 
-alias e='"${C_DRV}/Program Files/WZ EDITOR 9"/wzeditor'
+alias wz='"${C_DRV}/Program Files/WZ EDITOR 9"/wzeditor'
+alias e='runemacs'
 alias gterm='${BD}/tool/mingw32-x86_64/etc/gterm -l /dev/ttyS0 -b -x'
 ##cd $BD/monitor/tmmain/build
 ##cd $BD/kernel/sysmain/build_t2ex/app_rzt1.debug
