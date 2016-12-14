@@ -28,6 +28,7 @@ extern "C" {
 
 
 /*** Misc標準の型定義 ***/
+#if 0	///////////////
 #ifndef _MISC_TYPEDEF
 #define _MISC_TYPEDEF
 /* もし以下を定義したくない時は、本inludeの前に｢_MISC_TYPEDEF｣を定義しておく */
@@ -35,6 +36,7 @@ typedef	unsigned char	BYTE;		/* unsigned 8bit integer */
 typedef unsigned short	USHORT;		/* unsinged 16bit integer */
 typedef	unsigned long	ULONG;		/* unsinged 32bit integer */
 #endif	/* _MISC_TYPEDEF */
+#endif	//////////////
 
 
 #if 0	////////////////
@@ -64,10 +66,12 @@ typedef	unsigned long	ULONG;		/* unsinged 32bit integer */
 
 #define	debug_trap()	Asm("trapa   #0x0b")
 
+#if 0	/////////////
 ///#define	LD_WORD(ptr)		(WORD)(((WORD)*((BYTE*)(ptr)+1)<<8)|(WORD)*(BYTE*)(ptr))
 #define	LD_ULONG(ptr)		(ULONG)(((ULONG)*((BYTE*)(ptr)+3)<<24)|((ULONG)*((BYTE*)(ptr)+2)<<16)|((USHORT)*((BYTE*)(ptr)+1)<<8)|*(BYTE*)(ptr))
 ///#define	ST_WORD(ptr,val)	*(BYTE*)(ptr)=(BYTE)(val); *((BYTE*)(ptr)+1)=(BYTE)((WORD)(val)>>8)
 ///#define	ST_ULONG(ptr,val)	*(BYTE*)(ptr)=(BYTE)(val); *((BYTE*)(ptr)+1)=(BYTE)((WORD)(val)>>8); *((BYTE*)(ptr)+2)=(BYTE)((DWORD)(val)>>16); *((BYTE*)(ptr)+3)=(BYTE)((DWORD)(val)>>24)
+#endif	////////////
 
 
 /* ----- initialize library ----- */
