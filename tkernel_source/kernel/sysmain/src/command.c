@@ -88,7 +88,7 @@ LOCAL	void	rtc_get_set(SYSTIM *stm, BOOL set)
 	struct tzinfo	tz;
 
 	/* open RTC (CLOCK) driver */
-	dd = tk_opn_dev("CLOCK", (set == TRUE) ? TD_WRITE : TD_READ);
+	dd = tk_opn_dev((UB*)"CLOCK", (set == TRUE) ? TD_WRITE : TD_READ);
 	if (dd < E_OK) {
 		P("Can't open CLOCK device [%#x]\n", dd);
 		goto exit0;
@@ -187,7 +187,7 @@ LOCAL	void	cmd_date(INT ac, B *av[])
 	ER	er;
 	struct tm	ctm;
 	SYSTIM	stm;
-static	const B	*week[] = {"sun","mon","tue","wed","thu","fri","sat"};
+static	const char	*week[] = {"sun","mon","tue","wed","thu","fri","sat"};
 
 	if (ac < 2) {		/* show current date */
 		tk_get_tim(&stm);
@@ -201,12 +201,12 @@ static	const B	*week[] = {"sun","mon","tue","wed","thu","fri","sat"};
 				ctm.tm_hour, ctm.tm_min, ctm.tm_sec);
 		}
 	} else if (ac >= 4) {	/* set current date */
-		ctm.tm_year = atoi(av[1]) - 1900;
-		ctm.tm_mon = atoi(av[2]) - 1;
-		ctm.tm_mday = atoi(av[3]);
-		ctm.tm_hour = (ac >= 5) ? atoi(av[4]) : 0;
-		ctm.tm_min = (ac >= 6) ? atoi(av[5]) : 0;
-		ctm.tm_sec = (ac >= 7) ? atoi(av[6]) : 0;
+		ctm.tm_year = atoi((char*)av[1]) - 1900;
+		ctm.tm_mon = atoi((char*)av[2]) - 1;
+		ctm.tm_mday = atoi((char*)av[3]);
+		ctm.tm_hour = (ac >= 5) ? atoi((char*)av[4]) : 0;
+		ctm.tm_min = (ac >= 6) ? atoi((char*)av[5]) : 0;
+		ctm.tm_sec = (ac >= 7) ? atoi((char*)av[6]) : 0;
 		ctm.tm_usec = 0;
 		ctm.tm_wday = -1;
 		ctm.tm_isdst = 0;
@@ -222,7 +222,7 @@ static	const B	*week[] = {"sun","mon","tue","wed","thu","fri","sat"};
 				rtc_get_set(&stm, TRUE);
 			}
 		}
-	} else if (ac == 2 && strcmp(av[1], "init") == 0) {
+	} else if (ac == 2 && strcmp((char*)av[1], "init") == 0) {
 		/* initialize current date from RTC */
 		init_calendar_date();
 	}
