@@ -321,6 +321,8 @@ LOCAL void cmd_test(int argc, char *argv[])
 LOCAL void help_cmd(int ac, char *av[])
 {
 	P("ref      [item]\n");
+	P("d{b/h/w} [adr [cnt]] : memory Dump.\n");
+	P("m{b/h/w} [adr] : Memory set.\n");
 }
 
 
