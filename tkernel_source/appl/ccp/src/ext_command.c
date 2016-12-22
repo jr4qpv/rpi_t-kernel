@@ -139,11 +139,11 @@ LOCAL void cmd_mem(int argc, char *argv[])
 
 
 /*============================================
-       ダウンロードコマンド(LO,lo,load)
+       UARTロードコマンド(LO,lo,uaload)
 
 	LO protocol[,loading_addr]
  =============================================*/
-LOCAL void cmd_load(int argc, char *argv[])
+LOCAL void cmd_uaload(int argc, char *argv[])
 {
 	int rc;
 	W	i, par;
@@ -323,6 +323,7 @@ LOCAL void help_cmd(int ac, char *av[])
 	P("ref      [item]\n");
 	P("d{b/h/w} [adr [cnt]] : memory Dump.\n");
 	P("m{b/h/w} [adr] : Memory set.\n");
+	P("uaload   {S|XS|XM} [adr] : UART load.\n");
 }
 
 
@@ -353,9 +354,9 @@ EXPORT	int	exec_extcmd(int ac, char *av[])
 		{ "mh",			cmd_mem			},
 		{ "mw",			cmd_mem			},
 
-		{ "LO",			cmd_load		},
-		{ "lo",			cmd_load		},
-		{ "load",		cmd_load		},
+		{ "LO",			cmd_uaload		},
+		{ "lo",			cmd_uaload		},
+		{ "uaload",		cmd_uaload		},
 
 ///		{ "dir",		cmd_dir		},
 		{ "fload",		cmd_fload		},
