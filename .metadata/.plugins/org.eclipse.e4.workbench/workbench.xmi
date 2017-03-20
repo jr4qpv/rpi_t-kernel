@@ -3,7 +3,7 @@
   <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;workbench>&#xD;&#xA;&lt;mruList>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.cdt.ui.editor.CEditor&quot; name=&quot;power.c&quot; tooltip=&quot;tkernel_source/kernel/sysdepend/device/app_rzt1/power.c&quot;>&#xD;&#xA;&lt;persistable path=&quot;/tkernel_source/kernel/sysdepend/device/app_rzt1/power.c&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.cdt.ui.editor.CEditor&quot; name=&quot;sysinit_main.c&quot; tooltip=&quot;tkernel_source/kernel/sysinit/src/sysinit_main.c&quot;>&#xD;&#xA;&lt;persistable path=&quot;/tkernel_source/kernel/sysinit/src/sysinit_main.c&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.cdt.ui.editor.asm.AsmEditor&quot; name=&quot;loader_init.S&quot; tooltip=&quot;tkernel_source/monitor/hwdepend/app_rzt1/src/common/loader_init.S&quot;>&#xD;&#xA;&lt;persistable path=&quot;/tkernel_source/monitor/hwdepend/app_rzt1/src/common/loader_init.S&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.cdt.ui.editor.asm.AsmEditor&quot; name=&quot;icrt0_ram.S&quot; tooltip=&quot;tkernel_source/kernel/sysdepend/device/app_rzt1/icrt0_ram.S&quot;>&#xD;&#xA;&lt;persistable path=&quot;/tkernel_source/kernel/sysdepend/device/app_rzt1/icrt0_ram.S&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.cdt.ui.editor.asm.AsmEditor&quot; name=&quot;eitent.S&quot; tooltip=&quot;tkernel_source/monitor/hwdepend/rpi_bcm283x/src/eitent.S&quot;>&#xD;&#xA;&lt;persistable path=&quot;/tkernel_source/monitor/hwdepend/rpi_bcm283x/src/eitent.S&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.cdt.ui.editor.asm.AsmEditor&quot; name=&quot;icrt0.S&quot; tooltip=&quot;tkernel_source/kernel/sysdepend/device/rpi_bcm283x/icrt0.S&quot;>&#xD;&#xA;&lt;persistable path=&quot;/tkernel_source/kernel/sysdepend/device/rpi_bcm283x/icrt0.S&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;/mruList>&#xD;&#xA;&lt;/workbench>"/>
   <tags>activeSchemeId:org.eclipse.ui.defaultAcceleratorConfiguration</tags>
   <tags>ModelMigrationProcessor.001</tags>
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_1O__InrgEeat1cvM-X531g" elementId="IDEWindow" contributorURI="platform:/plugin/org.eclipse.platform" selectedElement="_1frfc3rgEeat1cvM-X531g" label="%trimmedwindow.label.eclipseSDK" x="82" y="48" width="1438" height="880">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_1O__InrgEeat1cvM-X531g" elementId="IDEWindow" contributorURI="platform:/plugin/org.eclipse.platform" selectedElement="_1frfc3rgEeat1cvM-X531g" label="%trimmedwindow.label.eclipseSDK" x="63" y="35" width="1438" height="880">
     <persistedState key="coolBarVisible" value="true"/>
     <persistedState key="perspectiveBarVisible" value="true"/>
     <persistedState key="isRestored" value="true"/>
@@ -527,7 +527,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_1guBQnrgEeat1cvM-X531g" elementId="org.eclipse.ui.workbench.file">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_1K2SBw0nEeeYlIwOcxGzEQ" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="&#x5370;&#x5237;" command="_1PctFHrgEeat1cvM-X531g"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_F3Q6EA0qEeeyR-JJml71rA" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="&#x5370;&#x5237;" command="_1PctFHrgEeat1cvM-X531g"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_1guBQ3rgEeat1cvM-X531g" elementId="additions" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -563,7 +563,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_1guBR3rgEeat1cvM-X531g" elementId="org.eclipse.ui.workbench.navigate">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_1LJM9Q0nEeeYlIwOcxGzEQ" elementId="org.eclipse.ui.window.pinEditor" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="&#x30a8;&#x30c7;&#x30a3;&#x30bf;&#x30fc;&#x306e;&#x30d4;&#x30f3;&#x7559;&#x3081;" type="Check" command="_1PcsjnrgEeat1cvM-X531g"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_F3Q6Gw0qEeeyR-JJml71rA" elementId="org.eclipse.ui.window.pinEditor" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="&#x30a8;&#x30c7;&#x30a3;&#x30bf;&#x30fc;&#x306e;&#x30d4;&#x30f3;&#x7559;&#x3081;" type="Check" command="_1PcsjnrgEeat1cvM-X531g"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_1guBSHrgEeat1cvM-X531g" elementId="group.editor" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -1452,6 +1452,10 @@
     <tags>menuContribution:popup</tags>
   </menuContributions>
   <menuContributions xmi:id="_3p2rEA0nEeeYlIwOcxGzEQ" elementId="null:12639744" positionInParent="after=additions" parentId="popup">
+    <tags>scheme:popup</tags>
+    <tags>menuContribution:popup</tags>
+  </menuContributions>
+  <menuContributions xmi:id="_GXvw8A0qEeeyR-JJml71rA" elementId="null:22981336" positionInParent="after=additions" parentId="popup">
     <tags>scheme:popup</tags>
     <tags>menuContribution:popup</tags>
   </menuContributions>
