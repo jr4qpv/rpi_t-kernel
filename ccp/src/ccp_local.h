@@ -28,6 +28,10 @@
 #endif
 
 
+//#define		CCP_PROMPT			"T2EX >> "
+#define		CCP_PROMPT			"CCP> "
+
+
 
 #endif  /* __CCP_LOCAL_H__ */
 

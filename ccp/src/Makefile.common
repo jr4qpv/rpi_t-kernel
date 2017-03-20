@@ -7,7 +7,7 @@
 #
 
 #
-#    @(#)Makefile.common (appl) 2016/11/18
+#    @(#)Makefile.common (appl) 2016/12/07
 #
 #
 
@@ -29,8 +29,8 @@ VPATH	= $(S)
 HEADER := $(S) $(BD)/include/t2ex $(HEADER)
 
 # source files
-SRC	=	ccp_main.c
-SRC	+=	command.c ref_command.c ext_command.c
+SRC	=	ext_command.c
+SRC	+=	ref_command.c 
 
 # object files
 OBJ	= $(addsuffix .o, $(basename $(SRC)))
