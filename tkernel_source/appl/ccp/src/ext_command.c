@@ -18,13 +18,16 @@
 #include "ccp_local.h"
 
 
-/*------( 外部参照関数 )------*/
-
 
 /*******( 定数の定義 )*******/
+#define	RZT1_CMD		1
 
 
-/*******( 外部参照変数 )*******/
+/*******( 外部参照 )*******/
+#ifdef RZT1_CMD
+extern void cmd_flash(int argc, char *argv[]);
+
+#endif
 
 
 /*******( 共通変数定義 )*******/
@@ -366,6 +369,10 @@ EXPORT	int	exec_extcmd(int ac, char *av[])
 #endif
 
 		{ "ref",		cmd_ref			},
+
+#ifdef RZT1_CMD
+		{ "flash",		cmd_flash		},
+#endif
 
 #if 0	//////////
 		{ "lua",		lua_main		},
