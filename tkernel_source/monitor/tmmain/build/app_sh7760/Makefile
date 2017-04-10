@@ -123,11 +123,11 @@ $(TARGET).bin:	$(TARGET)
 $(TARGET).mot:	$(TARGET)
 	$(OBJCOPY) -O srec --srec-forceS3 --srec-len 32 $< $@
 
-$(TARGET): $(M_OBJ) $(OBJ) version.o
+$(TARGET): $(M_OBJ) $(OBJ) ver_info.o
 	$(CC) $(TARGET_ARCH) $(LDFLAGS) $^ $(LDLIBS) $(OUTPUT_OPTION)
 
-version.c: Makefile $(OBJ) $(M_OBJ)
-	echo "$$VERSION" > version.c
+ver_info.c: Makefile $(OBJ) $(M_OBJ)
+	echo "$$VERSION" > ver_info.c
 
 hwdepend:
 	( cd $(HWDEPEND_PATH) ; $(MAKE) ; $(MAKE) install ; )
@@ -146,7 +146,7 @@ clean:
 	( cd $(DRV_SIO_PATH) ; $(MAKE) clean )
 	( cd $(DRV_FLASH_PATH) ; $(MAKE) clean )
 	( cd $(DRV_MEMDISK_PATH) ; $(MAKE) clean )
-	$(RM) version.[co] $(OBJ) $(M_OBJ) $(TARGET) $(ALL) $(DEPS)
+	$(RM) ver_info.[co] $(OBJ) $(M_OBJ) $(TARGET) $(ALL) $(DEPS)
 
 install: $(addprefix $(EXE_INSTALLDIR)/, $(ALL))
 
@@ -171,4 +171,5 @@ $(SRC.C):
 #|* 2016/03/17	KPIT GCCでは、LDLIBSに"-lgcc-Os-4-200"追加
 #|  (___udivsi3_i4i がundefined対策)
 #|* 2016/11/10	Title[0]にBOARDNAME文字列と、Title[3]にBOARDNAME文字列の追加
+#|* 2017/04/10	バージョン情報のファイル名を ver_info に変更
 #|

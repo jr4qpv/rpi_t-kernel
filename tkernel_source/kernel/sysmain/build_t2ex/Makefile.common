@@ -270,7 +270,7 @@ emu: all config monitor
 	$(MAKE) install_emu
 
 # objects for RAM
-$(TARGET_RAM): $(TARGET_RAMCRT0) $(OBJ) $(U_OBJ) $(K_OBJ) $(I_OBJ) version.o
+$(TARGET_RAM): $(TARGET_RAMCRT0) $(OBJ) $(U_OBJ) $(K_OBJ) $(I_OBJ) ver_info.o
 	$(CC) $(TARGET_ARCH) $(LDFLAGS) $^ $(LDLIBS) $(STDLIB) $(OUTPUT_OPTION)
 
 $(TARGET_RAM:%.sys=%.map): $(TARGET_RAM)
@@ -283,7 +283,7 @@ $(TARGET_RAM:%.sys=%.bin): $(TARGET_RAM)
 	$(OBJCOPY) -O binary $< $@
 
 # objects for ROM
-$(TARGET_ROM): $(TARGET_ROMCRT0) $(OBJ) $(U_OBJ) $(K_OBJ) $(I_OBJ) version.o
+$(TARGET_ROM): $(TARGET_ROMCRT0) $(OBJ) $(U_OBJ) $(K_OBJ) $(I_OBJ) ver_info.o
 	$(CC) $(TARGET_ARCH) $(LDFLAGS) $^ $(LDLIBS) $(STDLIB) $(OUTPUT_OPTION)
 
 $(TARGET_ROM:%.rom=%.map): $(TARGET_ROM)
@@ -295,8 +295,8 @@ $(TARGET_ROM:%.rom=%.mot): $(TARGET_ROM)
 $(TARGET_ROM:%.rom=%.bin): $(TARGET_ROM)
 	$(OBJCOPY) -O binary $< $@
 
-version.c: Makefile $(OBJ)
-	echo "$$VERSION_APP" > version.c
+ver_info.c: Makefile $(OBJ)
+	echo "$$VERSION_APP" > ver_info.c
 
 # objects for emulator rom images
 EMU_OBJ	= 	$(BLD_MONITOR_PATH)/tmonitor.mot \
@@ -405,7 +405,7 @@ ifdef  T2EX
 endif
 	$(RM) $(OBJ) $(U_OBJ) $(TARGET_RAMCRT0) $(TARGET_ROMCRT0) $(ALL) $(DEPS)
 	$(RM) $(TARGET_EMU) $(TARGET_DBG_EMU)
-	$(RM) version.[co]
+	$(RM) ver_info.[co]
 
 # clean all objects and source files of svc interface 
 clean_all: clean clean_source
@@ -432,3 +432,4 @@ $(DEPS): ; touch $(DEPS)
 #|* 2016/09/12	version情報ファイル生成追加
 #|* 2016/11/18	｢Appl definitions」関連処理の追加
 #|* 2016/12/08	-lcの位置変更
+#|* 2017/04/10	version情報のファイル名を ver_info に変更

@@ -7,7 +7,7 @@
 Dependencies
 Dependencies_src
 \!OLD/
-version.c
+ver_info.c
 tmonitor
 tmonitor.map
 tmonitor.mot
