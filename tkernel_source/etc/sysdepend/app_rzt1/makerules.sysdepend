@@ -86,6 +86,9 @@ endif
 ifneq ($(filter Linux-%, $(CROSS_ARCH)), )
   PATH := $(PATH):/usr/local/bin:/bin:/usr/bin
 endif
+ifneq ($(filter Darwin-%, $(CROSS_ARCH)), )
+  PATH := $(PATH):/usr/local/bin:/bin:/usr/bin
+endif
 ifneq ($(filter Cygwin-%, $(CROSS_ARCH)), )
   PATH := $(PATH):/usr/local/bin:/bin:/usr/bin
 endif
@@ -319,4 +322,5 @@ OUTPUT_SREC = -O srec --srec-forceS3 --srec-len 32
 #|* 2016/08/19	｢_GNU_CONFIG｣のprefix指定は、最後の"-"まで含めるように変更
 #|* 2016/08/20	｢GNUARM_2｣変数は使わないように変更
 #|* 2016/08/31	｢_GNU_CONFIG｣が未指定の時はﾃﾞﾌｫﾙﾄで"arm-none-eabi-"をセット
+#|* 2017/04/11	macOS環境に対応
 #|
