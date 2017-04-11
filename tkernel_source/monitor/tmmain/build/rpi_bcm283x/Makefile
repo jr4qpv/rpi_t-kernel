@@ -19,7 +19,7 @@
 # ----------------------------------------------------------------------
 #
 
-#	@(#)T-Monitor : tmmain (bcm283x) 2016/09/08
+#	@(#)T-Monitor : tmmain (bcm283x) 2017/04/11
 
 MACHINE = bcm283x
 TETYPE = rpi
@@ -56,7 +56,7 @@ HEADER = $(BD)/include $(BD)/monitor/include
 # ----------------------------------------------------------------------------
 
 # vsersion for rpi
-VER_RPI := 0.10
+VER_RPI := 0.11
 
 # rpi board name
 ifeq ($(TYPE_RPI),1)
@@ -187,4 +187,5 @@ $(SRC.C):
 #|* 2016/09/08	VER_RPI定義の追加し、起動時表示するようにTitle[0]に含めた
 #|* 2016/09/08	Title[4]にVER_RPI文字列の追加
 #|* 2017/04/10	バージョン情報のファイル名を ver_info に変更
+#|* 2017/04/11	VER_RPI=0.11に変更
 #|
