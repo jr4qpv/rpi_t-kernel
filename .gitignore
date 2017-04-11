@@ -9,8 +9,6 @@ Dependencies_src
 \!OLD/
 ver_info.c
 tmonitor
-tmonitor.map
-tmonitor.mot
 *.jlink
 *.launch
 *.log
@@ -20,6 +18,5 @@ rominfo-ram
 rominfo-rom
 *.a
 *.uo
-rpi_tk-dist-ucode.png
 .history/
 *.snap
