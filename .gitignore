@@ -7,10 +7,8 @@
 Dependencies
 Dependencies_src
 \!OLD/
-version.c
+ver_info.c
 tmonitor
-tmonitor.map
-tmonitor.mot
 .metadata/
 .settings/
 .cproject
@@ -23,6 +21,9 @@ rominfo-ram
 rominfo-rom
 *.a
 *.uo
+tkernel_source/tool/
+lua/
+librzt/
 app_rzt1/
 app_rzt1.*/
 rzt1/
