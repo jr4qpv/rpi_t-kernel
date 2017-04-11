@@ -27,6 +27,7 @@
  */
 LOCAL void sample_tsk( INT stacd, void *exinf )
 {
+	tk_dly_tsk(100);
 	P("3 - Sample task started (tid=%d).\n", tk_get_tid());
 
 	while (1) {
