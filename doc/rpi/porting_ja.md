@@ -1,5 +1,5 @@
 T-Kernel for Raspberry Pi 移植メモ
-==================================
+======================================
 本ファイルは、Markdown記法で書いています。
 
 概要
@@ -7,20 +7,20 @@ T-Kernel for Raspberry Pi 移植メモ
 Tronフォーラム（<http://www.tron.org/ja/>）で下記公開のオープンソース T-Kernel2.0 & Extensyon(T2EX)から、[Raspberry Pi](https://ja.wikipedia.org/wiki/Raspberry_Pi) にポーティングしたリアルタイムＯＳ。
 
 1. [T-Kernel 2.02.00 Software Package](http://www.tron.org/download/index.php?route=product/product&product_id=133)
- - `2015/06/08  18:35  396,299 tkernel_source.tar.gz`
+    - `2015/06/08  18:35  396,299 tkernel_source.tar.gz`
 2. [T-Kernel 2.0 Extension（T2EX 2.01.00）](http://www.tron.org/download/index.php?route=product/product&product_id=134)
- - `2015/06/09  13:16  419,593 t2ex_source.tar.gz`
- - `2015/03/25  17:12  1,219,629 bsd_source.tar.gz`
+    - `2015/06/09  13:16  419,593 t2ex_source.tar.gz`
+    - `2015/03/25  17:12  1,219,629 bsd_source.tar.gz`
 
 #### 【Raspberry Pi 対応機種】
 TYPE_RPIは、コンパイル時にRasperry Piの機種を区別しているmake変数。
 
-モデル        | TYPE_RPI |備考
-:-------------|:--------:|:-----------------------
-Pi Zero       | 1        |
-Pi 1 Model B+ | 1        |動作未確認
-Pi 2 Model B  | 2        |シングルコア動作
-Pi 3 Model B  | 3        |32bit,シングルコア動作
+|モデル        | TYPE_RPI |備考                    |
+|:-------------|:--------:|:-----------------------|
+|Pi Zero       | 1        |                        |
+|Pi 1 Model B+ | 1        |動作未確認              |
+|Pi 2 Model B  | 2        |シングルコア動作        |
+|Pi 3 Model B  | 3        |32bit,シングルコア動作  |
 
 ビルド環境
 ----------
@@ -29,8 +29,8 @@ Pi 3 Model B  | 3        |32bit,シングルコア動作
 * [msys2](https://msys2.github.io/)
 * [GNU ARM Embedded Toolchain](https://launchpad.net/gcc-arm-embedded)  5-2016-q2-update
 
-#### 【Mac】
-* OS X EI Capitan v10.11.6
+#### 【macOS】
+* macOS Sierra v10.12.4
 * [GNU ARM Embedded Toolchain](https://launchpad.net/gcc-arm-embedded)  5-2016-q2-update
 
 #### 【Linux】
@@ -43,10 +43,10 @@ Pi 3 Model B  | 3        |32bit,シングルコア動作
 
 コンパイル実行するには、下記環境変数が設定されている事が必要。
 
-環境変数 |説明                       |備考
-:--------|:--------------------------|:-------------
-BD       |T-Kernelソースのベースパス |
-GNU_BD   |ARMコンパイラのベースパス  |
+|環境変数 |説明                       |備考          |
+|:--------|:--------------------------|:-------------|
+|BD       |T-Kernelソースのベースパス |              |
+|GNU_BD   |ARMコンパイラのベースパス  |              |
 
 #### 環境変数の設定
 `$HOME/.bashrc`に下記設定を追記しておくと便利。本プログラムは `C:¥work¥` にgitで取得したものとする。
@@ -59,58 +59,61 @@ export GNU_BD='/C/Program Files (x86)/GNU Tools ARM Embedded/5.4 2016q2'
 #### ■T-Monitorのコンパイル
 下記フォルダにて `make` を実行する事でコンパイルする。
 
-ビルドフォルダ                            |機種                |備考
-:-----------------------------------------|:-------------------|:-------------
-$BD/monitor/tmmain/build/rpi_bcm283x      |Raspberry Pi Zero/1 |
-$BD/monitor/tmmain/build/rpi_bcm283x.rpi2 |Raspberry Pi 2      |
-$BD/monitor/tmmain/build/rpi_bcm283x.rpi3 |Raspberry Pi 3      |
+|ビルドフォルダ                            |機種                |備考        |
+|:-----------------------------------------|:-------------------|:-----------|
+|$BD/monitor/tmmain/build/rpi_bcm283x      |Raspberry Pi Zero/1 |            |
+|$BD/monitor/tmmain/build/rpi_bcm283x.rpi2 |Raspberry Pi 2      |            |
+|$BD/monitor/tmmain/build/rpi_bcm283x.rpi3 |Raspberry Pi 3      |            |
+
 * `.debug`ついたフォルダでコンパイルするとデバック情報を付加する
 * `make clean`で生成されたファイルを削除
 
 生成されるT-Monitorオブジェクトファイル
 
-ファイル名    |説明                       |備考
-:-------------|:--------------------------|:-------------
-tmonitor      |elfファイル                |
-tmonitor.bin  |バイナリファイル           |←これを利用
-tmonitor.mot  |Sフォーマットファイル      |
+|ファイル名    |説明                       |備考          |
+|:-------------|:--------------------------|:-------------|
+|tmonitor      |elfファイル                |              |
+|tmonitor.bin  |バイナリファイル           |←これを利用  |
+|tmonitor.mot  |Sフォーマットファイル      |              |
 
 #### ■config情報のコンパイル
 下記フォルダにて `make` を実行する事でconfigファイルを作成する。
 
-ビルドフォルダ                            |機種                |備考
-:-----------------------------------------|:-------------------|:-------------
-$BD/config/build_t2ex/rpi_bcm283x         |Raspberry Pi Zero/1 |
-$BD/config/build_t2ex/rpi_bcm283x.rpi2    |Raspberry Pi 2      |
-$BD/config/build_t2ex/rpi_bcm283x.rpi3    |Raspberry Pi 3      |
+|ビルドフォルダ                            |機種                |備考       |
+|:-----------------------------------------|:-------------------|:----------|
+|$BD/config/build_t2ex/rpi_bcm283x         |Raspberry Pi Zero/1 |           |
+|$BD/config/build_t2ex/rpi_bcm283x.rpi2    |Raspberry Pi 2      |           |
+|$BD/config/build_t2ex/rpi_bcm283x.rpi3    |Raspberry Pi 3      |           |
+
 * `make clean`で生成されたファイルを削除
 
 生成されるconfigオブジェクトファイル
 
-ファイル名           |説明                       |備考
-:--------------------|:--------------------------|:-------------
-rominfo-rom          |elfファイル                |
-rominfo_t2ex-rom.bin |バイナリファイル           |←これを利用
-rominfo_t2ex-rom.mot |Sフォーマットファイル      |
+|ファイル名           |説明                       |備考          |
+|:--------------------|:--------------------------|:-------------|
+|rominfo-rom          |elfファイル                |              |
+|rominfo_t2ex-rom.bin |バイナリファイル           |←これを利用  |
+|rominfo_t2ex-rom.mot |Sフォーマットファイル      |              |
 
 #### ■T-Kernelのコンパイル
 下記フォルダにて `make` を実行する事でコンパイルする。
 
-ビルドフォルダ                                 |機種                |備考
-:----------------------------------------------|:-------------------|:-------------
-$BD/kernel/sysmain/build_t2ex/rpi_bcm283x      |Raspberry Pi Zero/1 |
-$BD/kernel/sysmain/build_t2ex/rpi_bcm283x.rpi2 |Raspberry Pi 2      |
-$BD/kernel/sysmain/build_t2ex/rpi_bcm283x.rpi3 |Raspberry Pi 3      |
+|ビルドフォルダ                                 |機種                |備考     |
+|:----------------------------------------------|:-------------------|:--------|
+|$BD/kernel/sysmain/build_t2ex/rpi_bcm283x      |Raspberry Pi Zero/1 |         |
+|$BD/kernel/sysmain/build_t2ex/rpi_bcm283x.rpi2 |Raspberry Pi 2      |         |
+|$BD/kernel/sysmain/build_t2ex/rpi_bcm283x.rpi3 |Raspberry Pi 3      |         |
+
 * `.debug`ついたフォルダでコンパイルするとデバック情報を付加する
 * `make clean`で生成されたファイルを削除
 
 生成されるT-Kernelオブジェクトファイル
 
-ファイル名            |説明                       |備考
-:---------------------|:--------------------------|:-------------
-kernel_t2ex-rom.rom   |elfファイル                |
-kernel_t2ex-rom.bin   |バイナリファイル           |←これを利用
-kernel_t2ex-rom.mot   |Sフォーマットファイル      |
+|ファイル名            |説明                       |備考          |
+|:---------------------|:--------------------------|:-------------|
+|kernel_t2ex-rom.rom   |elfファイル                |              |
+|kernel_t2ex-rom.bin   |バイナリファイル           |←これを利用  |
+|kernel_t2ex-rom.mot   |Sフォーマットファイル      |              |
 
 #### コンパイルの実行例
 ```
@@ -126,11 +129,11 @@ $ make
 ------------------
 Raspberry Piとパソコンとは、シリアル通信で接続する。Raspberry Piのシリアル通信関係のコネクタピンは下記。尚、Raspberry Pi側は3.3V信号なので、シリアル-USB変換ケーブルなどが必要。詳しくは参考リンク[4.]を参照。
 
-Raspberry Pi ピン名称|ピン番号|シリアル信号
-:--------------------|:------:|:-----------
-GND                  |6       |GND
-GPIO 14 (TXD)        |8       |RX
-GPIO 15 (RXD)        |10      |TX
+|Raspberry Pi ピン名称|ピン番号|シリアル信号|
+|:--------------------|:------:|:-----------|
+|GND                  |6       |GND         |
+|GPIO 14 (TXD)        |8       |RX          |
+|GPIO 15 (RXD)        |10      |TX          |
 
 ※通信仕様は下記
 
@@ -285,12 +288,12 @@ u-boot> saveenv
 ----------------------
 T-Kernel/T-Monitorではシリアルポートは、Raspberry Piでは下記を利用
 
-モデル        | TYPE_RPI |UART#|備考
-:-------------|:--------:|:---:|:----------------
-Pi Zero       | 1        | 0   |PL011
-Pi 1 Model B+ | 1        | 0   |PL011
-Pi 2 Model B  | 2        | 0   |PL011
-Pi 3 Model B  | 3        | 1   |mini UART
+|モデル        | TYPE_RPI |UART#|備考             |
+|:-------------|:--------:|:---:|:----------------|
+|Pi Zero       | 1        | 0   |PL011            |
+|Pi 1 Model B+ | 1        | 0   |PL011            |
+|Pi 2 Model B  | 2        | 0   |PL011            |
+|Pi 3 Model B  | 3        | 1   |mini UART        |
 
 タイマー
 --------
@@ -301,29 +304,31 @@ LED割り当て
 T-MonitorのcpuLED()関数で、LED操作ができる。LED表示の為に下記のGIIOポートを割り当てている。
 
 #### Raspberry Pi Zero/1/2
-bit番号|GPIO番号|備考
-:-----:|:------:|:--------------------------------
-  0    | 47     |ACT（緑)
-  1    | 35     |PWR（赤）,Raspberry Pi Zeroは無し
+
+|bit番号|GPIO番号|備考                             |
+|:-----:|:------:|:--------------------------------|
+|  0    | 47     |ACT（緑)                         |
+|  1    | 35     |PWR（赤）,Raspberry Pi Zeroは無し|
 
 #### Raspberry Pi 3
 Raspberry Pi 3ではACT/PWRはARM CPUから操作できない。
 
-bit番号|GPIO番号|備考
-:-----:|:------:|:--------------------------------
-  0    | 17     |コネクタの11ピン
+|bit番号|GPIO番号|備考                             |
+|:-----:|:------:|:--------------------------------|
+|  0    | 17     |コネクタの11ピン                 |
 
 JTAGピン
 --------
 JTAGデバッグ可能なように、T-Monitorの初期化時に、Raspberry PiのJTAGピンを有効にしている。Raspberry PiコネクタのJTAGピンの割り当ては下記。
 
-ピン番号|GPIO番号|GPIOモード|機能（JTAG）
-:-------|:-------|:---------|:-----------
-15      |GPIO22  |ALT4      |TRST
-7       |GPIO4   |ALT5      |TDI
-13      |GPIO27  |ALT5      |TMS
-22      |GPIO25  |ALT5      |TCK
-18      |GPIO24  |ALT5      |TDO
+|ピン番号|GPIO番号|GPIOモード|機能（JTAG）|
+|:-------|:-------|:---------|:-----------|
+|15      |GPIO22  |ALT4      |TRST        |
+|7       |GPIO4   |ALT5      |TDI         |
+|13      |GPIO27  |ALT5      |TMS         |
+|22      |GPIO25  |ALT5      |TCK         |
+|18      |GPIO24  |ALT5      |TDO         |
+
 * Raspberry Pi Zero/2ではJTAGデバッガ接続できるは確認したが、Raspberry Pi 3では未確認。
 
 ユーザアプリケーション
@@ -363,7 +368,7 @@ T-Kernel再配布規約に従い、本ソフトウェアのディストリビュ
 
 作者関連サイト
 -------------
-* [GitHub (jr4qpv)](https://github.com/jr4qpv?tab=overview&from=2016-08-01&to=2016-08-31&utf8=%E2%9C%93)
+* [GitHub (jr4qpv)](https://github.com/jr4qpv/)
 * [The modern stone age.](https://www.yokoweb.net/)
 * [JR4QPV Yoko's Library](http://jr4qpv.my.coocan.jp/)
 
@@ -371,6 +376,7 @@ T-Kernel再配布規約に従い、本ソフトウェアのディストリビュ
 ----
 本ソフトウェアに関しては、作者のブログ「[The modern stone age.](https://www.yokoweb.net/)」でも情報公開していきますので参考にください。
 
-履歴
+来歴
 ----
 * 2016/09/18 r0.10公開
+* 2017/04/11 r0.11：作者サイトのURL変更，本ファイル拡張子.mdに変更
