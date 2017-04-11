@@ -19,7 +19,7 @@
  */
 
 /*
- *  @(#)cprintf.c (libmisc)  2016/02/19
+ *  @(#)cprintf.c (libmisc)  2016/11/14
  *  ｺﾝﾊﾟｸﾄ版 printf関数
  *
  *	printf() / sprintf() routine using t-monitor function.
@@ -34,6 +34,7 @@
  */
 
 #include <basic.h>
+#include <stdarg.h>				/* for va_list */
 #include <misc/libmisc.h>
 
 #define	CPRINTF_SELECT	1		/* =1:tm_printf()流用, =0:従来cprintf流用 */
@@ -805,7 +806,7 @@ int cxprintf(char disp, const char *format, ...)
 /*----------------------------------------------------------------------
 #|History of "cprintf.c"
 #|======================
-#|* 2016/02/05	新規作成(by T.Yokobayashi)
+#|* 2016/02/05	New created.(By T.Yokobayashi)
 #|  "sh_std/lib/cprintf.c"を流用
 #|* 2016/02/06	可変個引数の扱いをva_listに変更。
 #|* 2016/02/10	"{V2}/lib/libtm/src/tm_printf.c"から流用し、CPRINTF_SELECTで

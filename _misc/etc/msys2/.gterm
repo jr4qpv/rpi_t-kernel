@@ -1,0 +1,10 @@
+.* .cd  /C/work/t-kernel/tkernel_source/bin/app_sh7760
+.cd  /C/work/t-kernel/tkernel_source/bin/rpi_bcm283x
+.alias monwr .flload tmonitor.mot xe
+.alias romwr .flload rominfo_t2ex-rom.mot xe
+.alias ramwr .flload rominfo_t2ex-ram.mot xe
+.alias kw .flload kernel_t2ex-rom.mot xe
+.alias klram .load kernel_t2ex-ram.mot
+.alias klrom .load kernel_t2ex-rom.mot
+.alias klsh .load kernel_t2ex-ram.bin 8c002000
+.alias kl .load kernel_t2ex-rom.bin 00030000

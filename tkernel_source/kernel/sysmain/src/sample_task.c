@@ -1,17 +1,13 @@
 /*
  *----------------------------------------------------------------------
+ *
  *    T-Kernel Software Package
- *
- *    Copyright(C) 2016 by T.Yokobayashi.
- *----------------------------------------------------------------------
- *
- *    Released by T.Yokobayashi at 2016/09/12.
  *
  *----------------------------------------------------------------------
  */
 
 /*
- *	@(#)sample_task.c (t2ex) 2016/09/14
+ *	@(#)sample_task.c (t2ex) 2016/12/08
  *
  */
 
@@ -21,29 +17,9 @@
 #include <tk/tkernel.h>
 #include <tm/tmonitor.h>
 #include <t2ex/string.h>
-
 #include <misc/libmisc.h>
+#include "cmd_local.h"
 
-#ifdef	USE_MISC_CPRINT
-#define	P			cprintf
-#define	Gets(buf, bufsz)	cgetstring(buf, bufsz)
-//#define	P			ceprintf
-//#define	Gets(buf, bufsz)	egetstring(buf, bufsz)
-//#define	P			printf
-//#define	Gets(buf, bufsz)	fgets(buf, bufsz, stdin)
-//#define	P			tm_printf
-//#define	Gets(buf, bufsz)	tm_getline(buf)
-#else
-
-#ifdef	USE_T2EX_FS
-#define	P			printf
-#define	Gets(buf, bufsz)	fgets(buf, bufsz, stdin)
-#else
-#define	P			tm_printf
-#define	Gets(buf, bufsz)	tm_getline(buf)
-#endif
-
-#endif
 
 
 /*

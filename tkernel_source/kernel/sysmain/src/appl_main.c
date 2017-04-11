@@ -49,39 +49,27 @@
  */
 
 /*
- *	@(#)appl_main.c (t2ex) 2016/09/12
+ *	@(#)appl_main.c (t2ex) 2016/11/22
  *
  */
 #include <basic.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+//#include <stdlib.h>
+//#include <string.h>
 #include <tk/tkernel.h>
 #include <tm/tmonitor.h>
 
 #include <misc/libmisc.h>
 
-#ifdef	USE_MISC_CPRINT
-#define	P			cprintf
-#define	Gets(buf, bufsz)	cgetstring(buf, bufsz)
-#else
 
-#ifdef	USE_T2EX_FS
-#define	P			printf
-#define	Gets(buf, bufsz)	fgets(buf, bufsz, stdin)
-#else
-#define	P			tm_printf
-#define	Gets(buf, bufsz)	tm_getline(buf)
-#endif
-
-#endif
-
-/* Command functions */
-IMPORT	INT	exec_cmd(B *cmd);
-IMPORT	void	init_calendar_date(void);
 #ifdef	USE_APP_SAMPLE
 IMPORT	void	sample_exec(void);
 #endif
+#ifdef	USE_T2EX_DT
+IMPORT	void	init_calendar_date(void);
+#endif
+
+IMPORT	void cmd_proc(void);
+
 
 
 /*
@@ -89,12 +77,9 @@ IMPORT	void	sample_exec(void);
  */
 EXPORT	void	appl_main( void )
 {
-	B	buf[256];
-	INT	fin, n;
-
-	/* initialize library */
-#ifdef APP_EXTCMD
-	init_libmisc();
+	/* sample task execute */
+#ifdef	USE_APP_SAMPLE
+	sample_exec();
 #endif
 
 	/* initialize calendar date */
@@ -102,45 +87,20 @@ EXPORT	void	appl_main( void )
 	init_calendar_date();
 #endif
 
-	/* sample task execute */
-#ifdef	USE_APP_SAMPLE
-	sample_exec();
-#endif
+	/* initialize library */
+	init_libmisc();
 
 	/* command processing */
-	for (fin = 0; fin == 0; ) {
-		P("T2EX >> ");
-		Gets(buf, sizeof(buf));
-		for (n = strlen(buf); --n >= 0 && buf[n] <= ' '; ) 
-			buf[n] = '\0';
-
-		if (strncmp(buf, "quit", 1) == 0) {
-			fin = 1;
-
-		/* t-monitor */
-		} else if (strncmp(buf, "#", 1) == 0) {
-			tm_command(&buf[1]);
-
-		/* misc. command */
-		} else {
-			if (exec_cmd(buf) == 0) {
-				P("q[uit]      quit\n");
-				P("# [cmd]     exec t-monitor command\n");
-				P("?           command help\n");
-				P("<command>   misc. command\n");
-			}
-		}
-	}
+	cmd_proc();
 }
 
 
 /*----------------------------------------------------------------------
 #|History of "appl_main.c"
 #|========================
-#|* 2016/02/04	"USE_T2EX_FS"が未定義の時のダミー関数記述の追加。
 #|* 2016/09/12	"USE_T2EX_DT"未定義時は、init_calendar_date()関数は呼ばない
 #|* 2016/09/12	"USE_MISC_CPRINT"定義時には、cprintf()を使うようにした。
 #|  "#include <misc/libmisc.h>"の追加。
-#|* init_libmisc()呼び出し処理の追加。
+#|* 2016/11/22	init_libmisc()呼び出し処理の追加。
 #|
 */

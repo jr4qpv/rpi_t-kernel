@@ -50,7 +50,7 @@
 #
 
 #
-#	@(#)Makefile for gmake (BCM283x) 2016/09/12
+#	@(#)Makefile for gmake (BCM283x) 2016/12/08
 #	sysmain (system-dependent description)
 #
 
@@ -68,8 +68,8 @@ APP_VER = 0.10
 # ----------------------------------------------------------------------------
 # App definitions
 MISC_CPRINT = yes
-APP_EXTCMD = yes
 APP_SAMPLE = yes
+##LUA_CMD = yes
 
 # ----------------------------------------------------------------------------
 # T2EX definitions
@@ -86,13 +86,13 @@ T2EX_MM_USE_TASKEXCEPTION = 1
 T2EX_MM_USE_DEFAULT_FAULT_HANDLER = 1
 
 # use T2EX file management
-##T2EX_FS = yes
+T2EX_FS = yes
 
 # use T2EX network communication
 ##T2EX_NET = yes
 
 # use T2EX calendar
-##T2EX_DT = yes
+T2EX_DT = yes
 
 # use T2EX program load
 ##T2EX_PM = yes
@@ -121,18 +121,18 @@ endif
 SRC_SYS	= usermain_t2ex.c
 
 # source files for simple command interpreter
-SRC_SYS	+= appl_main.c command.c sample_task.c
+SRC_SYS	+= appl_main.c cmd_proc.c command.c sample_task.c
 
 # user-level source files
 SRC_USR	=
 
 # user-level libraries
-LDUSRLIBS = -lmisc
+LDUSRLIBS = -lmisc -lrpi
 
 # ----------------------------------------------------------------------------
 # device driver definitions
 DRV_CONSOLE = yes
-##DRV_CLOCK   = yes
+DRV_CLOCK   = yes
 ##DRV_SYSDISK = yes
 ##DRV_SCREEN  = yes
 ##DRV_KBPD    = yes
@@ -200,5 +200,7 @@ include ../Makefile.common
 #|* 2016/03/13	LDUSRLIBS に｢-lmisc指定の追加
 #|* 2016/08/08	TYPE_RPI指定を追加(1,2,3を指定)、但しﾌｫﾙﾀﾞ名による指定が優先
 #|* 2016/09/08	APP_VERの追加
-#|* 2016/09/12	MISC_CPRINT,APP_EXTCMD,APP_SAMPLEの追加
+#|* 2016/09/12	MISC_CPRINT,APP_SAMPLEの追加
+#|* 2016/11/22	LDUSRLIBS に｢-lrpi｣指定の追加
+#|* 2016/12/08	LUA_CMDの追加
 #|

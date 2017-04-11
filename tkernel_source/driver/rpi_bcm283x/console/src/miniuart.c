@@ -42,7 +42,7 @@ EXPORT	SC_FUNC	ScFuncMINIUART = {
 /*
  *	Define the serial controller (mini UART)
  */
-#include "misc/rpi/miniuart.h"	/* Common definition */
+#include "rpi/miniuart.h"		/* Common definition */
 #include "miniuartsys.h"		/* System-dependent definition */
 
 /* Clock */

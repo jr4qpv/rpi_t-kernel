@@ -1,13 +1,13 @@
 #
 # ----------------------------------------------------------------------
+#
 #     T-Kernel Software Library
 #
-#     Copyright(c) 2016 by T.Yokobayashi.
 # ----------------------------------------------------------------------
 #
 
 #
-#	Makefile for gmake
+#	@(#)Makefile for gmake (for TF open T-Kernel) 2016/11/16
 #	libmisc - T-Kernel misc library (common description)
 #
 
@@ -26,11 +26,10 @@ VPATH = $(S) $(S)/sysdepend/$(MACHINE)
 HEADER += $(S) $(S)/sysdepend/$(MACHINE)
 
 # source files
-SRC +=	init_libmisc.c conio.c errio.c cprintf.c cursor.c keyin.c remote.c \
-	atohex.c \
-	disp_mem.c \
-	filebios.c lowlevel.c filedir.c file.c \
-	load.c
+SRC +=	init_libmisc.c conio.c errio.c cprintf.c keyin.c cursor.c \
+	atohex.c disp_mem.c doload.c
+
+##remote.c filebios.c lowlevel.c filedir.c file.c
 
 # ff(FatFs) source files
 ##VPATH += $(S)/ff
@@ -77,5 +76,5 @@ endif
 # ----------------------------------------------------------------------
 #|History of "Makefile.common"
 #|============================
-#|* 2016/02/05	 新規作成(by T.Yokobayashi)
+#|* 2016/02/05	New created.(By T.Yokobayashi)
 #| 

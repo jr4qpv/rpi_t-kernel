@@ -48,9 +48,9 @@ EXPORT INT init_task_main( void )
 	tm_putstring((UB*)BOOT_MESSAGE);
  #else
 extern char const * const TitleAPP[];		/* ブートメッセージ */
-	tm_putstring("\n");
-	tm_putstring(TitleAPP[0]);
-	tm_putstring("\n\n");
+	tm_putstring((UB*)"\n");
+	tm_putstring((UB*)TitleAPP[0]);
+	tm_putstring((UB*)"\n\n");
  #endif
 #endif
 

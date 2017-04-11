@@ -1,25 +1,22 @@
 /*
  *----------------------------------------------------------------------
+ *
  *    T-Kernel Software Library
  *
- *    Copyright(c) 2016 by T.Yokobayashi.
  *----------------------------------------------------------------------
  */
 
 /*
- *	@(#)disp_mem.c (libmisc) 2016/02/19
+ *	@(#)disp_mem.c (libmisc) 2016/11/16
  *  DISP_MEM関係ﾗｲﾌﾞﾗﾘｰ
  */
 #include <basic.h>
-#include <t2ex/ctype.h>				/* for isprint() */
-#include <t2ex/errno.h>				/* for t2ex/string.h */
-#include <t2ex/string.h>			/* for strchr() */
+#ifdef __GNUC__
+ #include <t2ex/ctype.h>				/* for isprint() */
+#else
+ #include <ctype.h>						/* for isprint() */
+#endif
 #include <misc/libmisc.h>
-
-typedef	unsigned char	uchar;
-typedef	unsigned short	ushort;
-typedef	unsigned long	ulong;
-
 
 
 /*================================================
@@ -69,11 +66,11 @@ uint32_t mem_dumpx(uint32_t addr, long count, int size, char disp)
 			switch (size) {
 			case 1:
 				d.cdata = *(char *)addr;
-				cxprintf(disp, "%02X ", (uchar)d.cdata);
+				cxprintf(disp, "%02X ", (uint8_t)d.cdata);
 				break;
 			case 2:
 				d.sdata = *(short *)addr;
-				cxprintf(disp, "%04X ", (ushort)d.sdata);
+				cxprintf(disp, "%04X ", (uint16_t)d.sdata);
 				break;
 			case 4:
 				d.ldata = *(long *)addr;
@@ -134,6 +131,7 @@ uint32_t mem_dump(uint32_t addr, long count, int size)
 uint32_t mem_set(uint32_t addr, int size)
 {
 	char buff[15], *p;					/* ｷｰ入力ﾊﾞｯﾌｧ */
+	int len;
 
 	switch (size) {
 	case 1:
@@ -156,17 +154,18 @@ uint32_t mem_set(uint32_t addr, int size)
 
 		switch (size) {
 		case 1:
-			cprintf("%02X - ", (uchar)(*(char *)addr)); break;
+			cprintf("%02X - ", (uint8_t)(*(char *)addr)); break;
 		case 2:
-			cprintf("%04X - ", (ushort)(*(short *)addr)); break;
+			cprintf("%04X - ", (uint16_t)(*(short *)addr)); break;
 		case 4:
-			cprintf("%08X - ", (ulong)(*(long *)addr)); break;
+			cprintf("%08X - ", (uint32_t)(*(long *)addr)); break;
 		}
 
 		buff[0] = 10;
 		p = cgets(buff);					/* 一行入力 */
 ///		disp_nl(1);
-		if (buff[1] == 0) {
+		len = buff[1];
+		if (len == 0) {
 			addr += size;
 			continue;						/* 入力文字がなければ次へ */
 		}
@@ -196,7 +195,8 @@ uint32_t mem_set(uint32_t addr, int size)
 			break;
 		}
 
-		if (strchr(p, ',') == NULL)			/* ','を含む時はｱﾄﾞﾚｽを進めない */
+		/* 最後の文字が','の時はｱﾄﾞﾚｽを進めない */
+		if (p[len - 1] != ',')
 			addr += size;
 	}
 }
@@ -205,7 +205,8 @@ uint32_t mem_set(uint32_t addr, int size)
 /*----------------------------------------------------------------------
 #|History of "disp_mem.c"
 #|=======================
-#|* 2016/02/11	新規作成(by T.Yokobayashi)
+#|* 2016/02/11	New created.(By T.Yokobayashi)
 #|  "sh_std/lib/disp_mem.c"を流用
+#|* 2016/11/09	mem_set()で','文字ﾁｪｯｸで、strchr()を使わないように変更。
 #|
 */

@@ -1,0 +1,72 @@
+#
+# ----------------------------------------------------------------------
+#
+#     T-Kernel Software Library
+#
+# ----------------------------------------------------------------------
+#
+
+#
+#	@(#)Makefile for gmake () 2016/11/22
+#	librpi - T-Kernel for Raspberry Pi library (common description)
+#
+
+# source file dependencies (generated automatically)
+DEPS = Dependencies
+DEPENDENCIES_OUTPUT := $(DEPS)
+
+# ----------------------------------------------------------------------------
+
+# target file
+TARGET = librpi.a
+
+# source file path
+S = ../../src
+VPATH = $(S) $(S)/sysdepend/$(MACHINE)
+HEADER += $(S) $(S)/sysdepend/$(MACHINE)
+
+# source files
+SRC +=	init_librpi.c
+
+
+OBJ	= $(addsuffix .o, $(basename $(notdir $(SRC))))
+
+# compiler options
+CFLAGS += $(CFLAGS_WARNING)
+
+# ----------------------------------------------------------------------------
+
+.PHONY: all clean install clean_install
+
+ALL = $(TARGET)
+
+all: $(ALL)
+
+$(TARGET): $(OBJ)
+	$(AR) $(ARFLAGS) $@ $?
+  ifdef RANLIB
+	$(RANLIB) $@
+  endif
+
+install: $(TARGET:%=$(LIB_INSTALLDIR)/%)
+
+clean:
+	$(RM) $(OBJ) $(ALL) $(DEPS)
+
+clean_install:
+	$(RM) $(TARGET:%=$(LIB_INSTALLDIR)/%)
+
+# generate dependencies
+ifdef DEPENDENCIES_OUTPUT
+  $(DEPS): ; touch $(DEPS)
+else
+  $(DEPS): $(SRC) ; $(MAKEDEPS) $@ $?
+endif
+-include $(DEPS)
+
+
+# ----------------------------------------------------------------------
+#|History of "Makefile.common"
+#|============================
+#|* 2016/11/22	New created.(By T.Yokobayashi)
+#| 

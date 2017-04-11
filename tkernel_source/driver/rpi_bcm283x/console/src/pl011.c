@@ -25,7 +25,7 @@
 
 #include "line_drv.h"
 #include <sys/sysinfo.h>
-#include <misc/rpi/bcm283x.h>
+#include <rpi/bcm283x.h>
 
 /*
  *	Define the serial controller operation function groups
@@ -43,7 +43,7 @@ EXPORT	SC_FUNC	ScFuncPL011 = {
 /*
  *	Define the serial controller ("PL011")
  */
-#include <misc/rpi/pl011.h>		/* Common definition */
+#include <rpi/pl011.h>			/* Common definition */
 #include "pl011sys.h"			/* System-dependent definition */
 
 /* Clock */

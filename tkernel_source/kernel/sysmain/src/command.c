@@ -49,16 +49,15 @@
  */
 
 /*
- *	@(#)command.c
+ *	@(#)command.c (appl) 2016/12/08
  *
  */
 
 #include <basic.h>
 #include <stdlib.h>
-#ifdef	USE_T2EX_FS
+#if	defined(USE_T2EX_FS) & FS_CMD_ENABLE
 #include <stdio.h>
 #endif
-#include <string.h>
 #include <tk/tkernel.h>
 #include <tm/tmonitor.h>
 #include <t2ex/datetime.h>
@@ -66,28 +65,14 @@
 #include <t2ex/load.h>
 #include <device/clk.h>
 #include <misc/libmisc.h>
+#include <string.h>
+#include "cmd_local.h"
 
-#ifdef	USE_MISC_CPRINT
-#define	P		cprintf
-#else
 
-#ifdef	USE_T2EX_FS
-#define	P		printf
-#else
-#define	P		tm_printf
+#ifdef USE_LUA_CMD
+IMPORT int lua_main (int argc, char **argv);
 #endif
 
-#endif
-
-#define	N_ARGS		16
-
-/*
-	ref command
-*/
-#include "ref_command.c"
-#ifdef	USE_APP_EXTCMD
-#include "ext_command.c"
-#endif
 
 #ifdef	USE_T2EX_DT
 /*
@@ -103,7 +88,7 @@ LOCAL	void	rtc_get_set(SYSTIM *stm, BOOL set)
 	struct tzinfo	tz;
 
 	/* open RTC (CLOCK) driver */
-	dd = tk_opn_dev("CLOCK", (set == TRUE) ? TD_WRITE : TD_READ);
+	dd = tk_opn_dev((UB*)"CLOCK", (set == TRUE) ? TD_WRITE : TD_READ);
 	if (dd < E_OK) {
 		P("Can't open CLOCK device [%#x]\n", dd);
 		goto exit0;
@@ -202,7 +187,7 @@ LOCAL	void	cmd_date(INT ac, B *av[])
 	ER	er;
 	struct tm	ctm;
 	SYSTIM	stm;
-static	const B	*week[] = {"sun","mon","tue","wed","thu","fri","sat"};
+static	const char	*week[] = {"sun","mon","tue","wed","thu","fri","sat"};
 
 	if (ac < 2) {		/* show current date */
 		tk_get_tim(&stm);
@@ -216,12 +201,12 @@ static	const B	*week[] = {"sun","mon","tue","wed","thu","fri","sat"};
 				ctm.tm_hour, ctm.tm_min, ctm.tm_sec);
 		}
 	} else if (ac >= 4) {	/* set current date */
-		ctm.tm_year = atoi(av[1]) - 1900;
-		ctm.tm_mon = atoi(av[2]) - 1;
-		ctm.tm_mday = atoi(av[3]);
-		ctm.tm_hour = (ac >= 5) ? atoi(av[4]) : 0;
-		ctm.tm_min = (ac >= 6) ? atoi(av[5]) : 0;
-		ctm.tm_sec = (ac >= 7) ? atoi(av[6]) : 0;
+		ctm.tm_year = atoi((char*)av[1]) - 1900;
+		ctm.tm_mon = atoi((char*)av[2]) - 1;
+		ctm.tm_mday = atoi((char*)av[3]);
+		ctm.tm_hour = (ac >= 5) ? atoi((char*)av[4]) : 0;
+		ctm.tm_min = (ac >= 6) ? atoi((char*)av[5]) : 0;
+		ctm.tm_sec = (ac >= 7) ? atoi((char*)av[6]) : 0;
 		ctm.tm_usec = 0;
 		ctm.tm_wday = -1;
 		ctm.tm_isdst = 0;
@@ -237,7 +222,7 @@ static	const B	*week[] = {"sun","mon","tue","wed","thu","fri","sat"};
 				rtc_get_set(&stm, TRUE);
 			}
 		}
-	} else if (ac == 2 && strcmp(av[1], "init") == 0) {
+	} else if (ac == 2 && strcmp((char*)av[1], "init") == 0) {
 		/* initialize current date from RTC */
 		init_calendar_date();
 	}
@@ -245,7 +230,7 @@ static	const B	*week[] = {"sun","mon","tue","wed","thu","fri","sat"};
 #endif	/* USE_T2EX_DT */
 
 
-#ifdef	USE_T2EX_FS
+#if	defined(USE_T2EX_FS) & FS_CMD_ENABLE
 /*
 	attach command
 */
@@ -792,13 +777,13 @@ LOCAL	void	cmd_call(INT ac, B *av[])
 	if (ac < 2) return;
 
 #if 1
-	fnc = (FP)atolhex(av[1]);				/* ｱﾄﾞﾚｽの獲得 */
+	fnc = (FP)atolhex((char*)av[1]);	/* ｱﾄﾞﾚｽの獲得 */
 #else
 	fnc = (FP)strtol(av[1], NULL, 0);
 #endif
-	p1 = (ac >= 3) ? strtol(av[2], NULL, 0) : 0;
-	p2 = (ac >= 4) ? strtol(av[3], NULL, 0) : 0;
-	p3 = (ac >= 5) ? strtol(av[4], NULL, 0) : 0;
+	p1 = (ac >= 3) ? strtol((char*)av[2], NULL, 0) : 0;
+	p2 = (ac >= 4) ? strtol((char*)av[3], NULL, 0) : 0;
+	p3 = (ac >= 5) ? strtol((char*)av[4], NULL, 0) : 0;
 
 	(*fnc)(p1, p2, p3);
 }
@@ -816,23 +801,15 @@ IMPORT	void	net_test(void);
 
 
 /*
-	setup parameters
+	debug command
 */
-LOCAL	INT	setup_param(B *bp, B **av)
+LOCAL	void	cmd_debug(INT ac, B *av[])
 {
-	INT	ac;
+	INT i;
 
-	for (ac = 0; ac < N_ARGS; ac++) {
-		while (*((UB*)bp) <= ' ' && *bp != '\0') bp++;	// 先頭の文字以外削除
-		if (*bp == '\0') break;
-		av[ac] = bp;
-		while (*((UB*)bp) > ' ' && *bp != ',') bp++;	// 区切りに','も含める
-		if (*bp != '\0') {
-			*bp++ = '\0';
-		}
+	for (i=0; i<ac; i++) {
+		P("av[%d]=\"%s\"\n", i, av[i]);
 	}
-	av[ac] = NULL;
-	return ac;
 }
 
 
@@ -844,7 +821,7 @@ LOCAL void help_cmd(INT ac, B *av[])
 #ifdef	USE_T2EX_DT
 	P("date     [y m d [h m s]]\n");
 #endif
-#ifdef	USE_T2EX_PM
+#if	defined(USE_T2EX_FS) & FS_CMD_ENABLE
 	P("attach   devnm connm\n");
 	P("detach   connm\n");
 	P("cd       dir\n");
@@ -863,7 +840,6 @@ LOCAL void help_cmd(INT ac, B *av[])
 	P("cp       s-path d-path/dir [wofs [wlen]]\n");
 #endif
 
-	P("ref      [item]\n");
 	P("call     addr [p1 p2 p3]\n");
 
 #ifdef	USE_T2EX_PM
@@ -874,58 +850,29 @@ LOCAL void help_cmd(INT ac, B *av[])
 #ifdef	NET_SAMPLE
 	P("net      execute network sample\n");
 #endif
+#ifdef USE_LUA_CMD
+	P("lua      lua Interpreter\n");
+#endif
 }
 
-
-
-
-
-extern void cmd_dir(INT argc, B *argv[]);
-extern void cmd_fload(INT argc, B *argv[]);
-
-extern void cmd_test(INT argc, B *argv[]);		//////////
 
 
 /*---------------------------------------------------------
 	execute command
 */
-EXPORT	INT	exec_cmd(B *cmd)
+EXPORT	INT	exec_cmd(INT ac, B *av[])
 {
 	int i, n_cmd_table;
-	INT	ac;
-	B	*av[N_ARGS];
 
 	/*** コマンドテーブル ***/
 	static const struct {
 		char  *cmd_str ;
 		void (*cmd_func)(INT ac, B *av[]) ;
     } cmd_table[] = {
-#ifdef	USE_APP_EXTCMD
-		{ "d",			cmd_dump		},
-		{ "db",			cmd_dump		},
-		{ "dh",			cmd_dump		},
-		{ "dw",			cmd_dump		},
-
-		{ "m",			cmd_mem			},
-		{ "mb",			cmd_mem			},
-		{ "mh",			cmd_mem			},
-		{ "mw",			cmd_mem			},
-
-		{ "LO",			cmd_load		},
-		{ "lo",			cmd_load		},
-		{ "load",		cmd_load		},
-
-///		{ "dir",		cmd_dir		},
-		{ "fload",		cmd_fload		},
-
-		{ "t",			cmd_test		},
-		{ "test",		cmd_test		},
-#endif
-
 #ifdef	USE_T2EX_DT
 		{ "date",		cmd_date		},
 #endif
-#ifdef	USE_T2EX_FS
+#if	defined(USE_T2EX_FS) & FS_CMD_ENABLE
 		{ "attach",		cmd_attach		},
 		{ "detach",		cmd_detach		},
 		{ "mkdir",		cmd_mkdir		},
@@ -944,7 +891,6 @@ EXPORT	INT	exec_cmd(B *cmd)
 		{ "chmod",		cmd_chmod		},
 #endif	/* USE_T2EX_FS */
 
-		{ "ref",		cmd_ref			},
 		{ "call",		cmd_call		},
 
 #ifdef	USE_T2EX_PM
@@ -955,18 +901,20 @@ EXPORT	INT	exec_cmd(B *cmd)
 #ifdef	NET_SAMPLE
 		{ "net",		cmd_net			},
 #endif
-		{ "h",			help_cmd		},
+#ifdef USE_LUA_CMD
+		{ "lua",		lua_main		},
+#endif
+		{ "debug",		cmd_debug		},
 		{ "?",			help_cmd		}
 	};
 
-	/*======( コマンドの抽出 )======*/
-	ac = setup_param(cmd, av);
+	/*======( コマンドのチェッック )======*/
 	if (ac < 1) return 0;
 
 	/*======( コマンド行の解析＆実行 )======*/
 	n_cmd_table = sizeof(cmd_table) / sizeof(cmd_table[0]) ;
 	for (i=0 ; i<n_cmd_table ; i++) {
-	    if (strcmp(av[0], cmd_table[i].cmd_str) == 0)
+	    if (strcmp((char*)av[0], cmd_table[i].cmd_str) == 0)
 			break;
 	}
 
@@ -985,13 +933,10 @@ EXPORT	INT	exec_cmd(B *cmd)
 /*----------------------------------------------------------------------
 #|History of "command.c"
 #|======================
+#|* 2016/02/04	T2EXの"kernel/sysmain/src/command.c"を修正(By T.Yokobayashi)
 #|* 2016/02/04	"USE_T2EX_PM"未定義時には、pm_*()関数は呼びださないようにした。
 #|* 2016/02/04	"USE_T2EX_DT"未定義時には、dt_*()関数は呼びださないようにした。
 #|* 2016/02/04	"USE_T2EX_FS"未定義時には、fs_*()関数は呼びださないようにした。
-#|* 2016/02/06	"USE_MISC_CPRINT"定義時には、cprintf()を使うようにした。
-#|  "#include <misc/libmisc.h>"の追加。
 #|* 2016/02/10	コマンド解析を、cmd_table[]を使った方式に見直し。
-#|* 2016/02/19	setup_param()で区切文字に空白の他に','文字も見るようにした。
-#|* 2016/09/12	APP拡張コマンド"USE_APP_EXTCMD"関連を追加。
 #|
 */

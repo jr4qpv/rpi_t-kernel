@@ -38,7 +38,7 @@ typedef struct {
 
 /* ----------------------------------------------------------------------- */
 #elif _RPI_BCM283x_
-#  include <misc/rpi/bcm283x.h>
+#  include <rpi/bcm283x.h>
    LOCAL const DEFSIO	DefSIO[1] = {
 			{ UART1_BASE },
    };
@@ -46,7 +46,7 @@ typedef struct {
 #  define _CLOCK	250000000		/* 250MHz */
 
 #define	_IOADR(n)	( IOB + (n) * IOSTEP )
-#include <misc/rpi/miniuart.h>		/* Common definition */
+#include <rpi/miniuart.h>			/* Common definition */
 #endif
 
 #define	N_DEFSIO	( sizeof(DefSIO) / sizeof(DEFSIO) )

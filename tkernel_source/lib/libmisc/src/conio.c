@@ -1,28 +1,31 @@
 /*
  *----------------------------------------------------------------------
+ *
  *    T-Kernel Software Library
  *
- *    Copyright(C) 2016 by T.Yokobayashi.
  *----------------------------------------------------------------------
  */
 
 /*
- *  @(#)conio.c (libmisc) 2016/02/19
+ *  @(#)conio.c (libmisc) 2016/11/16
  *  ｺﾝｿｰﾙI/O ﾙｰﾁﾝ
  */
 
 #include <basic.h>
-#include <t2ex/errno.h>					/* for t2ex/string.h */
-#include <t2ex/string.h>				/* for strlen() */
-#include <sys/consio.h>
 #include <misc/libmisc.h>
 
+#define	USE_ERRIO_SERIAL	0			/* =1:serialﾄﾞﾗｲﾊﾞを使う(for debug) */
 
-//#define	USE_ERRIO_DEBUG		1			/* =1:serialﾄﾞﾗｲﾊﾞを使う(ﾃﾞﾊﾞｯｸ用) */
 
+#ifndef USE_ERRIO_SERIAL
+#include <libstr>						/* for strlen() *? */
+#include <sys/consio.h>
 
-#ifndef USE_ERRIO_DEBUG
-#define	PORT_NO				1			/* 標準ｺﾝｿｰﾙ */
+#ifdef STRLEN
+#define	strlen	STRLEN
+#endif
+
+#define	PORT_NO		CONSOLE_PORT		/* 標準ｺﾝｿｰﾙ */
 #endif
 
 
@@ -36,13 +39,11 @@
 ;|  ［戻値］成功すると出力された文字cを返し、エラーの場合はEOFを返す。
 ;|  ［Note］・ｺﾝｿｰﾙﾄﾞﾗｲﾊﾞの｢console_out｣をｺｰﾙしている。
 ;|          ・'\n'(LF)のｺｰﾄﾞはCR/LFへ変換しない
-;|          ・ｺﾝｿｰﾙﾄﾞﾗｲﾊﾞの仕様は、ﾊﾟｰｿﾅﾙﾒﾃﾞｨｱ社のSH7760開発ｷｯﾄに含まれる
-;|            ｢T-Engine開発キットデバイスドライバ共通説明書｣が参考になる。
 ;|
  ================================================*/
 int putch(int c)
 {
-#ifndef USE_ERRIO_DEBUG
+#ifndef USE_ERRIO_SERIAL
 	B	buf[1];
 
 	buf[0] = c;							// 出力文字
@@ -66,13 +67,11 @@ int putch(int c)
 ;|  ［戻値］成功すると出力された文字cを返し、エラーの場合はEOFを返す。
 ;|  ［Note］・ｺﾝｿｰﾙﾄﾞﾗｲﾊﾞの｢console_out｣をｺｰﾙしている。
 ;|          ・'\n'(LF)のｺｰﾄﾞはCR/LFへ変換する。
-;|          ・ｺﾝｿｰﾙﾄﾞﾗｲﾊﾞの仕様は、ﾊﾟｰｿﾅﾙﾒﾃﾞｨｱ社のSH7760開発ｷｯﾄに含まれる
-;|            ｢T-Engine開発キットデバイスドライバ共通説明書｣が参考になる。
 ;|
  ================================================*/
 int cputchar(int c)
 {
-#ifndef USE_ERRIO_DEBUG
+#ifndef USE_ERRIO_SERIAL
 	B	buf[1];
 
 	buf[0] = c;							// 出力文字
@@ -100,7 +99,7 @@ int cputchar(int c)
  ================================================*/
 int cputstring(const char *s)
 {
-#ifndef USE_ERRIO_DEBUG
+#ifndef USE_ERRIO_SERIAL
 	UW len;
 
 	len = strlen(s);					// 文字数
@@ -124,13 +123,11 @@ int cputstring(const char *s)
 ;|  ［Note］・ｺﾝｿｰﾙﾄﾞﾗｲﾊﾞの｢console_in｣をｺｰﾙしている。
 ;|          ・'\r'(CR)のｺｰﾄﾞは'\n'(LF)へ変換しない。
 ;|          ・不正時はEOF(-1)を戻す。
-;|          ・ｺﾝｿｰﾙﾄﾞﾗｲﾊﾞの仕様は、ﾊﾟｰｿﾅﾙﾒﾃﾞｨｱ社のSH7760開発ｷｯﾄに含まれる
-;|            ｢T-Engine開発キットデバイスドライバ共通説明書｣が参考になる。
 ;|
  ================================================*/
 int getch(void)
 {
-#ifndef USE_ERRIO_DEBUG
+#ifndef USE_ERRIO_SERIAL
 	B	buf[2];							// 1Byte余裕に確保
 	int	c;
 	W	echo_mode;
@@ -150,7 +147,7 @@ int getch(void)
 
 	return c;
 #else
-	return _getSIO(-1);
+	return _getSIO(-1);					// タイムアウトしない
 #endif
 }
 
@@ -165,13 +162,11 @@ int getch(void)
 ;|  ［Note］・ｺﾝｿｰﾙﾄﾞﾗｲﾊﾞの｢console_in｣をｺｰﾙしている。
 ;|          ・'\r'(CR)のｺｰﾄﾞは'\n'(LF)へ変換する。
 ;|          ・不正時はEOF(-1)を戻す。
-;|          ・ｺﾝｿｰﾙﾄﾞﾗｲﾊﾞの仕様は、ﾊﾟｰｿﾅﾙﾒﾃﾞｨｱ社のSH7760開発ｷｯﾄに含まれる
-;|            ｢T-Engine開発キットデバイスドライバ共通説明書｣が参考になる。
 ;|
  ================================================*/
 int cgetchar(void)
 {
-#ifndef USE_ERRIO_DEBUG
+#ifndef USE_ERRIO_SERIAL
 	B	buf[2];							// 1Byte余裕に確保
 	int c;
 
@@ -199,7 +194,7 @@ int cgetchar(void)
  ================================================*/
 int kbhit(void)
 {
-#ifndef USE_ERRIO_DEBUG
+#ifndef USE_ERRIO_SERIAL
 	return console_in(PORT_NO, NULL, 0);	// 入力可能ﾊﾞｲﾄ数の獲得
 #else
 	return ekbhit();
@@ -219,14 +214,14 @@ int kbhit(void)
  ================================================*/
 void kbclr(void)
 {
-#ifndef USE_ERRIO_DEBUG
+#ifndef USE_ERRIO_SERIAL
 	int n;
 
 	n = kbhit();
 	for ( ; n>0; n--)
 		cgetchar();
 #else
-	return ekbclr();
+	ekbclr();
 #endif
 }
 
@@ -249,7 +244,7 @@ void kbclr(void)
  ================================================*/
 int cgetstring(char *s, int n)
 {
-#ifndef USE_ERRIO_DEBUG
+#ifndef USE_ERRIO_SERIAL
 	int rc;
 
 	rc = console_in(PORT_NO, s, n);
@@ -291,7 +286,7 @@ char *cgets(char *buf)
 /*----------------------------------------------------------------------
 #|History of "conio.c"
 #|=====================
-#|* 2016/02/10	新規作成(by T.Yokobayashi)
+#|* 2016/02/10	New created.(By T.Yokobayashi)
 #|  "sh_std/lib/conio.c"を参考に移植
 #|
 */

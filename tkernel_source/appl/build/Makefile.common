@@ -1,0 +1,40 @@
+#
+# ----------------------------------------------------------------------
+#
+#    T-Kernel Software Library (for TF T-Kernel)
+#
+# ----------------------------------------------------------------------
+#
+
+#
+#	@(#)Makefile for gmake (aapl) 2017/04/11
+#	appl main (common description)
+#
+
+# standard libraries
+APPL_TARGET = ccp
+##APPL_TARGET += lua
+##APPL_TARGET += libsvc libstr libsys
+
+# ----------------------------------------------------------------------------
+.PHONY: all clean
+
+all: $(APPL_TARGET)
+
+$(APPL_TARGET):
+	cd ../../$@/build/$(TETYPE)_$(MACHINE) ; \
+	$(MAKE) ; \
+	$(MAKE) install
+
+clean:
+	@( cd ../.. ; \
+	for dir in $(APPL_TARGET); do \
+		( cd $$dir/build/$(TETYPE)_$(MACHINE) ; $(MAKE) clean clean_install ) ; \
+	done )
+
+
+# ----------------------------------------------------------------------
+#|History of "Makefile.common"
+#|============================
+#|* 2016/11/18	New created.(By T.Yokobayashi)
+#|

@@ -1,13 +1,13 @@
 /*
  *----------------------------------------------------------------------
+ *
  *    T-Kernel Software Library
  *
- *    Copyright(c) 2016 by T.Yokobayashi.
  *----------------------------------------------------------------------
  */
 
 /*
- *	@(#)errio.c (libmisc) 2016/02/19
+ *	@(#)errio.c (libmisc) 2016/11/14
  *  エラー入出力 ﾙｰﾁﾝ（シリアルポート）
  */
 
@@ -17,7 +17,7 @@
 #include <misc/libmisc.h>
 
 
-#define	PORT_NO				0
+extern int _libmisc_std_portno;
 
 
 
@@ -30,8 +30,6 @@
 ;|  ［戻値］成功すると出力された文字cを返し、エラーの場合はEOFを返す。
 ;|  ［Note］・ｼﾘｱﾙI/Oﾄﾞﾗｲﾊﾞの｢serial_out｣をｺｰﾙしている。
 ;|          ・'\n'のｺｰﾄﾞはCR/LFへ変換しない。
-;|          ・ｼﾘｱﾙI/Oﾄﾞﾗｲﾊﾞの仕様は、ﾊﾟｰｿﾅﾙﾒﾃﾞｨｱ社のSH7760開発ｷｯﾄに含まれる
-;|            ｢T-Engine開発キットデバイスドライバ共通説明書｣が参考になる。
 ;|
  ================================================*/
 int _putSIO(int c)
@@ -40,7 +38,7 @@ int _putSIO(int c)
 	W	alen;
 
 	buf[0] = c;							// 出力文字
-	if (serial_out(PORT_NO, buf, 1, &alen, -1) != 0)
+	if (serial_out(_libmisc_std_portno, buf, 1, &alen, TMO_FEVR) != 0)
 		return EOF;						// エラー
 
 	return (UB)c;						// 正常
@@ -80,7 +78,7 @@ int eputstring(const char *s)
 {
 	int c;
 
-	while ((c = *s++)) {
+	while ((c = *s++) != '\0') {
 		if (eputchar(c) < 0) return EOF;
 	}
 	return 0;							// 正常
@@ -93,7 +91,7 @@ int eputstring(const char *s)
 ;|  ［形式］#include <misc/libmisc.h>
 ;|          int _getSIO(long wait);
 ;|  ［引数］wait…タイムアウト指定[m秒], <0でタイムアウトしない
-;|  ［戻値］入力した文字
+;|  ［戻値］入力した文字（タイムアウト時はEOF）
 ;|  ［Note］・ｼﾘｱﾙI/Oﾄﾞﾗｲﾊﾞの｢serial_in｣をｺｰﾙしている。
 ;|          ・'\r'(CR)のｺｰﾄﾞ変換はしない。
 ;|          ・不正時はEOF(-1)を戻す。
@@ -104,7 +102,7 @@ int _getSIO(long wait)
 	B	buf[2];							// 1Byte余裕に確保
 	W	alen;
 
-	if (serial_in(PORT_NO, buf, 1, &alen, wait) != 0)		// 正常?
+	if (serial_in(_libmisc_std_portno, buf, 1, &alen, wait) != 0)	// 正常?
 		return EOF;						// エラー
 
 	return (UB)buf[0];					// 入力文字
@@ -127,7 +125,7 @@ int egetchar(void)
 {
 	int c;
 
-	if ((c = _getSIO(-1)) == EOF)		// 1文字入力
+	if ((c = _getSIO(TMO_FEVR)) == EOF)	// 1文字入力
 		return EOF;
 	if (c == '\r')
 		c = '\n';						// CRをLFに変換
@@ -150,9 +148,9 @@ int ekbhit(void)
 {
 	W	alen;
 
-	serial_in(PORT_NO, NULL, 0, &alen, 0);
+	serial_in(_libmisc_std_portno, NULL, 0, &alen, 0);	// 受信済みバイト数獲得 */
 
-	return alen;						// 受信済バイト数
+	return alen;							// 受信済バイト数
 }
 
 
@@ -170,7 +168,7 @@ void ekbclr(void)
 {
 	int n;
 
-	n = kbhit();
+	n = ekbhit();
 	for ( ; n>0; n--)
 		egetchar();
 }
@@ -205,8 +203,11 @@ int egetstring(char *s, int n)
 
 		if (c == BS_CODE || c == DEL_CODE)  {	// BS,DEL ?
 			if (i > 0) {
+				s--;
 				i--;
 				eputchar(BS_CODE);		// BS エコーバック 
+				eputchar(' ');
+				eputchar(BS_CODE);
 			}
 			continue;
 		}
@@ -230,7 +231,7 @@ int egetstring(char *s, int n)
 ;|          char *egets(char *buf);
 ;|  ［引数］buf…入力ﾊﾞｯﾌｧｰへのﾎﾟｲﾝﾀ
 ;|  ［戻値］buf[2]へのﾎﾟｲﾝﾀを返す
-;|  ［Note］・ﾓﾆﾀｺｰﾙの｢CON_STR_IN｣をｺｰﾙしている。
+;|  ［Note］・ｼﾘｱﾙI/Oﾄﾞﾗｲﾊﾞをｺｰﾙしている。
 ;|          ・本関数をｺｰﾙする前に､buf[0]には読み込むべき文字列の最大長を
 ;|            設定しておく(ﾀｰﾐﾈﾀのNULLを含む文字数)。
 ;|          ・本関数の実行が終わるとbuf[1]には実際に読み込まれた文字数が
@@ -268,7 +269,7 @@ void rsflow_save_setraw(void)
 	RsFlow rsflow;
 
 	/* RsFlowの獲得＆退避 */
-	serial_ctl(PORT_NO, -DN_RSFLOW, (UW *)&rsflow);
+	serial_ctl(_libmisc_std_portno, -DN_RSFLOW, (UW *)&rsflow);
 	rsflow_backup = rsflow;
 
 	/* RAWモードに設定 */
@@ -279,7 +280,7 @@ void rsflow_save_setraw(void)
 	rsflow.sxflow = 0;					/* Send "XON/XOFF" control */
 	rsflow.rxflow = 0;					/* Receive "XON/XOFF" contorol */
 
-	serial_ctl(PORT_NO, DN_RSFLOW, (UW *)&rsflow);
+	serial_ctl(_libmisc_std_portno, DN_RSFLOW, (UW *)&rsflow);
 }
 
 
@@ -296,14 +297,14 @@ void rsflow_save_setraw(void)
 void rsflow_restore(void)
 {
 	/* RsFlowの復帰 */
-	serial_ctl(PORT_NO, DN_RSFLOW, (UW *)&rsflow_backup);
+	serial_ctl(_libmisc_std_portno, DN_RSFLOW, (UW *)&rsflow_backup);
 }
 
 
 /*----------------------------------------------------------------------
 #|History of "errio.c"
 #|=====================
-#|* 2016/02/10	新規作成
+#|* 2016/02/10	New created.(By T.Yokobayashi)
 #|  "sh_std/lib/errio.c"を参考に移植
 #|
 */

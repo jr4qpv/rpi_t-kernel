@@ -1,8 +1,8 @@
 /*
  *----------------------------------------------------------------------
+ *
  *    T-Kernel Stoftware Library
  *
- *    Copyright(C) 2016 by T.Yokobayashi.
  *----------------------------------------------------------------------
  */
 
@@ -14,18 +14,14 @@
 #include <basic.h>
 #include <misc/libmisc.h>
 
-typedef	unsigned char	uchar;
-typedef	unsigned long	ulong;
-
-
 
 /*
         extract hexadecimal value
 */
-static	ulong getHexVal(const uchar *p)
+static	uint32_t getHexVal(const uint8_t *p)
 {
 	int c;
-	ulong v;
+	uint32_t v;
 
 	for (v = 0; ((c = *p) >= '0' && c <= '9') ||
 		(c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f'); p++) {
@@ -51,7 +47,7 @@ static	ulong getHexVal(const uchar *p)
  ================================================*/
 char atochex(const char *s)
 {
-	return (char)getHexVal(s);
+	return (char)getHexVal((uint8_t *)s);
 }
 
 
@@ -68,7 +64,7 @@ char atochex(const char *s)
  ================================================*/
 short atoshex(const char *s)
 {
-	return (short)getHexVal(s);
+	return (short)getHexVal((uint8_t *)s);
 }
 
 
@@ -85,15 +81,14 @@ short atoshex(const char *s)
  ================================================*/
 long atolhex(const char *s)
 {
-	return (long)getHexVal(s);
+	return (long)getHexVal((uint8_t *)s);
 }
-
 
 
 /*----------------------------------------------------------------------
 #|History of "atohex.c"
 #|=====================
-#|* 2016/02/11	新規作成(by T.Yokobayashi)
+#|* 2016/02/11	New created.(By T.Yokobayashi)
 #|  "sh_std/lib/atohex.c"を参考に移植
 #|
 */

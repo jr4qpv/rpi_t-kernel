@@ -50,7 +50,7 @@
 #
 
 #
-#	Makefile for gmake
+#	@(#)Makefile for gmake () 2016/11/22
 #	library main (common description)
 #
 
@@ -62,8 +62,8 @@ LIB_T2EXBLD_TARGET = libtk
 # additional libraries
 LIB_TARGET += libdrvif
 
-# additional misc libraries
-LIB_TARGET += libmisc
+# additional libraries
+LIB_TARGET += libmisc librpi
 
 # ----------------------------------------------------------------------------
 .PHONY: all clean source clean_source clean_all
@@ -101,6 +101,8 @@ clean_all: clean clean_source
 
 
 # ----------------------------------------------------------------------
-#|【Makefile.common 変更履歴】
-#|□2016/02/04	 libmiscの追加
+#|History of "Makefile.common"
+#|============================
+#|* 2016/02/04	 Add libmisc
+#|* 2016/11/22	 Add librpi
 #| 

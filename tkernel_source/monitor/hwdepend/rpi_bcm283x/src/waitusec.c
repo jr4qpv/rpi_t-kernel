@@ -23,7 +23,7 @@
  */
 
 #include "sysdepend.h"
-#include <misc/rpi/bcm283x.h>
+#include <rpi/bcm283x.h>
 
 LOCAL	UW	delay64us;		 // wait for 64 microsec
 

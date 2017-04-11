@@ -50,7 +50,7 @@
 #
 
 #
-#	@(#)Makefile for gmake (tkernel) 2016/09/14
+#	@(#)Makefile for gmake (tkernel) 2016/12/08
 #	sysmain (common description)
 #
 
@@ -88,6 +88,9 @@ ifdef T2EX
   BLD_NET_PATH		= $(BD)/t2ex/network/build/$(MDIR)
   BLD_T2EX_PATH		= $(BD)/t2ex/build/$(MDIR)
 endif
+
+# appl path
+BLD_APPL_PATH		= $(BD)/appl/build/$(MDIR)
 
 # device driver path
 BLD_DRIVER_PATH		= $(BD)/driver/$(MDIR)/build$(T2EX)
@@ -156,16 +159,23 @@ K_OBJ	+=	$(BLD_TKERNEL_PATH)/tkernel.o \
 		$(BLD_SYSINIT_PATH)/sysinit.o
 
 # ----------------------------------------------------------------------------
-# App definitions
+# Appl definitions
 ifdef MISC_CPRINT
   CFLAGS += -DUSE_MISC_CPRINT
-endif
-ifdef APP_EXTCMD
-  CFLAGS += -DUSE_APP_EXTCMD
 endif
 ifdef APP_SAMPLE
   CFLAGS += -DUSE_APP_SAMPLE
 endif
+ifdef LUA_CMD
+  CFLAGS += -DUSE_LUA_CMD
+endif
+
+K_OBJ += $(BLD_APPL_PATH)/ccp.o
+ifdef LUA_CMD
+  K_OBJ += $(BLD_APPL_PATH)/lua.o
+endif
+ADD_MODULES += appl
+
 
 # ----------------------------------------------------------------------------
 # T2EX function objects
@@ -181,7 +191,7 @@ ifdef  T2EX
     LDUSRLIBS += -ldatetime
   endif
 
-  LDUSRLIBS += -lc		##←この位置でないとリンクエラー
+  LDUSRLIBS += -lc                 ## この位置にしないとリンクエラー
 
   ifdef  T2EX_PM
     # T2EX program load
@@ -234,7 +244,7 @@ CPPFLAGS += -DTKERNEL_ONLY
 ALL  = $(TARGET_ROM) $(TARGET_ROM:%.rom=%.map) $(TARGET_ROM:%.rom=%.mot)
 ALL += $(TARGET_RAM) $(TARGET_RAM:%.sys=%.map) $(TARGET_RAM:%.sys=%.mot)
 ALL += $(TARGET_RAM:%.sys=%.bin)
-ALL += $(TARGET_ROM:%.rom=%.bin)		######
+ALL += $(TARGET_ROM:%.rom=%.bin)
 ###EMU  = $(TARGET_EMU) $(TARGET_DBG_EMU)
 REQ_MODULES = libraries tkernel sysmgr sysinit drivers $(ADD_MODULES)
 
@@ -246,6 +256,8 @@ REQ_MODULES = libraries tkernel sysmgr sysinit drivers $(ADD_MODULES)
 ifdef  T2EX
 .PHONY: datetime load fs net
 endif
+.PHONY: appl
+.PHONY: clean_appl
 
 # default make targets
 all: $(REQ_MODULES) $(TARGET_RAMCRT0) $(TARGET_ROMCRT0)
@@ -258,7 +270,7 @@ emu: all config monitor
 	$(MAKE) install_emu
 
 # objects for RAM
-$(TARGET_RAM): $(TARGET_RAMCRT0) $(OBJ) $(U_OBJ) $(K_OBJ) $(I_OBJ) version.o
+$(TARGET_RAM): $(TARGET_RAMCRT0) $(OBJ) $(U_OBJ) $(K_OBJ) $(I_OBJ) ver_info.o
 	$(CC) $(TARGET_ARCH) $(LDFLAGS) $^ $(LDLIBS) $(STDLIB) $(OUTPUT_OPTION)
 
 $(TARGET_RAM:%.sys=%.map): $(TARGET_RAM)
@@ -271,7 +283,7 @@ $(TARGET_RAM:%.sys=%.bin): $(TARGET_RAM)
 	$(OBJCOPY) -O binary $< $@
 
 # objects for ROM
-$(TARGET_ROM): $(TARGET_ROMCRT0) $(OBJ) $(U_OBJ) $(K_OBJ) $(I_OBJ) version.o
+$(TARGET_ROM): $(TARGET_ROMCRT0) $(OBJ) $(U_OBJ) $(K_OBJ) $(I_OBJ) ver_info.o
 	$(CC) $(TARGET_ARCH) $(LDFLAGS) $^ $(LDLIBS) $(STDLIB) $(OUTPUT_OPTION)
 
 $(TARGET_ROM:%.rom=%.map): $(TARGET_ROM)
@@ -280,11 +292,11 @@ $(TARGET_ROM:%.rom=%.map): $(TARGET_ROM)
 $(TARGET_ROM:%.rom=%.mot): $(TARGET_ROM)
 	$(OBJCOPY) $(OUTPUT_SREC) $< $@
 
-$(TARGET_ROM:%.rom=%.bin): $(TARGET_ROM)		#####
-	$(OBJCOPY) -O binary $< $@			#####
+$(TARGET_ROM:%.rom=%.bin): $(TARGET_ROM)
+	$(OBJCOPY) -O binary $< $@
 
-version.c: Makefile $(OBJ)
-	echo "$$VERSION_APP" > version.c
+ver_info.c: Makefile $(OBJ)
+	echo "$$VERSION_APP" > ver_info.c
 
 # objects for emulator rom images
 EMU_OBJ	= 	$(BLD_MONITOR_PATH)/tmonitor.mot \
@@ -327,6 +339,12 @@ fs:
 net:
 	( cd $(BLD_NET_PATH) ; $(MAKE) $(DBGOPT) install)
 endif
+
+appl:
+	( cd $(BLD_APPL_PATH) ; $(MAKE) $(DBGOPT) )
+
+clean_appl:
+	( cd $(BLD_APPL_PATH) ; $(MAKE) $(DBGOPT) clean)
 
 libraries:
 	( cd $(BLD_LIBS_PATH) ; $(MAKE) $(DBGOPT) )
@@ -387,7 +405,7 @@ ifdef  T2EX
 endif
 	$(RM) $(OBJ) $(U_OBJ) $(TARGET_RAMCRT0) $(TARGET_ROMCRT0) $(ALL) $(DEPS)
 	$(RM) $(TARGET_EMU) $(TARGET_DBG_EMU)
-	$(RM) version.[co]
+	$(RM) ver_info.[co]
 
 # clean all objects and source files of svc interface 
 clean_all: clean clean_source
@@ -409,8 +427,9 @@ $(DEPS): ; touch $(DEPS)
 #|History of "Makefile"
 #|=====================
 #|* 2016/01/05	ﾘﾝｸｽｸﾘﾌﾟﾄの拡張子を｢.lnk｣→｢.lds｣に変更。
-#|* 2016/01/06	リンクエラー回避の為、"-lc"のリンク指定の位置を変更。
 #|* 2016/07/07	debugﾌｫﾙﾀﾞとmakefileとﾘﾝｸｽｸﾘﾌﾟﾄが共通にできるように、
 #|  ﾘﾝｸｽｸﾘﾌﾟﾄに"..\$(MDIR)\"のパス記述追加
 #|* 2016/09/12	version情報ファイル生成追加
-#|* 2016/09/14	｢App definitions」関連処理の追加
+#|* 2016/11/18	｢Appl definitions」関連処理の追加
+#|* 2016/12/08	-lcの位置変更
+#|* 2017/04/10	version情報のファイル名を ver_info に変更
