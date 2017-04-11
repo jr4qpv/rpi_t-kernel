@@ -7,12 +7,13 @@
 #
 
 #
-#	@(#)Makefile for gmake (aapl) 2016/11/18
+#	@(#)Makefile for gmake (aapl) 2017/04/11
 #	appl main (common description)
 #
 
 # standard libraries
-APPL_TARGET = ccp lua
+APPL_TARGET = ccp
+##APPL_TARGET += lua
 ##APPL_TARGET += libsvc libstr libsys
 
 # ----------------------------------------------------------------------------
