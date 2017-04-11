@@ -6,7 +6,7 @@ T-Kernel for Raspberry Pi.
 ----
 Tronフォーラム（<http://www.tron.org/ja/>）で公開のオープンソース T-Kernel2.0 & Extensyon(T2EX)を、[Raspberry Pi](https://ja.wikipedia.org/wiki/Raspberry_Pi) にポーティングしたリアルタイムＯＳ。
 
-コンパイル手順、起動方法などは、`doc/rpi/porting_ja.txt`を参照ください。
+コンパイル手順、起動方法などは、`doc/rpi/porting_ja.md`を参照ください。
 
 #### 【Raspberry Pi 対応機種】
 
@@ -73,7 +73,7 @@ T-Kernel再配布規約に従い、本ソフトウェアのディストリビュ
 
 作者関連サイト
 -------------
-* [GitHub (jr4qpv)](https://github.com/jr4qpv?tab=overview&from=2016-08-01&to=2016-08-31&utf8=%E2%9C%93)
+* [GitHub (jr4qpv)](https://github.com/jr4qpv/)
 * [The modern stone age.](https://www.yokoweb.net/)
 * [JR4QPV Yoko's Library](http://jr4qpv.my.coocan.jp/)
 
@@ -90,4 +90,4 @@ LinuxやWindosでハードウェアを直接制御するプログラムを書く
 来歴
 ----
 * 2016/09/18 r0.10公開
-* 2017/04/11 r0.11, フォルダ構成見直し他
+* 2017/04/11 r0.11：フォルダ構成見直し、他
