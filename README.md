@@ -6,7 +6,7 @@ T-Kernel for Raspberry Pi.
 ----
 Tronフォーラム（<http://www.tron.org/ja/>）で公開のオープンソース T-Kernel2.0 & Extensyon(T2EX)を、[Raspberry Pi](https://ja.wikipedia.org/wiki/Raspberry_Pi) にポーティングしたリアルタイムＯＳ。
 
-コンパイル手順、起動方法などは、`doc/rpi/porting_ja.md`を参照ください。
+コンパイル手順、起動方法などは、[`doc/rpi/porting_ja.md`](https://github.com/jr4qpv/rpi_t-kernel/blob/master/doc/rpi/porting_ja.md)を参照ください。
 
 #### 【Raspberry Pi 対応機種】
 
