@@ -2,6 +2,14 @@ rpi_t-kernel
 =============
 T-Kernel for Raspberry Pi.
 
+### 2019/9/29追記
+下記GitHubのプロジェクトに、ここで使っているRTOS(T-Kernel)部分のみを分離し独立させた「[yt-kernel](https://github.com/jr4qpv/yt-kernel)」を公開しました。今後の更新は、その「yt-kernel」で行っていきますので、そちらをご利用ください。
+
+<https://github.com/jr4qpv/yt-kernel.git>
+
+* T-Kernel部分のみを分離することで、保守性を向上し見通しよくするのが目的。
+* ここで動かしている簡易コマンドシェルも、サンプルアプリとして別プロジェクトで公開していく予定。
+
 概要
 ----
 Tronフォーラム（<http://www.tron.org/ja/>）で公開のオープンソース T-Kernel2.0 & Extensyon(T2EX)を、[Raspberry Pi](https://ja.wikipedia.org/wiki/Raspberry_Pi) にポーティングしたリアルタイムＯＳ。
@@ -91,3 +99,4 @@ LinuxやWindosでハードウェアを直接制御するプログラムを書く
 ----
 * 2016/09/18 r0.10公開
 * 2017/04/11 r0.11：フォルダ構成見直し、他
+* 2019/09/29 yt-kernel 公開案内の追記を記載。
